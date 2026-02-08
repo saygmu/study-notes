@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>亨利定律 × 蒸氣壓 決策攻略 v2</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap');
+    
+    * { box-sizing: border-box; }
+    
+    body {
+      font-family: 'Noto Sans TC', -apple-system, sans-serif;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+      font-size: 16px;
+      line-height: 1.7;
+      color: #333;
+      background: #fafafa;
+    }
+    
+    h1 {
+      text-align: center;
+      color: #2c3e50;
+      border-bottom: 3px solid #3498db;
+      padding-bottom: 15px;
+      font-size: 1.8em;
+    }
+    
+    h2 {
+      color: #2980b9;
+      border-left: 4px solid #3498db;
+      padding-left: 12px;
+      margin-top: 35px;
+      font-size: 1.3em;
+    }
+    
+    h3 {
+      color: #16a085;
+      font-size: 1.1em;
+      margin-top: 25px;
+    }
+    
+    .formula-box {
+      background: linear-gradient(135deg, #667eea22, #764ba222);
+      border: 2px solid #667eea;
+      border-radius: 12px;
+      padding: 20px;
+      margin: 20px 0;
+      text-align: center;
+    }
+    
+    .formula {
+      font-size: 1.2em;
+      font-weight: bold;
+      color: #4a00e0;
+    }
+    
+    .formula-box p {
+      margin: 10px 0 0 0;
+      color: #555;
+    }
+    
+    .box {
+      background: #fff;
+      border-radius: 12px;
+      padding: 20px;
+      margin: 20px 0;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+    
+    .warning-box {
+      background: #fff3e0;
+      border-left: 4px solid #ff9800;
+      padding: 15px 20px;
+      margin: 20px 0;
+      border-radius: 0 8px 8px 0;
+    }
+    
+    .example-box {
+      background: #e8f5e9;
+      border: 1px solid #4caf50;
+      border-radius: 12px;
+      padding: 20px;
+      margin: 20px 0;
+    }
+    
+    .example-title {
+      color: #2e7d32;
+      font-weight: bold;
+      font-size: 1.1em;
+      margin-bottom: 15px;
+    }
+    
+    .key-point {
+      background: #ffe6e6;
+      border-radius: 4px;
+      padding: 2px 8px;
+      font-weight: bold;
+      color: #c0392b;
+    }
+    
+    .correct {
+      background: #d4edda;
+      border-radius: 4px;
+      padding: 2px 8px;
+      font-weight: bold;
+      color: #155724;
+    }
+    
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 15px 0;
+      background: #fff;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    
+    th, td {
+      border: 1px solid #e0e0e0;
+      padding: 12px;
+      text-align: left;
+    }
+    
+    th {
+      background: #3498db;
+      color: white;
+    }
+    
+    tr:nth-child(even) { background: #f8f9fa; }
+    
+    ul, ol { padding-left: 25px; }
+    li { margin: 8px 0; }
+    
+    .step-flow {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 20px 0;
+      justify-content: center;
+    }
+    
+    .step {
+      background: #fff;
+      border: 2px solid #9b59b6;
+      border-radius: 10px;
+      padding: 15px;
+      text-align: center;
+      min-width: 120px;
+      flex: 1;
+    }
+    
+    .step-num {
+      background: #9b59b6;
+      color: white;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      margin-bottom: 8px;
+    }
+    
+    .compare-table th:first-child { background: #e74c3c; }
+    .compare-table th:last-child { background: #27ae60; }
+    
+    .liquify-box {
+      background: linear-gradient(135deg, #74ebd522, #ACB6E522);
+      border: 2px solid #74ebd5;
+      border-radius: 12px;
+      padding: 20px;
+      margin: 20px 0;
+    }
+    
+    .decision-flow {
+      background: #fff;
+      border-radius: 12px;
+      padding: 20px;
+      margin: 20px 0;
+      border: 2px dashed #3498db;
+    }
+    
+    .arrow { 
+      text-align: center; 
+      font-size: 1.5em; 
+      color: #7f8c8d;
+      margin: 10px 0;
+    }
+    
+    .highlight-box {
+      background: #fff3cd;
+      border: 2px solid #ffc107;
+      border-radius: 10px;
+      padding: 15px;
+      margin: 15px 0;
+      text-align: center;
+    }
+
+    @media (max-width: 600px) {
+      body { padding: 15px; font-size: 15px; }
+      .step { min-width: 100%; }
+      table { font-size: 14px; }
+      th, td { padding: 8px; }
+    }
+  </style>
+</head>
+<body>
+
+<h1>🧪 亨利定律 × 蒸氣壓<br>決策攻略 v2</h1>
+
+<h2>📌 核心公式</h2>
+
+<div class="formula-box">
+  <div class="formula">亨利定律：C = k<sub>H</sub> × P<sub>氣體分壓</sub></div>
+  <p>溶解度與該氣體的 <span class="key-point">分壓</span> 成正比</p>
+</div>
+
+<div class="formula-box">
+  <div class="formula">濕氣體：P<sub>總</sub> = P<sub>乾氣體</sub> + P<sub>水蒸氣</sub></div>
+  <p>排水集氣 → 總壓包含水的飽和蒸氣壓</p>
+</div>
+
+<h2>⚠️ 公式順序：先扣再乘！</h2>
+
+<div class="box">
+  <table class="compare-table">
+    <tr>
+      <th>❌ 錯誤</th>
+      <th>✅ 正確</th>
+    </tr>
+    <tr>
+      <td style="text-align:center; font-size:1.1em;">
+        P<sub>總</sub> × 莫耳分率 − P<sub>蒸氣</sub>
+      </td>
+      <td style="text-align:center; font-size:1.1em;">
+        <strong>(P<sub>總</sub> − P<sub>蒸氣</sub>) × 莫耳分率</strong>
+      </td>
+    </tr>
+  </table>
+  
+  <div class="warning-box">
+    <strong>為什麼？</strong><br>
+    水蒸氣是「額外」的，不屬於原本的氣體混合物！
+    <ol>
+      <li>P<sub>總</sub> = P<sub>乾氣體混合物</sub> + P<sub>水蒸氣</sub></li>
+      <li>先扣掉水蒸氣 → 得到乾氣體的總壓</li>
+      <li>再乘莫耳分率 → 得到某一種氣體的分壓</li>
+    </ol>
+  </div>
+</div>
+
+<div class="example-box">
+  <div class="example-title">📝 例題：混合氣體 + 濕</div>
+  <p><strong>題目：</strong>排水集氣收集空氣（N₂:O₂ = 4:1），總壓 800 mmHg。<br>
+  25°C 水的飽和蒸氣壓 = 24 mmHg，求 O₂ 分壓。</p>
+  
+  <div class="decision-flow">
+    <strong>Step 1：扣水蒸氣</strong><br>
+    P<sub>乾空氣</sub> = 800 − 24 = <span class="correct">776 mmHg</span>
+    
+    <div class="arrow">↓</div>
+    
+    <strong>Step 2：乘莫耳分率</strong><br>
+    P<sub>O₂</sub> = 776 × (1/5) = <span class="correct">155.2 mmHg</span>
+  </div>
+  
+  <div class="warning-box">
+    ❌ 錯誤算法：800 × (1/5) − 24 = 136 mmHg
+  </div>
+</div>
+
+<h2>🔧 活塞 + 砝碼問題</h2>
+
+<div class="step-flow">
+  <div class="step">
+    <div class="step-num">1</div><br>
+    <strong>算新總壓</strong><br>
+    <small>P<sub>新</sub> = P<sub>大氣</sub> + P<sub>砝碼</sub></small>
+  </div>
+  <div class="step">
+    <div class="step-num">2</div><br>
+    <strong>有水？</strong><br>
+    <small>扣蒸氣壓</small>
+  </div>
+  <div class="step">
+    <div class="step-num">3</div><br>
+    <strong>混合？</strong><br>
+    <small>乘莫耳分率</small>
+  </div>
+  <div class="step">
+    <div class="step-num">4</div><br>
+    <strong>套公式</strong><br>
+    <small>PV=nRT</small>
+  </div>
+</div>
+
+<div class="warning-box">
+  <strong>🔑 關鍵：</strong>水蒸氣壓只跟溫度有關，跟總壓無關！<br>
+  加壓前後，只要溫度不變，P<sub>水蒸氣</sub> 就不變。
+</div>
+
+<h2>💧 液化問題：壓到飽和就停！</h2>
+
+<div class="liquify-box">
+  <h3 style="margin-top:0;">🎯 核心觀念</h3>
+  <p>當氣體被壓縮到 <span class="key-point">飽和蒸氣壓</span> 時，就會開始液化。<br>
+  之後再怎麼壓，<strong>氣體壓力不會再上升</strong>，多的氣體會變成液體。</p>
+</div>
+
+<div class="box">
+  <h3>📋 液化判斷流程</h3>
+  
+  <div class="decision-flow">
+    <div class="highlight-box">
+      <strong>Step 1：假設沒液化</strong><br>
+      用 P₁V₁ = P₂V₂ 算出「預期壓力」
+    </div>
+    
+    <div class="arrow">↓</div>
+    
+    <div class="highlight-box">
+      <strong>Step 2：比較</strong><br>
+      預期壓力 vs 該溫度的飽和蒸氣壓
+    </div>
+    
+    <div class="arrow">↓</div>
+    
+    <table>
+      <tr>
+        <th>情況</th>
+        <th>結果</th>
+      </tr>
+      <tr>
+        <td>預期 < 飽和蒸氣壓</td>
+        <td><span class="correct">沒液化</span>，用算出來的值</td>
+      </tr>
+      <tr>
+        <td>預期 ≥ 飽和蒸氣壓</td>
+        <td><span class="key-point">會液化！</span>壓力 = 飽和蒸氣壓</td>
+      </tr>
+    </table>
+  </div>
+</div>
+
+<div class="example-box">
+  <div class="example-title">📝 例題：多變數 + 液化</div>
+  <p><strong>題目：</strong>25°C，容器內有 2 atm 的水蒸氣，體積 10 L。<br>
+  現壓縮至 2 L，求最終壓力。（25°C 水的飽和蒸氣壓 = 0.03 atm）</p>
+  
+  <div class="decision-flow">
+    <strong>Step 1：假設沒液化，算預期壓力</strong><br>
+    P₁V₁ = P₂V₂<br>
+    2 × 10 = P₂ × 2<br>
+    P₂ = <span class="key-point">10 atm</span>（預期）
+    
+    <div class="arrow">↓</div>
+    
+    <strong>Step 2：比較</strong><br>
+    10 atm >> 0.03 atm（飽和蒸氣壓）<br>
+    <span class="key-point">會液化！</span>
+    
+    <div class="arrow">↓</div>
+    
+    <strong>答案：</strong><br>
+    最終壓力 = <span class="correct">0.03 atm</span>（飽和蒸氣壓）<br>
+    <small>多餘的水蒸氣都變成液態水了</small>
+  </div>
+</div>
+
+<div class="example-box">
+  <div class="example-title">📝 例題：活塞 + 液化 + 溶解度</div>
+  <p><strong>題目：</strong>25°C，活塞容器內有 O₂(g) 和水。O₂ 分壓 0.5 atm，體積 100 mL，水中已溶解 1.5 mg O₂。<br>
+  加砝碼使總壓從 1 atm 變 3 atm，求：<br>
+  (1) 新的 O₂ 分壓  (2) 新的溶解度  (3) 新體積<br>
+  （25°C 水的飽和蒸氣壓 = 0.03 atm）</p>
+  
+  <div class="decision-flow">
+    <strong>(1) 新的 O₂ 分壓</strong><br>
+    P<sub>O₂,新</sub> = P<sub>總,新</sub> − P<sub>水蒸氣</sub><br>
+    = 3 − 0.03 = <span class="correct">2.97 atm</span>
+    
+    <div class="arrow">↓</div>
+    
+    <strong>(2) 新的溶解度（亨利定律）</strong><br>
+    C₁/C₂ = P₁/P₂<br>
+    1.5/C₂ = 0.5/2.97<br>
+    C₂ = 1.5 × (2.97/0.5) = <span class="correct">8.91 mg</span>
+    
+    <div class="arrow">↓</div>
+    
+    <strong>(3) 新體積（波以耳定律）</strong><br>
+    ⚠️ 要用 O₂ 的分壓，不是總壓！<br>
+    P₁V₁ = P₂V₂<br>
+    0.5 × 100 = 2.97 × V₂<br>
+    V₂ = <span class="correct">16.8 mL</span>
+  </div>
+</div>
+
+<h2>✅ 終極檢查表</h2>
+
+<table>
+  <tr>
+    <th>看到這種題</th>
+    <th>這樣處理</th>
+  </tr>
+  <tr>
+    <td>有水/排水集氣</td>
+    <td><strong>先扣</strong>飽和蒸氣壓</td>
+  </tr>
+  <tr>
+    <td>混合氣體</td>
+    <td><strong>再乘</strong>莫耳分率</td>
+  </tr>
+  <tr>
+    <td>亨利定律</td>
+    <td>用<strong>該氣體的分壓</strong></td>
+  </tr>
+  <tr>
+    <td>活塞加壓</td>
+    <td>水蒸氣壓<strong>不變</strong>（只跟溫度有關）</td>
+  </tr>
+  <tr>
+    <td>壓縮氣體</td>
+    <td>先算預期壓力，<strong>比較</strong>飽和蒸氣壓</td>
+  </tr>
+  <tr>
+    <td>預期 ≥ 飽和</td>
+    <td><strong>液化</strong>，壓力 = 飽和蒸氣壓</td>
+  </tr>
+</table>
+
+<div class="warning-box" style="margin-top:30px;">
+  <h3 style="margin-top:0;">🧠 記憶口訣</h3>
+  <p style="font-size:1.2em; text-align:center; margin:15px 0;">
+    <strong>「濕扣乾不扣，先扣再乘」</strong><br>
+    <strong>「壓到飽和就停住」</strong>
+  </p>
+</div>
+
+<p style="text-align:center; color:#7f8c8d; margin-top:40px; padding-top:20px; border-top:1px solid #eee;">
+  🦞 AB御用秘書 製作
+</p>
+
+</body>
+</html>
