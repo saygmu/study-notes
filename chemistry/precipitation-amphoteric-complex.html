@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>沉澱表、兩性物質、錯合物</title>
+    <style>
+        :root {
+            --bg: #1a1a2e;
+            --card: #16213e;
+            --accent: #e94560;
+            --text: #eee;
+            --muted: #aaa;
+            --green: #4ade80;
+            --red: #f87171;
+            --yellow: #facc15;
+            --blue: #60a5fa;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.7;
+            padding: 2rem;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        h1 {
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            color: var(--accent);
+        }
+        h2 {
+            color: var(--accent);
+            margin: 2rem 0 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--accent);
+        }
+        h3 {
+            color: var(--yellow);
+            margin: 1.5rem 0 0.75rem;
+        }
+        .card {
+            background: var(--card);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+        }
+        th, td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid #333;
+        }
+        th {
+            background: rgba(233, 69, 96, 0.2);
+            color: var(--accent);
+        }
+        tr:hover { background: rgba(255,255,255,0.05); }
+        .formula {
+            font-family: "Times New Roman", serif;
+            background: rgba(0,0,0,0.3);
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-size: 1.05em;
+        }
+        .tip {
+            background: linear-gradient(135deg, #4ade8033, #22c55e22);
+            border-left: 4px solid var(--green);
+            padding: 1rem;
+            border-radius: 0 8px 8px 0;
+            margin: 1rem 0;
+        }
+        .warn {
+            background: linear-gradient(135deg, #facc1533, #eab30822);
+            border-left: 4px solid var(--yellow);
+            padding: 1rem;
+            border-radius: 0 8px 8px 0;
+            margin: 1rem 0;
+        }
+        .color-box {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border-radius: 4px;
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+        .white { background: #fff; border: 1px solid #666; }
+        .yellow { background: #facc15; }
+        .light-yellow { background: #fef08a; }
+        .red-brown { background: #b45309; }
+        .black { background: #1f2937; border: 1px solid #666; }
+        .blue { background: #3b82f6; }
+        .green { background: #22c55e; }
+        .brick-red { background: #c2410c; }
+        .blood-red { background: #dc2626; }
+        .deep-blue { background: #1e40af; }
+        sup, sub { font-size: 0.7em; }
+        code {
+            background: rgba(0,0,0,0.4);
+            padding: 0.5rem 1rem;
+            display: block;
+            border-radius: 6px;
+            margin: 0.5rem 0;
+            font-family: monospace;
+            overflow-x: auto;
+        }
+        ul { padding-left: 1.5rem; }
+        li { margin: 0.3rem 0; }
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1rem;
+        }
+        @media (max-width: 600px) {
+            body { padding: 1rem; }
+            h1 { font-size: 1.5rem; }
+            table { font-size: 0.9rem; }
+            th, td { padding: 0.5rem; }
+        }
+    </style>
+</head>
+<body>
+    <h1>🧪 沉澱表、兩性物質、錯合物</h1>
+    
+    <h2>一、沉澱表（溶解度規則）</h2>
+    
+    <div class="card">
+        <h3>🟢 易溶（大部分可溶）</h3>
+        <table>
+            <tr><th>離子</th><th>例外（不溶）</th></tr>
+            <tr><td><b>Na⁺、K⁺、NH₄⁺</b></td><td>無例外，全部可溶</td></tr>
+            <tr><td><b>NO₃⁻</b>（硝酸鹽）</td><td>無例外，全部可溶</td></tr>
+            <tr><td><b>CH₃COO⁻</b>（醋酸鹽）</td><td>無例外，全部可溶</td></tr>
+            <tr><td><b>Cl⁻、Br⁻、I⁻</b>（鹵化物）</td><td>AgX、PbX₂、Hg₂X₂ 不溶</td></tr>
+            <tr><td><b>SO₄²⁻</b>（硫酸鹽）</td><td>BaSO₄、PbSO₄、CaSO₄（微溶）、SrSO₄ 不溶</td></tr>
+        </table>
+    </div>
+    
+    <div class="card">
+        <h3>🔴 難溶（大部分不溶）</h3>
+        <table>
+            <tr><th>離子</th><th>例外（可溶）</th></tr>
+            <tr><td><b>OH⁻</b>（氫氧化物）</td><td>Na⁺、K⁺、NH₄⁺、Ba²⁺、Ca²⁺（微溶）可溶</td></tr>
+            <tr><td><b>S²⁻</b>（硫化物）</td><td>Na⁺、K⁺、NH₄⁺、Ca²⁺、Ba²⁺、Mg²⁺ 可溶</td></tr>
+            <tr><td><b>CO₃²⁻</b>（碳酸鹽）</td><td>Na⁺、K⁺、NH₄⁺ 可溶</td></tr>
+            <tr><td><b>PO₄³⁻</b>（磷酸鹽）</td><td>Na⁺、K⁺、NH₄⁺ 可溶</td></tr>
+            <tr><td><b>CrO₄²⁻</b>（鉻酸鹽）</td><td>Na⁺、K⁺、NH₄⁺ 可溶</td></tr>
+        </table>
+    </div>
+    
+    <div class="tip">
+        <b>📝 口訣</b><br>
+        鉀鈉銨鹽都可溶，硝酸鹽類無沉澱<br>
+        鹵化銀和鹵化鉛，硫酸鋇和硫酸鉛<br>
+        氫氧化物多不溶，鉀鈉鈣鋇是例外
+    </div>
+    
+    <div class="card">
+        <h3>🎨 常見沉澱顏色</h3>
+        <table>
+            <tr><th>沉澱</th><th>顏色</th></tr>
+            <tr><td>AgCl</td><td><span class="color-box white"></span>白色</td></tr>
+            <tr><td>AgBr</td><td><span class="color-box light-yellow"></span>淡黃色</td></tr>
+            <tr><td>AgI</td><td><span class="color-box yellow"></span>黃色</td></tr>
+            <tr><td>Ag₂S</td><td><span class="color-box black"></span>黑色</td></tr>
+            <tr><td>Ag₂CrO₄</td><td><span class="color-box brick-red"></span>磚紅色</td></tr>
+            <tr><td>PbI₂</td><td><span class="color-box yellow"></span>鮮黃色</td></tr>
+            <tr><td>BaSO₄</td><td><span class="color-box white"></span>白色</td></tr>
+            <tr><td>Cu(OH)₂</td><td><span class="color-box blue"></span>藍色</td></tr>
+            <tr><td>Fe(OH)₂</td><td><span class="color-box white"></span>白色→綠色→紅棕色</td></tr>
+            <tr><td>Fe(OH)₃</td><td><span class="color-box red-brown"></span>紅棕色</td></tr>
+        </table>
+    </div>
+
+    <h2>二、兩性物質</h2>
+    
+    <div class="card">
+        <p><b>定義：</b>既能與酸反應，也能與鹼反應的物質</p>
+        
+        <h3>🔹 兩性氫氧化物</h3>
+        <table>
+            <tr><th>物質</th><th>與酸反應</th><th>與鹼反應</th></tr>
+            <tr>
+                <td><b>Al(OH)₃</b></td>
+                <td>Al(OH)₃ + 3H⁺ → Al³⁺ + 3H₂O</td>
+                <td>Al(OH)₃ + OH⁻ → AlO₂⁻ + 2H₂O</td>
+            </tr>
+            <tr>
+                <td><b>Zn(OH)₂</b></td>
+                <td>Zn(OH)₂ + 2H⁺ → Zn²⁺ + 2H₂O</td>
+                <td>Zn(OH)₂ + 2OH⁻ → ZnO₂²⁻ + 2H₂O</td>
+            </tr>
+            <tr>
+                <td><b>Pb(OH)₂</b></td>
+                <td>Pb(OH)₂ + 2H⁺ → Pb²⁺ + 2H₂O</td>
+                <td>Pb(OH)₂ + 2OH⁻ → PbO₂²⁻ + 2H₂O</td>
+            </tr>
+            <tr>
+                <td><b>Cr(OH)₃</b></td>
+                <td>Cr(OH)₃ + 3H⁺ → Cr³⁺ + 3H₂O</td>
+                <td>Cr(OH)₃ + OH⁻ → CrO₂⁻ + 2H₂O</td>
+            </tr>
+        </table>
+    </div>
+    
+    <div class="warn">
+        <b>📝 口訣：</b>鋁鋅鉛錫鉻（Al、Zn、Pb、Sn、Cr）的氫氧化物是兩性
+    </div>
+    
+    <div class="card">
+        <h3>🔹 兩性元素 - 鋁</h3>
+        <code>2Al + 6HCl → 2AlCl₃ + 3H₂↑</code>
+        <code>2Al + 2NaOH + 2H₂O → 2NaAlO₂ + 3H₂↑</code>
+    </div>
+
+    <h2>三、錯合物（配位化合物）</h2>
+    
+    <div class="card">
+        <p><b>定義：</b>由中心金屬離子與配位基（ligand）以配位鍵結合形成的化合物</p>
+        
+        <h3>🔹 常見配位基</h3>
+        <table>
+            <tr><th>配位基</th><th>名稱</th><th>配位數</th></tr>
+            <tr><td>NH₃</td><td>氨</td><td>單牙</td></tr>
+            <tr><td>H₂O</td><td>水</td><td>單牙</td></tr>
+            <tr><td>CN⁻</td><td>氰根</td><td>單牙</td></tr>
+            <tr><td>Cl⁻</td><td>氯</td><td>單牙</td></tr>
+            <tr><td>OH⁻</td><td>氫氧根</td><td>單牙</td></tr>
+            <tr><td>SCN⁻</td><td>硫氰根</td><td>單牙</td></tr>
+            <tr><td>en (乙二胺)</td><td>H₂N-CH₂-CH₂-NH₂</td><td>雙牙</td></tr>
+            <tr><td>EDTA</td><td>乙二胺四乙酸</td><td>六牙</td></tr>
+        </table>
+    </div>
+    
+    <div class="card">
+        <h3>🔹 重要錯離子</h3>
+        <table>
+            <tr><th>錯離子</th><th>顏色</th><th>用途</th></tr>
+            <tr>
+                <td><b>[Ag(NH₃)₂]⁺</b><br>二氨合銀離子</td>
+                <td>無色</td>
+                <td>多倫試劑（銀鏡反應）</td>
+            </tr>
+            <tr>
+                <td><b>[Cu(NH₃)₄]²⁺</b><br>四氨合銅離子</td>
+                <td><span class="color-box deep-blue"></span>深藍色</td>
+                <td>檢驗 Cu²⁺</td>
+            </tr>
+            <tr>
+                <td><b>[Fe(SCN)]²⁺</b><br>硫氰合鐵離子</td>
+                <td><span class="color-box blood-red"></span>血紅色</td>
+                <td>檢驗 Fe³⁺</td>
+            </tr>
+            <tr>
+                <td><b>[Fe(CN)₆]⁴⁻</b><br>六氰合亞鐵離子</td>
+                <td><span class="color-box yellow"></span>黃色</td>
+                <td>亞鐵氰化鉀</td>
+            </tr>
+            <tr>
+                <td><b>[Zn(OH)₄]²⁻</b><br>四羥合鋅離子</td>
+                <td>無色</td>
+                <td>Zn(OH)₂ 溶於過量 NaOH</td>
+            </tr>
+            <tr>
+                <td><b>[Al(OH)₄]⁻</b><br>四羥合鋁離子</td>
+                <td>無色</td>
+                <td>Al(OH)₃ 溶於過量 NaOH</td>
+            </tr>
+        </table>
+    </div>
+    
+    <div class="card">
+        <h3>🔹 錯合反應實例</h3>
+        <p><b>1. 氨水與銅離子</b></p>
+        <code>Cu²⁺ + 4NH₃ → [Cu(NH₃)₄]²⁺ (深藍色)</code>
+        
+        <p><b>2. 氨水與銀離子（多倫試劑）</b></p>
+        <code>Ag⁺ + 2NH₃ → [Ag(NH₃)₂]⁺ (無色)</code>
+        
+        <p><b>3. 氫氧化鋅溶於過量鹼</b></p>
+        <code>Zn(OH)₂ + 2OH⁻ → [Zn(OH)₄]²⁻</code>
+        
+        <p><b>4. 硫氰化鉀檢驗三價鐵</b></p>
+        <code>Fe³⁺ + SCN⁻ → [Fe(SCN)]²⁺ (血紅色)</code>
+    </div>
+
+    <h2>四、綜合應用</h2>
+    
+    <div class="card">
+        <h3>🧪 利用兩性與錯合的分離</h3>
+        
+        <p><b>分離 Al³⁺ 和 Fe³⁺：</b></p>
+        <ol>
+            <li>加入過量 NaOH</li>
+            <li>Fe(OH)₃ 沉澱（紅棕色）</li>
+            <li>Al(OH)₃ 溶解成 [Al(OH)₄]⁻</li>
+            <li>過濾分離</li>
+        </ol>
+        
+        <p style="margin-top:1rem"><b>分離 Ag⁺ 和 Pb²⁺：</b></p>
+        <ol>
+            <li>加入稀 HCl → AgCl↓ + PbCl₂↓（都是白色）</li>
+            <li>加熱水 → PbCl₂ 溶解（熱水中可溶）</li>
+            <li>或加 NH₃ → AgCl 溶解成 [Ag(NH₃)₂]⁺</li>
+        </ol>
+    </div>
+
+    <div class="tip" style="margin-top: 2rem; text-align: center;">
+        <b>📌 重點整理</b><br><br>
+        1️⃣ <b>沉澱</b>：記住鉀鈉銨硝全溶，鹵化物注意 Ag⁺、Pb²⁺<br>
+        2️⃣ <b>兩性</b>：Al、Zn、Pb、Sn、Cr 的氫氧化物<br>
+        3️⃣ <b>錯合</b>：深藍色 [Cu(NH₃)₄]²⁺、血紅色 [Fe(SCN)]²⁺<br>
+        4️⃣ <b>分離</b>：利用溶解度差異、兩性、錯合反應<br><br>
+        <span style="font-size: 1.5rem">💪 加油！</span>
+    </div>
+    
+    <footer style="text-align: center; margin-top: 3rem; color: var(--muted); font-size: 0.9rem;">
+        Made with 🦞 by AB御用秘書
+    </footer>
+</body>
+</html>
