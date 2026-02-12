@@ -3,801 +3,557 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>靜力平衡 完全攻略</title>
+  <title>靜力平衡</title>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600&family=Noto+Sans+TC:wght@300;400;500&display=swap');
     
-    * { box-sizing: border-box; }
-
     :root {
-      --bg-color: #fafafa;
-      --text-color: #333;
-      --card-bg: #fff;
-      --border-color: #eee;
-      --primary: #e74c3c;
-      --primary-light: #e7494922;
+      --bg: #fefefe;
+      --text: #2d2d2d;
+      --muted: #888;
+      --accent: #4a4a4a;
+      --border: #e8e8e8;
+      --card: #fff;
     }
 
     [data-theme="dark"] {
-      --bg-color: #1a1a2e;
-      --text-color: #e8e8e8;
-      --card-bg: #16213e;
-      --border-color: #2a2a4a;
+      --bg: #1a1a1a;
+      --text: #e8e8e8;
+      --muted: #888;
+      --accent: #ccc;
+      --border: #333;
+      --card: #242424;
     }
     
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    
     body {
-      font-family: 'Noto Sans TC', -apple-system, sans-serif;
-      max-width: 850px;
-      margin: 0 auto;
-      padding: 20px;
-      padding-top: 70px;
+      font-family: 'Noto Sans TC', sans-serif;
+      font-weight: 300;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 2;
       font-size: 16px;
-      line-height: 1.8;
-      color: var(--text-color);
-      background: var(--bg-color);
       transition: all 0.3s ease;
     }
 
-    /* 頂部工具列 */
-    .toolbar {
+    .container {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 60px 24px;
+    }
+
+    /* 極簡導航 */
+    nav {
       position: fixed;
       top: 0;
       left: 0;
       right: 0;
-      background: var(--card-bg);
-      border-bottom: 1px solid var(--border-color);
-      padding: 10px 20px;
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+      padding: 16px 24px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      z-index: 1000;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      z-index: 100;
+      font-size: 14px;
     }
 
-    .toolbar-left, .toolbar-right {
+    nav a {
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    nav a:hover {
+      color: var(--text);
+    }
+
+    .nav-actions {
       display: flex;
-      gap: 10px;
-      align-items: center;
+      gap: 20px;
     }
 
-    .toolbar-btn {
-      background: var(--primary);
-      color: white;
+    .nav-actions button {
+      background: none;
       border: none;
-      padding: 8px 16px;
-      border-radius: 20px;
+      color: var(--muted);
       cursor: pointer;
       font-size: 14px;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      text-decoration: none;
-      transition: all 0.2s;
+      font-family: inherit;
+      transition: color 0.2s;
     }
 
-    .toolbar-btn:hover {
-      transform: scale(1.05);
-      box-shadow: 0 3px 10px rgba(231, 76, 60, 0.3);
+    .nav-actions button:hover {
+      color: var(--text);
     }
 
-    .toolbar-btn.secondary {
-      background: #6c757d;
-    }
-
-    .toolbar-btn.secondary:hover {
-      background: #5a6268;
-      box-shadow: 0 3px 10px rgba(108, 117, 125, 0.3);
-    }
-
-    .toolbar-title {
-      font-weight: bold;
-      color: var(--text-color);
-      font-size: 14px;
-    }
-
-    /* 目錄側邊欄 */
-    .toc {
-      position: fixed;
-      left: 10px;
-      top: 80px;
-      width: 180px;
-      background: var(--card-bg);
-      border-radius: 12px;
-      padding: 15px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-      font-size: 13px;
-      max-height: calc(100vh - 100px);
-      overflow-y: auto;
-      display: none;
-    }
-
-    @media (min-width: 1200px) {
-      .toc { display: block; }
-      body { margin-left: 200px; }
-    }
-
-    .toc-title {
-      font-weight: bold;
-      margin-bottom: 10px;
-      color: var(--primary);
-    }
-
-    .toc a {
-      display: block;
-      color: var(--text-color);
-      text-decoration: none;
-      padding: 5px 0;
-      border-left: 2px solid transparent;
-      padding-left: 10px;
-      transition: all 0.2s;
-    }
-
-    .toc a:hover {
-      border-left-color: var(--primary);
-      color: var(--primary);
-    }
-    
+    /* 標題 */
     h1 {
-      text-align: center;
-      color: var(--primary);
-      border-bottom: 3px solid var(--primary);
-      padding-bottom: 15px;
-      font-size: 1.8em;
+      font-family: 'Noto Serif TC', serif;
+      font-weight: 600;
+      font-size: 2.5rem;
+      margin: 40px 0 16px;
+      letter-spacing: 2px;
+    }
+
+    .subtitle {
+      color: var(--muted);
+      margin-bottom: 60px;
+      font-size: 14px;
     }
     
     h2 {
-      color: #c0392b;
-      border-left: 4px solid var(--primary);
-      padding-left: 12px;
-      margin-top: 40px;
-      font-size: 1.3em;
-      scroll-margin-top: 80px;
-    }
-
-    [data-theme="dark"] h2 {
-      color: #ff6b6b;
+      font-family: 'Noto Serif TC', serif;
+      font-weight: 600;
+      font-size: 1.25rem;
+      margin: 60px 0 24px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border);
+      letter-spacing: 1px;
     }
     
     h3 {
-      color: #27ae60;
-      font-size: 1.1em;
-      margin-top: 25px;
+      font-weight: 500;
+      font-size: 1rem;
+      margin: 32px 0 16px;
+      color: var(--accent);
     }
 
-    [data-theme="dark"] h3 {
-      color: #69db7c;
+    p {
+      margin-bottom: 16px;
     }
-    
-    .formula-box {
-      background: linear-gradient(135deg, #e7494922, #f3935122);
-      border: 2px solid var(--primary);
-      border-radius: 12px;
-      padding: 20px;
-      margin: 20px 0;
-      text-align: center;
-    }
-    
+
+    /* 公式 */
     .formula {
-      font-size: 1.3em;
-      font-weight: bold;
-      color: #c0392b;
-    }
-
-    [data-theme="dark"] .formula {
-      color: #ff8787;
-    }
-    
-    .formula-box p {
-      margin: 10px 0 0 0;
-      color: var(--text-color);
-    }
-    
-    .box {
-      background: var(--card-bg);
-      border-radius: 12px;
-      padding: 20px;
-      margin: 20px 0;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-    }
-    
-    .warning-box {
-      background: #fff3e0;
-      border-left: 4px solid #ff9800;
-      padding: 15px 20px;
-      margin: 20px 0;
-      border-radius: 0 8px 8px 0;
-    }
-
-    [data-theme="dark"] .warning-box {
-      background: #3d2e0a;
-    }
-    
-    .tip-box {
-      background: #e3f2fd;
-      border-left: 4px solid #2196f3;
-      padding: 15px 20px;
-      margin: 20px 0;
-      border-radius: 0 8px 8px 0;
-    }
-
-    [data-theme="dark"] .tip-box {
-      background: #0a2540;
-    }
-    
-    .scenario-box {
-      background: var(--card-bg);
-      border: 2px solid #3498db;
-      border-radius: 12px;
-      padding: 20px;
-      margin: 25px 0;
-      box-shadow: 0 3px 10px rgba(52, 152, 219, 0.1);
-    }
-
-    .scenario-title {
-      color: #2980b9;
-      font-weight: bold;
-      font-size: 1.15em;
-      margin-bottom: 15px;
-      padding-bottom: 10px;
-      border-bottom: 2px dashed #bde0fe;
-    }
-
-    [data-theme="dark"] .scenario-title {
-      color: #74c0fc;
-      border-bottom-color: #1c4966;
-    }
-    
-    .key-point {
-      background: #ffebee;
-      border-radius: 4px;
-      padding: 2px 8px;
-      font-weight: bold;
-      color: #c0392b;
-    }
-
-    [data-theme="dark"] .key-point {
-      background: #4a1a1a;
-      color: #ff8787;
-    }
-    
-    .diagram {
-      background: #f8f9fa;
-      border: 1px solid #dee2e6;
+      background: var(--card);
+      border: 1px solid var(--border);
       border-radius: 8px;
-      padding: 15px;
-      margin: 15px 0;
-      font-family: 'Courier New', monospace;
-      font-size: 14px;
-      line-height: 1.4;
-      white-space: pre;
-      overflow-x: auto;
+      padding: 24px;
+      margin: 24px 0;
+      text-align: center;
+      font-size: 1.1rem;
     }
 
-    [data-theme="dark"] .diagram {
-      background: #0d1117;
-      border-color: #30363d;
-      color: #c9d1d9;
+    .formula-main {
+      font-family: 'Times New Roman', serif;
+      font-size: 1.3rem;
+      margin-bottom: 8px;
     }
-    
+
+    .formula-note {
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+
+    /* 表格 */
     table {
       width: 100%;
       border-collapse: collapse;
-      margin: 20px 0;
-      background: var(--card-bg);
-      border-radius: 8px;
-      overflow: hidden;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      margin: 24px 0;
+      font-size: 0.95rem;
+    }
+    
+    th, td {
+      padding: 12px 16px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
     }
     
     th {
-      background: var(--primary);
-      color: white;
-      padding: 12px 15px;
-      text-align: left;
       font-weight: 500;
-    }
-    
-    td {
-      padding: 12px 15px;
-      border-bottom: 1px solid var(--border-color);
-    }
-    
-    tr:hover {
-      background: var(--primary-light);
+      color: var(--muted);
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
     }
 
-    .practice-box {
-      background: #e8f5e9;
-      border: 2px solid #4caf50;
+    /* 情境卡片 */
+    .scenario {
+      background: var(--card);
+      border: 1px solid var(--border);
       border-radius: 12px;
-      padding: 20px;
-      margin: 25px 0;
+      padding: 32px;
+      margin: 32px 0;
     }
 
-    [data-theme="dark"] .practice-box {
-      background: #1a3d1a;
+    .scenario-title {
+      font-weight: 500;
+      margin-bottom: 20px;
+      font-size: 1.05rem;
     }
 
-    .practice-title {
-      color: #2e7d32;
-      font-weight: bold;
-      font-size: 1.1em;
-      margin-bottom: 10px;
+    .scenario img {
+      display: block;
+      max-width: 100%;
+      margin: 20px auto;
+      border-radius: 4px;
     }
 
-    [data-theme="dark"] .practice-title {
-      color: #69db7c;
+    .scenario ul {
+      list-style: none;
+      padding-left: 0;
     }
 
-    .answer {
-      background: #f1f8e9;
-      border-radius: 8px;
-      padding: 15px;
-      margin-top: 15px;
-      border: 1px dashed #81c784;
+    .scenario li {
+      padding: 4px 0;
     }
 
-    [data-theme="dark"] .answer {
-      background: #0d2818;
-      border-color: #2f6846;
+    .scenario li::before {
+      content: "·";
+      margin-right: 12px;
+      color: var(--muted);
     }
 
-    .answer-toggle {
-      background: #4caf50;
-      color: white;
-      border: none;
+    /* 提示 */
+    .note {
+      background: var(--card);
+      border-left: 2px solid var(--border);
+      padding: 16px 20px;
+      margin: 24px 0;
+      font-size: 0.95rem;
+      color: var(--muted);
+    }
+
+    .note strong {
+      color: var(--text);
+    }
+
+    /* 練習題 */
+    .practice {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+      margin: 24px 0;
+    }
+
+    .practice-num {
+      font-size: 0.8rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 12px;
+    }
+
+    .answer-btn {
+      background: none;
+      border: 1px solid var(--border);
+      color: var(--muted);
       padding: 8px 16px;
       border-radius: 20px;
       cursor: pointer;
-      font-size: 14px;
-      margin-top: 10px;
+      font-size: 13px;
+      margin-top: 16px;
+      transition: all 0.2s;
+      font-family: inherit;
     }
 
-    .answer-toggle:hover {
-      background: #43a047;
+    .answer-btn:hover {
+      border-color: var(--text);
+      color: var(--text);
     }
 
     .answer-content {
       display: none;
-      margin-top: 15px;
-      padding-top: 15px;
-      border-top: 1px solid #c8e6c9;
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border);
+      font-size: 0.95rem;
     }
 
-    [data-theme="dark"] .answer-content {
-      border-top-color: #2f6846;
-    }
-
-    .summary-box {
-      background: linear-gradient(135deg, #667eea, #764ba2);
-      color: white;
-      border-radius: 12px;
-      padding: 25px;
-      margin: 30px 0;
-    }
-
-    .summary-box h2 {
-      color: white;
-      border-left-color: white;
-    }
-
-    .summary-box li {
-      margin: 10px 0;
-    }
-
-    .step-list {
+    /* 步驟 */
+    .steps {
       counter-reset: step;
       list-style: none;
       padding-left: 0;
     }
 
-    .step-list li {
+    .steps li {
       counter-increment: step;
-      padding: 12px 15px 12px 50px;
-      margin: 10px 0;
-      background: var(--card-bg);
-      border-radius: 8px;
+      padding: 8px 0 8px 40px;
       position: relative;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
     }
 
-    .step-list li::before {
+    .steps li::before {
       content: counter(step);
       position: absolute;
-      left: 15px;
-      top: 50%;
-      transform: translateY(-50%);
-      background: var(--primary);
-      color: white;
+      left: 0;
       width: 24px;
       height: 24px;
+      border: 1px solid var(--border);
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-weight: bold;
-      font-size: 14px;
+      font-size: 12px;
+      color: var(--muted);
     }
 
+    /* 重點整理 */
+    .summary {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 32px;
+      margin: 48px 0;
+    }
+
+    .summary h2 {
+      margin-top: 0;
+      border: none;
+      padding: 0;
+      margin-bottom: 20px;
+    }
+
+    .summary ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .summary li {
+      padding: 8px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .summary li:last-child {
+      border: none;
+    }
+
+    /* 頁尾 */
     footer {
       text-align: center;
-      color: #888;
-      margin-top: 40px;
-      padding-top: 20px;
-      border-top: 1px solid var(--border-color);
+      padding: 40px 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    /* 重點標記 */
+    mark {
+      background: #fff3cd;
+      padding: 1px 4px;
+      border-radius: 2px;
+    }
+
+    [data-theme="dark"] mark {
+      background: #4a4000;
     }
 
     @media print {
-      .toolbar, .toc { display: none !important; }
-      body { padding-top: 20px; margin-left: 0; }
+      nav { display: none; }
+      .container { padding-top: 0; }
       .answer-content { display: block !important; }
+    }
+
+    @media (max-width: 600px) {
+      .container { padding: 80px 16px 40px; }
+      h1 { font-size: 1.8rem; }
+      .scenario { padding: 20px; }
     }
   </style>
 </head>
 <body>
 
-<!-- 工具列 -->
-<div class="toolbar">
-  <div class="toolbar-left">
-    <a href="../index.html" class="toolbar-btn">🏠 返回首頁</a>
-    <span class="toolbar-title">靜力平衡 完全攻略</span>
+<nav>
+  <a href="../index.html">← 返回</a>
+  <div class="nav-actions">
+    <button onclick="window.print()">列印</button>
+    <button onclick="toggleTheme()">◐</button>
   </div>
-  <div class="toolbar-right">
-    <button class="toolbar-btn secondary" onclick="window.print()">🖨️ 列印</button>
-    <button class="toolbar-btn secondary" onclick="toggleTheme()">🌙 深色模式</button>
-  </div>
-</div>
-
-<!-- 目錄 -->
-<nav class="toc">
-  <div class="toc-title">📑 目錄</div>
-  <a href="#section1">一、什麼是靜力平衡？</a>
-  <a href="#section2">二、常見的力</a>
-  <a href="#section3">三、畫受力圖的步驟</a>
-  <a href="#section4">四、常見情境分析</a>
-  <a href="#section5">五、解題流程</a>
-  <a href="#section6">六、練習題</a>
-  <a href="#section7">七、重點整理</a>
 </nav>
 
-<h1>⚖️ 靜力平衡 完全攻略</h1>
+<div class="container">
 
-<h2 id="section1">一、什麼是靜力平衡？</h2>
+<h1>靜力平衡</h1>
+<p class="subtitle">Static Equilibrium</p>
 
-<div class="box">
-  <p>當一個物體處於<span class="key-point">靜止狀態</span>且<span class="key-point">保持靜止</span>，我們說它處於「靜力平衡」。</p>
-  <p>簡單說：不動，而且會繼續不動。</p>
+<h2>平衡條件</h2>
+
+<p>當物體處於靜止狀態且保持靜止，即為「靜力平衡」。</p>
+
+<div class="formula">
+  <div class="formula-main">ΣF = 0 ，Στ = 0</div>
+  <div class="formula-note">合力為零、合力矩為零</div>
 </div>
 
-<div class="formula-box">
-  <div class="formula">平衡條件</div>
-  <p><strong>平移平衡：</strong>ΣF = 0（合力為零）</p>
-  <p><strong>轉動平衡：</strong>Στ = 0（合力矩為零）</p>
+<div class="note">
+  <strong>實用分解</strong><br>
+  ΣFₓ = 0（水平）・ΣFᵧ = 0（垂直）・Στ = 0（力矩）
 </div>
 
-<div class="tip-box">
-  💡 <strong>實用分解：</strong><br>
-  • ΣFₓ = 0（水平方向的力平衡）<br>
-  • ΣFᵧ = 0（垂直方向的力平衡）<br>
-  • Στ = 0（對任意點的力矩平衡）
-</div>
-
-<h2 id="section2">二、常見的力</h2>
+<h2>常見的力</h2>
 
 <table>
   <tr>
-    <th>力的名稱</th>
+    <th>力</th>
     <th>符號</th>
     <th>方向</th>
-    <th>說明</th>
   </tr>
   <tr>
-    <td><strong>重力</strong></td>
-    <td>W 或 mg</td>
-    <td>鉛直向下</td>
-    <td>W = mg，作用於質心</td>
+    <td>重力</td>
+    <td>W, mg</td>
+    <td>鉛直向下，作用於質心</td>
   </tr>
   <tr>
-    <td><strong>正向力</strong></td>
+    <td>正向力</td>
     <td>N</td>
     <td>垂直接觸面，指向物體</td>
-    <td>接觸面對物體的支撐力</td>
   </tr>
   <tr>
-    <td><strong>摩擦力</strong></td>
+    <td>摩擦力</td>
     <td>f</td>
-    <td>平行接觸面</td>
-    <td>靜摩擦 f ≤ μₛN</td>
+    <td>平行接觸面，f ≤ μₛN</td>
   </tr>
   <tr>
-    <td><strong>張力</strong></td>
+    <td>張力</td>
     <td>T</td>
-    <td>沿繩方向，拉離物體</td>
-    <td>繩子對物體的拉力</td>
-  </tr>
-  <tr>
-    <td><strong>彈力</strong></td>
-    <td>F</td>
-    <td>沿彈簧方向</td>
-    <td>F = kx（虎克定律）</td>
+    <td>沿繩方向</td>
   </tr>
 </table>
 
-<h2 id="section3">三、畫受力圖的步驟</h2>
+<h2>畫受力圖</h2>
 
-<ol class="step-list">
-  <li><strong>確定研究對象</strong>：把物體隔離出來思考</li>
-  <li><strong>畫重力</strong>：從質心向下畫 W = mg</li>
-  <li><strong>找接觸點</strong>：每個接觸點可能有正向力和摩擦力</li>
-  <li><strong>畫正向力</strong>：垂直接觸面，指向物體</li>
-  <li><strong>畫摩擦力</strong>：平行接觸面，與相對運動趨勢相反</li>
-  <li><strong>畫其他力</strong>：張力、外力等</li>
-  <li><strong>檢查</strong>：每個力都要有來源！</li>
+<ol class="steps">
+  <li>確定研究對象</li>
+  <li>畫重力（從質心向下）</li>
+  <li>找接觸點，畫正向力與摩擦力</li>
+  <li>畫其他力（張力、外力）</li>
+  <li>檢查：每個力都要有來源</li>
 </ol>
 
-<div class="warning-box">
-  ⚠️ <strong>常見錯誤：</strong>憑空畫出不存在的力！每個力一定要有施力者。
-</div>
+<h2>情境分析</h2>
 
-<h2 id="section4">四、常見情境分析</h2>
-
-<!-- 情境 1 -->
-<div class="scenario-box">
-  <div class="scenario-title">📦 情境 1：水平面上的物體（有外力推）</div>
-  
-  <div style="text-align: center; margin: 15px 0;">
-    <img src="images/box-horizontal.gif" alt="水平面受力圖" style="max-width: 100%; border-radius: 8px; background: #fff; padding: 10px;">
-  </div>
-  
-  <p><strong>平衡條件：</strong></p>
+<div class="scenario">
+  <div class="scenario-title">水平面上的物體</div>
+  <img src="images/box-horizontal.gif" alt="水平面受力圖">
   <ul>
     <li>水平：F = f</li>
     <li>垂直：N = W = mg</li>
   </ul>
 </div>
 
-<!-- 情境 2 -->
-<div class="scenario-box">
-  <div class="scenario-title">📐 情境 2：斜面上的靜止物體</div>
-  
-  <div style="text-align: center; margin: 15px 0;">
-    <img src="images/incline-fbd.gif" alt="斜面受力圖" style="max-width: 100%; border-radius: 8px; background: #fff; padding: 10px;">
-  </div>
-  
-  <div class="tip-box">
-    💡 <strong>分解重力是關鍵！</strong><br>
-    • 沿斜面分量：W sinθ（向下滑的趨勢）<br>
-    • 垂直斜面分量：W cosθ（壓入斜面）
-  </div>
-  
-  <p><strong>平衡條件：</strong></p>
+<div class="scenario">
+  <div class="scenario-title">斜面上的物體</div>
+  <img src="images/incline-fbd.gif" alt="斜面受力圖">
   <ul>
-    <li>沿斜面：<span class="key-point">f = mg sinθ</span></li>
-    <li>垂直斜面：<span class="key-point">N = mg cosθ</span></li>
+    <li>沿斜面：<mark>f = mg sin θ</mark></li>
+    <li>垂直斜面：<mark>N = mg cos θ</mark></li>
   </ul>
-  
-  <p><strong>靜摩擦臨界條件：</strong> f ≤ μₛN → tanθ ≤ μₛ</p>
-</div>
-
-<!-- 情境 3 -->
-<div class="scenario-box">
-  <div class="scenario-title">🧵 情境 3：單繩懸掛</div>
-  
-  <div style="text-align: center; margin: 15px 0;">
-    <img src="images/hanging-sign.gif" alt="單繩懸掛受力圖" style="max-width: 200px; border-radius: 8px; background: #fff; padding: 10px;">
-  </div>
-  
-  <p><strong>平衡條件：</strong></p>
-  <ul>
-    <li>T = W = mg</li>
-  </ul>
-  <p>最單純的情況，張力等於重量。</p>
-</div>
-
-<!-- 情境 4 -->
-<div class="scenario-box">
-  <div class="scenario-title">🎭 情境 4：雙繩對稱懸掛</div>
-  
-  <div style="text-align: center; margin: 15px 0;">
-    <img src="images/tension-angle.gif" alt="雙繩對稱懸掛" style="max-width: 100%; border-radius: 8px; background: #fff; padding: 10px;">
-  </div>
-  
-  <p><strong>當兩繩對稱，各與垂直線夾角 θ：</strong></p>
-  <ul>
-    <li>垂直：2T cosθ = W → <span class="key-point">T = W/(2cosθ)</span></li>
-    <li>水平：自動平衡（兩邊對稱抵消）</li>
-  </ul>
-  
-  <div class="warning-box">
-    ⚠️ <strong>重要觀察：</strong>角度越大（繩子越水平），cosθ 越小，張力 T 越大！<br>
-    極端情況：θ → 90° 時，T → ∞（不可能水平掛住東西）
+  <div class="note">
+    靜摩擦臨界：tan θ ≤ μₛ
   </div>
 </div>
 
-<!-- 情境 5 -->
-<div class="scenario-box">
-  <div class="scenario-title">⚖️ 情境 5：雙繩不對稱懸掛</div>
-  
-  <div style="text-align: center; margin: 15px 0;">
-    <img src="images/tension-angle.gif" alt="雙繩不對稱懸掛" style="max-width: 100%; border-radius: 8px; background: #fff; padding: 10px;">
-    <p style="font-size: 0.9em; color: #666; margin-top: 8px;">（α、β 分別為兩繩與水平的夾角）</p>
-  </div>
-  
-  <p><strong>平衡條件（α、β 為與水平的夾角）：</strong></p>
+<div class="scenario">
+  <div class="scenario-title">雙繩懸掛（對稱）</div>
+  <img src="images/tension-angle.gif" alt="雙繩懸掛">
   <ul>
-    <li>水平：Tₐ cosα = Tᵦ cosβ</li>
-    <li>垂直：Tₐ sinα + Tᵦ sinβ = W</li>
+    <li>垂直：2T cos θ = W</li>
+    <li>張力：<mark>T = W / (2 cos θ)</mark></li>
   </ul>
-  
-  <p>兩個方程式，可解兩個未知數（Tₐ 和 Tᵦ）</p>
+  <div class="note">
+    角度越水平（θ 越大），張力越大
+  </div>
 </div>
 
-<!-- 情境 6 -->
-<div class="scenario-box">
-  <div class="scenario-title">🪜 情境 6：靠牆的梯子（經典力矩題）</div>
-  
-  <div class="diagram">            │
-            │← N₂（牆的正向力）
-          ╱│
-         ╱ │
-        ╱  │
-       ╱ ● │  （●是質心，受 W 向下）
-      ╱    │
-     ╱     │
-────■──────┴────
-    ↑  →
-    N₁  f₁</div>
-  
-  <p><strong>設定：</strong>梯子長 L，與地面夾角 θ，牆面光滑（無摩擦）</p>
-  
-  <p><strong>平衡條件：</strong></p>
+<div class="scenario">
+  <div class="scenario-title">雙繩懸掛（不對稱）</div>
+  <img src="images/tension-angle.gif" alt="雙繩懸掛">
+  <p>α、β 為兩繩與水平的夾角：</p>
   <ul>
-    <li>水平：f₁ = N₂</li>
+    <li>水平：Tₐ cos α = Tᵦ cos β</li>
+    <li>垂直：Tₐ sin α + Tᵦ sin β = W</li>
+  </ul>
+</div>
+
+<div class="scenario">
+  <div class="scenario-title">靠牆的梯子</div>
+  <p>梯子長 L，與地面夾角 θ，牆面光滑：</p>
+  <ul>
+    <li>水平：f = N₂</li>
     <li>垂直：N₁ = W</li>
-    <li>力矩（對底端取）：N₂ · L sinθ = W · (L/2) cosθ</li>
+    <li>力矩（對底端）：N₂ · L sin θ = W · (L/2) cos θ</li>
   </ul>
-  
-  <div class="tip-box">
-    💡 <strong>選支點技巧：</strong>選在未知力最多的點當支點，可以消掉那些力的力矩（力臂=0）！
+  <div class="note">
+    選在未知力最多的點當支點，可消掉那些力的力矩
   </div>
 </div>
 
-<h2 id="section5">五、解題流程</h2>
+<h2>練習</h2>
 
-<div class="box">
-  <ol class="step-list">
-    <li>選定研究對象</li>
-    <li>畫受力圖（標示所有力）</li>
-    <li>建立座標系（選方便的方向，斜面題可沿斜面建座標）</li>
-    <li>列平衡方程式：ΣFₓ = 0、ΣFᵧ = 0、（需要時）Στ = 0</li>
-    <li>解方程式，求未知數</li>
-  </ol>
-</div>
-
-<h2 id="section6">六、練習題</h2>
-
-<!-- 練習 1 -->
-<div class="practice-box">
-  <div class="practice-title">📝 練習 1：斜面問題</div>
-  <p>一個質量 5 kg 的物體靜止在傾角 30° 的斜面上。求：</p>
-  <p>(a) 正向力 N &nbsp;&nbsp; (b) 靜摩擦力 f &nbsp;&nbsp; (g = 10 m/s²)</p>
-  
-  <button class="answer-toggle" onclick="toggleAnswer(this)">顯示答案</button>
+<div class="practice">
+  <div class="practice-num">Practice 01</div>
+  <p>質量 5 kg 的物體靜止在傾角 30° 的斜面上。求正向力 N 與靜摩擦力 f。（g = 10 m/s²）</p>
+  <button class="answer-btn" onclick="toggleAnswer(this)">顯示解答</button>
   <div class="answer-content">
-    <div class="answer">
-      <p>W = mg = 5 × 10 = 50 N</p>
-      <p><strong>(a)</strong> N = W cos30° = 50 × (√3/2) ≈ <strong>43.3 N</strong></p>
-      <p><strong>(b)</strong> f = W sin30° = 50 × 0.5 = <strong>25 N</strong></p>
-    </div>
+    <p>W = mg = 50 N</p>
+    <p>N = W cos 30° = 50 × (√3/2) ≈ <strong>43.3 N</strong></p>
+    <p>f = W sin 30° = 50 × 0.5 = <strong>25 N</strong></p>
   </div>
 </div>
 
-<!-- 練習 2 -->
-<div class="practice-box">
-  <div class="practice-title">📝 練習 2：對稱雙繩懸掛</div>
-  <p>一個重 100 N 的招牌被兩條繩子對稱懸掛，每條繩子與垂直線夾角 45°。求繩子張力 T。</p>
-  
-  <button class="answer-toggle" onclick="toggleAnswer(this)">顯示答案</button>
+<div class="practice">
+  <div class="practice-num">Practice 02</div>
+  <p>重 100 N 的招牌被兩條繩子對稱懸掛，每條繩子與垂直線夾角 45°。求張力 T。</p>
+  <button class="answer-btn" onclick="toggleAnswer(this)">顯示解答</button>
   <div class="answer-content">
-    <div class="answer">
-      <p>垂直方向：2T cos45° = W</p>
-      <p>T = W / (2 cos45°) = 100 / (2 × √2/2) = 100 / √2</p>
-      <p>T ≈ <strong>70.7 N</strong></p>
-    </div>
+    <p>2T cos 45° = W</p>
+    <p>T = 100 / (2 × √2/2) = 100 / √2 ≈ <strong>70.7 N</strong></p>
   </div>
 </div>
 
-<!-- 練習 3 -->
-<div class="practice-box">
-  <div class="practice-title">📝 練習 3：不對稱懸掛</div>
-  <p>一物體重 W，被兩繩懸掛。繩 A 與水平夾角 60°，繩 B 與水平夾角 30°。求 Tₐ 和 Tᵦ（以 W 表示）。</p>
-  
-  <button class="answer-toggle" onclick="toggleAnswer(this)">顯示答案</button>
+<div class="practice">
+  <div class="practice-num">Practice 03</div>
+  <p>物體重 W，繩 A 與水平夾角 60°，繩 B 與水平夾角 30°。求 Tₐ 和 Tᵦ。</p>
+  <button class="answer-btn" onclick="toggleAnswer(this)">顯示解答</button>
   <div class="answer-content">
-    <div class="answer">
-      <p><strong>水平：</strong>Tₐ cos60° = Tᵦ cos30°</p>
-      <p>Tₐ × 0.5 = Tᵦ × (√3/2) → Tₐ = √3 Tᵦ</p>
-      
-      <p><strong>垂直：</strong>Tₐ sin60° + Tᵦ sin30° = W</p>
-      <p>√3 Tᵦ × (√3/2) + Tᵦ × 0.5 = W</p>
-      <p>1.5 Tᵦ + 0.5 Tᵦ = W → 2 Tᵦ = W</p>
-      
-      <p><strong>Tᵦ = W/2</strong></p>
-      <p><strong>Tₐ = √3 W/2 ≈ 0.866 W</strong></p>
-    </div>
+    <p>水平：Tₐ × 0.5 = Tᵦ × (√3/2) → Tₐ = √3 Tᵦ</p>
+    <p>垂直：1.5 Tᵦ + 0.5 Tᵦ = W → 2 Tᵦ = W</p>
+    <p><strong>Tᵦ = W/2，Tₐ = √3W/2</strong></p>
   </div>
 </div>
 
-<!-- 練習 4 -->
-<div class="practice-box">
-  <div class="practice-title">📝 練習 4：梯子問題</div>
-  <p>一把長 4 m、重 200 N 的均勻梯子斜靠在光滑牆上（牆面無摩擦），與地面夾角 60°。求：</p>
-  <p>(a) 牆對梯子的正向力 N₂ &nbsp;&nbsp; (b) 地面對梯子的摩擦力 f</p>
-  
-  <button class="answer-toggle" onclick="toggleAnswer(this)">顯示答案</button>
-  <div class="answer-content">
-    <div class="answer">
-      <p>設梯子底端為支點，對其取力矩：</p>
-      <p>N₂ × L sinθ = W × (L/2) cosθ</p>
-      <p>N₂ × 4 × sin60° = 200 × 2 × cos60°</p>
-      <p>N₂ × 4 × (√3/2) = 200 × 2 × 0.5</p>
-      <p>N₂ × 2√3 = 200</p>
-      <p><strong>(a) N₂ ≈ 57.7 N</strong></p>
-      
-      <p>水平平衡：f = N₂</p>
-      <p><strong>(b) f ≈ 57.7 N</strong></p>
-    </div>
-  </div>
-</div>
-
-<div class="summary-box" id="section7">
-  <h2>✨ 重點整理</h2>
+<div class="summary">
+  <h2>重點整理</h2>
   <ul>
-    <li>✅ 靜力平衡 = <strong>合力為零</strong> + <strong>合力矩為零</strong></li>
-    <li>✅ 斜面問題：N = mg cosθ，f = mg sinθ（要背！）</li>
-    <li>✅ 懸掛問題：角度越水平，張力越大</li>
-    <li>✅ 梯子問題：選擇適當支點可以消掉未知力</li>
-    <li>✅ <strong>畫受力圖是解題關鍵，每個力都要有來源！</strong></li>
+    <li>靜力平衡 = 合力為零 + 合力矩為零</li>
+    <li>斜面：N = mg cos θ，f = mg sin θ</li>
+    <li>懸掛：角度越水平，張力越大</li>
+    <li>力矩：選適當支點可消掉未知力</li>
+    <li>畫受力圖是解題關鍵</li>
   </ul>
 </div>
 
 <footer>
-  製作日期：2026-02-12 ｜ AB御用秘書 🦞
+  2026.02.12
 </footer>
+
+</div>
 
 <script>
 function toggleAnswer(btn) {
   const content = btn.nextElementSibling;
   if (content.style.display === 'block') {
     content.style.display = 'none';
-    btn.textContent = '顯示答案';
+    btn.textContent = '顯示解答';
   } else {
     content.style.display = 'block';
-    btn.textContent = '隱藏答案';
+    btn.textContent = '隱藏解答';
   }
 }
 
 function toggleTheme() {
   const html = document.documentElement;
-  const btn = document.querySelector('.toolbar-right .toolbar-btn.secondary:last-child');
   if (html.getAttribute('data-theme') === 'dark') {
     html.removeAttribute('data-theme');
-    btn.textContent = '🌙 深色模式';
     localStorage.setItem('theme', 'light');
   } else {
     html.setAttribute('data-theme', 'dark');
-    btn.textContent = '☀️ 淺色模式';
     localStorage.setItem('theme', 'dark');
   }
 }
 
-// 載入時檢查儲存的主題
 if (localStorage.getItem('theme') === 'dark') {
   document.documentElement.setAttribute('data-theme', 'dark');
-  document.addEventListener('DOMContentLoaded', () => {
-    const btn = document.querySelector('.toolbar-right .toolbar-btn.secondary:last-child');
-    if (btn) btn.textContent = '☀️ 淺色模式';
-  });
 }
 </script>
 
