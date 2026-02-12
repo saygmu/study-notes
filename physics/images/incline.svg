@@ -7,20 +7,20 @@
   <text x="75" y="180" font-family="Georgia, serif" font-size="14" font-style="italic">θ</text>
   
   <!-- 物體 -->
-  <rect x="140" y="95" width="45" height="45" fill="#e8e8e8" stroke="#333" stroke-width="2" transform="rotate(-30 162 117)"/>
+  <rect x="130" y="100" width="40" height="40" fill="#e8e8e8" stroke="#333" stroke-width="2" transform="rotate(-30 150 120)"/>
   
   <!-- 重力 W（垂直向下）-->
-  <line x1="162" y1="117" x2="162" y2="185" stroke="#333" stroke-width="2"/>
-  <polygon points="162,195 157,185 167,185" fill="#333"/>
-  <text x="170" y="195" font-family="Georgia, serif" font-size="14" font-style="italic">W</text>
+  <line x1="150" y1="120" x2="150" y2="185" stroke="#333" stroke-width="2"/>
+  <polygon points="150,195 145,185 155,185" fill="#333"/>
+  <text x="158" y="192" font-family="Georgia, serif" font-size="14" font-style="italic">W</text>
   
   <!-- 正向力 N（垂直斜面向外）-->
-  <line x1="162" y1="105" x2="130" y2="50" stroke="#333" stroke-width="2"/>
-  <polygon points="125,42 128,53 138,48" fill="#333"/>
-  <text x="110" y="45" font-family="Georgia, serif" font-size="14" font-style="italic">N</text>
+  <line x1="150" y1="108" x2="118" y2="53" stroke="#333" stroke-width="2"/>
+  <polygon points="113,45 116,56 126,51" fill="#333"/>
+  <text x="98" y="50" font-family="Georgia, serif" font-size="14" font-style="italic">N</text>
   
-  <!-- 摩擦力 f（沿斜面向上）-->
-  <line x1="148" y1="125" x2="95" y2="95" stroke="#333" stroke-width="2"/>
-  <polygon points="87,90 97,90 95,100" fill="#333"/>
-  <text x="72" y="90" font-family="Georgia, serif" font-size="14" font-style="italic">f</text>
+  <!-- 摩擦力 f（沿斜面向上 = 往右上）-->
+  <line x1="162" y1="108" x2="210" y2="80" stroke="#333" stroke-width="2"/>
+  <polygon points="218,75 208,75 210,85" fill="#333"/>
+  <text x="222" y="82" font-family="Georgia, serif" font-size="14" font-style="italic">f</text>
 </svg>
