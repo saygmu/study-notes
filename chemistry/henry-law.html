@@ -24,8 +24,61 @@
       color: var(--text);
       line-height: 1.7;
       padding: 2rem;
+      padding-top: 70px;
       max-width: 900px;
       margin: 0 auto;
+    }
+    .toolbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      background: var(--card);
+      border-bottom: 1px solid #333;
+      padding: 10px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 1000;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+    }
+    .toolbar-left, .toolbar-right {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+    .toolbar-btn {
+      background: var(--accent);
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 20px;
+      cursor: pointer;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+    .toolbar-btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 3px 10px rgba(233, 69, 96, 0.3);
+    }
+    .toolbar-btn.secondary {
+      background: #6c757d;
+    }
+    .toolbar-btn.secondary:hover {
+      background: #5a6268;
+    }
+    .toolbar-title {
+      font-weight: bold;
+      color: var(--text);
+      font-size: 14px;
+    }
+    @media print {
+      .toolbar { display: none !important; }
+      body { padding-top: 2rem; }
     }
     h1 {
       text-align: center;
@@ -209,6 +262,17 @@
   </style>
 </head>
 <body>
+
+<!-- 工具列 -->
+<div class="toolbar">
+  <div class="toolbar-left">
+    <a href="../index.html" class="toolbar-btn">🏠 返回首頁</a>
+    <span class="toolbar-title">亨利定律 × 蒸氣壓 決策攻略</span>
+  </div>
+  <div class="toolbar-right">
+    <button class="toolbar-btn secondary" onclick="window.print()">🖨️ 列印</button>
+  </div>
+</div>
 
 <h1>🧪 亨利定律 × 蒸氣壓<br>決策攻略</h1>
 

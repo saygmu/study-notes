@@ -8,32 +8,154 @@
     @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap');
     
     * { box-sizing: border-box; }
+
+    :root {
+      --bg-color: #fafafa;
+      --text-color: #333;
+      --card-bg: #fff;
+      --border-color: #eee;
+      --primary: #e74c3c;
+      --primary-light: #e7494922;
+    }
+
+    [data-theme="dark"] {
+      --bg-color: #1a1a2e;
+      --text-color: #e8e8e8;
+      --card-bg: #16213e;
+      --border-color: #2a2a4a;
+    }
     
     body {
       font-family: 'Noto Sans TC', -apple-system, sans-serif;
       max-width: 850px;
       margin: 0 auto;
       padding: 20px;
+      padding-top: 70px;
       font-size: 16px;
       line-height: 1.8;
-      color: #333;
-      background: #fafafa;
+      color: var(--text-color);
+      background: var(--bg-color);
+      transition: all 0.3s ease;
+    }
+
+    /* 頂部工具列 */
+    .toolbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      background: var(--card-bg);
+      border-bottom: 1px solid var(--border-color);
+      padding: 10px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 1000;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    .toolbar-left, .toolbar-right {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .toolbar-btn {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 20px;
+      cursor: pointer;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+
+    .toolbar-btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 3px 10px rgba(231, 76, 60, 0.3);
+    }
+
+    .toolbar-btn.secondary {
+      background: #6c757d;
+    }
+
+    .toolbar-btn.secondary:hover {
+      background: #5a6268;
+      box-shadow: 0 3px 10px rgba(108, 117, 125, 0.3);
+    }
+
+    .toolbar-title {
+      font-weight: bold;
+      color: var(--text-color);
+      font-size: 14px;
+    }
+
+    /* 目錄側邊欄 */
+    .toc {
+      position: fixed;
+      left: 10px;
+      top: 80px;
+      width: 180px;
+      background: var(--card-bg);
+      border-radius: 12px;
+      padding: 15px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      font-size: 13px;
+      max-height: calc(100vh - 100px);
+      overflow-y: auto;
+      display: none;
+    }
+
+    @media (min-width: 1200px) {
+      .toc { display: block; }
+      body { margin-left: 200px; }
+    }
+
+    .toc-title {
+      font-weight: bold;
+      margin-bottom: 10px;
+      color: var(--primary);
+    }
+
+    .toc a {
+      display: block;
+      color: var(--text-color);
+      text-decoration: none;
+      padding: 5px 0;
+      border-left: 2px solid transparent;
+      padding-left: 10px;
+      transition: all 0.2s;
+    }
+
+    .toc a:hover {
+      border-left-color: var(--primary);
+      color: var(--primary);
     }
     
     h1 {
       text-align: center;
-      color: #2c3e50;
-      border-bottom: 3px solid #e74c3c;
+      color: var(--primary);
+      border-bottom: 3px solid var(--primary);
       padding-bottom: 15px;
       font-size: 1.8em;
     }
     
     h2 {
       color: #c0392b;
-      border-left: 4px solid #e74c3c;
+      border-left: 4px solid var(--primary);
       padding-left: 12px;
       margin-top: 40px;
       font-size: 1.3em;
+      scroll-margin-top: 80px;
+    }
+
+    [data-theme="dark"] h2 {
+      color: #ff6b6b;
     }
     
     h3 {
@@ -41,10 +163,14 @@
       font-size: 1.1em;
       margin-top: 25px;
     }
+
+    [data-theme="dark"] h3 {
+      color: #69db7c;
+    }
     
     .formula-box {
       background: linear-gradient(135deg, #e7494922, #f3935122);
-      border: 2px solid #e74c3c;
+      border: 2px solid var(--primary);
       border-radius: 12px;
       padding: 20px;
       margin: 20px 0;
@@ -56,14 +182,18 @@
       font-weight: bold;
       color: #c0392b;
     }
+
+    [data-theme="dark"] .formula {
+      color: #ff8787;
+    }
     
     .formula-box p {
       margin: 10px 0 0 0;
-      color: #555;
+      color: var(--text-color);
     }
     
     .box {
-      background: #fff;
+      background: var(--card-bg);
       border-radius: 12px;
       padding: 20px;
       margin: 20px 0;
@@ -77,6 +207,10 @@
       margin: 20px 0;
       border-radius: 0 8px 8px 0;
     }
+
+    [data-theme="dark"] .warning-box {
+      background: #3d2e0a;
+    }
     
     .tip-box {
       background: #e3f2fd;
@@ -85,24 +219,13 @@
       margin: 20px 0;
       border-radius: 0 8px 8px 0;
     }
-    
-    .example-box {
-      background: #f3e5f5;
-      border: 1px solid #9c27b0;
-      border-radius: 12px;
-      padding: 20px;
-      margin: 20px 0;
-    }
-    
-    .example-title {
-      color: #7b1fa2;
-      font-weight: bold;
-      font-size: 1.1em;
-      margin-bottom: 15px;
-    }
 
+    [data-theme="dark"] .tip-box {
+      background: #0a2540;
+    }
+    
     .scenario-box {
-      background: #fff;
+      background: var(--card-bg);
       border: 2px solid #3498db;
       border-radius: 12px;
       padding: 20px;
@@ -118,6 +241,11 @@
       padding-bottom: 10px;
       border-bottom: 2px dashed #bde0fe;
     }
+
+    [data-theme="dark"] .scenario-title {
+      color: #74c0fc;
+      border-bottom-color: #1c4966;
+    }
     
     .key-point {
       background: #ffebee;
@@ -125,6 +253,11 @@
       padding: 2px 8px;
       font-weight: bold;
       color: #c0392b;
+    }
+
+    [data-theme="dark"] .key-point {
+      background: #4a1a1a;
+      color: #ff8787;
     }
     
     .diagram {
@@ -139,19 +272,25 @@
       white-space: pre;
       overflow-x: auto;
     }
+
+    [data-theme="dark"] .diagram {
+      background: #0d1117;
+      border-color: #30363d;
+      color: #c9d1d9;
+    }
     
     table {
       width: 100%;
       border-collapse: collapse;
       margin: 20px 0;
-      background: #fff;
+      background: var(--card-bg);
       border-radius: 8px;
       overflow: hidden;
       box-shadow: 0 2px 8px rgba(0,0,0,0.08);
     }
     
     th {
-      background: #e74c3c;
+      background: var(--primary);
       color: white;
       padding: 12px 15px;
       text-align: left;
@@ -160,11 +299,11 @@
     
     td {
       padding: 12px 15px;
-      border-bottom: 1px solid #eee;
+      border-bottom: 1px solid var(--border-color);
     }
     
     tr:hover {
-      background: #fff5f5;
+      background: var(--primary-light);
     }
 
     .practice-box {
@@ -175,11 +314,19 @@
       margin: 25px 0;
     }
 
+    [data-theme="dark"] .practice-box {
+      background: #1a3d1a;
+    }
+
     .practice-title {
       color: #2e7d32;
       font-weight: bold;
       font-size: 1.1em;
       margin-bottom: 10px;
+    }
+
+    [data-theme="dark"] .practice-title {
+      color: #69db7c;
     }
 
     .answer {
@@ -188,6 +335,11 @@
       padding: 15px;
       margin-top: 15px;
       border: 1px dashed #81c784;
+    }
+
+    [data-theme="dark"] .answer {
+      background: #0d2818;
+      border-color: #2f6846;
     }
 
     .answer-toggle {
@@ -210,6 +362,10 @@
       margin-top: 15px;
       padding-top: 15px;
       border-top: 1px solid #c8e6c9;
+    }
+
+    [data-theme="dark"] .answer-content {
+      border-top-color: #2f6846;
     }
 
     .summary-box {
@@ -239,7 +395,7 @@
       counter-increment: step;
       padding: 12px 15px 12px 50px;
       margin: 10px 0;
-      background: #fff;
+      background: var(--card-bg);
       border-radius: 8px;
       position: relative;
       box-shadow: 0 2px 5px rgba(0,0,0,0.05);
@@ -251,7 +407,7 @@
       left: 15px;
       top: 50%;
       transform: translateY(-50%);
-      background: #e74c3c;
+      background: var(--primary);
       color: white;
       width: 24px;
       height: 24px;
@@ -263,18 +419,50 @@
       font-size: 14px;
     }
 
+    footer {
+      text-align: center;
+      color: #888;
+      margin-top: 40px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border-color);
+    }
+
     @media print {
-      body { background: white; }
-      .answer-toggle { display: none; }
+      .toolbar, .toc { display: none !important; }
+      body { padding-top: 20px; margin-left: 0; }
       .answer-content { display: block !important; }
     }
   </style>
 </head>
 <body>
 
+<!-- 工具列 -->
+<div class="toolbar">
+  <div class="toolbar-left">
+    <a href="../index.html" class="toolbar-btn">🏠 返回首頁</a>
+    <span class="toolbar-title">靜力平衡 完全攻略</span>
+  </div>
+  <div class="toolbar-right">
+    <button class="toolbar-btn secondary" onclick="window.print()">🖨️ 列印</button>
+    <button class="toolbar-btn secondary" onclick="toggleTheme()">🌙 深色模式</button>
+  </div>
+</div>
+
+<!-- 目錄 -->
+<nav class="toc">
+  <div class="toc-title">📑 目錄</div>
+  <a href="#section1">一、什麼是靜力平衡？</a>
+  <a href="#section2">二、常見的力</a>
+  <a href="#section3">三、畫受力圖的步驟</a>
+  <a href="#section4">四、常見情境分析</a>
+  <a href="#section5">五、解題流程</a>
+  <a href="#section6">六、練習題</a>
+  <a href="#section7">七、重點整理</a>
+</nav>
+
 <h1>⚖️ 靜力平衡 完全攻略</h1>
 
-<h2>一、什麼是靜力平衡？</h2>
+<h2 id="section1">一、什麼是靜力平衡？</h2>
 
 <div class="box">
   <p>當一個物體處於<span class="key-point">靜止狀態</span>且<span class="key-point">保持靜止</span>，我們說它處於「靜力平衡」。</p>
@@ -294,7 +482,7 @@
   • Στ = 0（對任意點的力矩平衡）
 </div>
 
-<h2>二、常見的力</h2>
+<h2 id="section2">二、常見的力</h2>
 
 <table>
   <tr>
@@ -335,7 +523,7 @@
   </tr>
 </table>
 
-<h2>三、畫受力圖的步驟</h2>
+<h2 id="section3">三、畫受力圖的步驟</h2>
 
 <ol class="step-list">
   <li><strong>確定研究對象</strong>：把物體隔離出來思考</li>
@@ -351,7 +539,7 @@
   ⚠️ <strong>常見錯誤：</strong>憑空畫出不存在的力！每個力一定要有施力者。
 </div>
 
-<h2>四、常見情境分析</h2>
+<h2 id="section4">四、常見情境分析</h2>
 
 <!-- 情境 1 -->
 <div class="scenario-box">
@@ -494,7 +682,7 @@
   </div>
 </div>
 
-<h2>五、解題流程</h2>
+<h2 id="section5">五、解題流程</h2>
 
 <div class="box">
   <ol class="step-list">
@@ -506,7 +694,7 @@
   </ol>
 </div>
 
-<h2>六、練習題</h2>
+<h2 id="section6">六、練習題</h2>
 
 <!-- 練習 1 -->
 <div class="practice-box">
@@ -582,7 +770,7 @@
   </div>
 </div>
 
-<div class="summary-box">
+<div class="summary-box" id="section7">
   <h2>✨ 重點整理</h2>
   <ul>
     <li>✅ 靜力平衡 = <strong>合力為零</strong> + <strong>合力矩為零</strong></li>
@@ -593,9 +781,9 @@
   </ul>
 </div>
 
-<p style="text-align: center; color: #888; margin-top: 40px;">
+<footer>
   製作日期：2026-02-12 ｜ AB御用秘書 🦞
-</p>
+</footer>
 
 <script>
 function toggleAnswer(btn) {
@@ -607,6 +795,29 @@ function toggleAnswer(btn) {
     content.style.display = 'block';
     btn.textContent = '隱藏答案';
   }
+}
+
+function toggleTheme() {
+  const html = document.documentElement;
+  const btn = document.querySelector('.toolbar-right .toolbar-btn.secondary:last-child');
+  if (html.getAttribute('data-theme') === 'dark') {
+    html.removeAttribute('data-theme');
+    btn.textContent = '🌙 深色模式';
+    localStorage.setItem('theme', 'light');
+  } else {
+    html.setAttribute('data-theme', 'dark');
+    btn.textContent = '☀️ 淺色模式';
+    localStorage.setItem('theme', 'dark');
+  }
+}
+
+// 載入時檢查儲存的主題
+if (localStorage.getItem('theme') === 'dark') {
+  document.documentElement.setAttribute('data-theme', 'dark');
+  document.addEventListener('DOMContentLoaded', () => {
+    const btn = document.querySelector('.toolbar-right .toolbar-btn.secondary:last-child');
+    if (btn) btn.textContent = '☀️ 淺色模式';
+  });
 }
 </script>
 
