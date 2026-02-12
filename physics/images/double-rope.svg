@@ -1,44 +1,39 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 220">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 260 200">
   <!-- 天花板 -->
-  <line x1="20" y1="30" x2="260" y2="30" stroke="#333" stroke-width="2"/>
-  <line x1="30" y1="30" x2="25" y2="20" stroke="#333" stroke-width="1"/>
-  <line x1="60" y1="30" x2="55" y2="20" stroke="#333" stroke-width="1"/>
-  <line x1="90" y1="30" x2="85" y2="20" stroke="#333" stroke-width="1"/>
-  <line x1="120" y1="30" x2="115" y2="20" stroke="#333" stroke-width="1"/>
-  <line x1="150" y1="30" x2="145" y2="20" stroke="#333" stroke-width="1"/>
-  <line x1="180" y1="30" x2="175" y2="20" stroke="#333" stroke-width="1"/>
-  <line x1="210" y1="30" x2="205" y2="20" stroke="#333" stroke-width="1"/>
-  <line x1="240" y1="30" x2="235" y2="20" stroke="#333" stroke-width="1"/>
+  <line x1="20" y1="25" x2="240" y2="25" stroke="#333" stroke-width="2"/>
+  <line x1="35" y1="25" x2="30" y2="15" stroke="#333" stroke-width="1"/>
+  <line x1="65" y1="25" x2="60" y2="15" stroke="#333" stroke-width="1"/>
+  <line x1="95" y1="25" x2="90" y2="15" stroke="#333" stroke-width="1"/>
+  <line x1="165" y1="25" x2="160" y2="15" stroke="#333" stroke-width="1"/>
+  <line x1="195" y1="25" x2="190" y2="15" stroke="#333" stroke-width="1"/>
+  <line x1="225" y1="25" x2="220" y2="15" stroke="#333" stroke-width="1"/>
   
   <!-- 左繩 -->
-  <line x1="60" y1="30" x2="140" y2="120" stroke="#333" stroke-width="2"/>
+  <line x1="55" y1="25" x2="130" y2="105" stroke="#333" stroke-width="2"/>
   
   <!-- 右繩 -->
-  <line x1="220" y1="30" x2="140" y2="120" stroke="#333" stroke-width="2"/>
+  <line x1="205" y1="25" x2="130" y2="105" stroke="#333" stroke-width="2"/>
   
   <!-- 物體 -->
-  <circle cx="140" cy="135" r="18" fill="#e8e8e8" stroke="#333" stroke-width="2"/>
+  <circle cx="130" cy="120" r="18" fill="#e8e8e8" stroke="#333" stroke-width="2"/>
   
   <!-- 左張力 T₁ -->
-  <line x1="130" y1="118" x2="75" y2="55" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
-  <text x="55" y="55" font-family="serif" font-size="13" font-style="italic">T₁</text>
+  <line x1="118" y1="100" x2="78" y2="55" stroke="#333" stroke-width="2"/>
+  <polygon points="70,48 80,50 78,60" fill="#333"/>
+  <text x="55" y="50" font-family="Georgia, serif" font-size="13">T₁</text>
   
   <!-- 右張力 T₂ -->
-  <line x1="150" y1="118" x2="205" y2="55" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
-  <text x="210" y="55" font-family="serif" font-size="13" font-style="italic">T₂</text>
+  <line x1="142" y1="100" x2="182" y2="55" stroke="#333" stroke-width="2"/>
+  <polygon points="190,48 180,50 182,60" fill="#333"/>
+  <text x="192" y="50" font-family="Georgia, serif" font-size="13">T₂</text>
   
   <!-- 重力 W -->
-  <line x1="140" y1="158" x2="140" y2="210" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
-  <text x="148" y="205" font-family="serif" font-size="14" font-style="italic">W</text>
+  <line x1="130" y1="143" x2="130" y2="180" stroke="#333" stroke-width="2"/>
+  <polygon points="130,190 125,180 135,180" fill="#333"/>
+  <text x="138" y="185" font-family="Georgia, serif" font-size="14" font-style="italic">W</text>
   
   <!-- 角度 θ -->
-  <path d="M 140,95 L 140,70 L 118,82" fill="none" stroke="#333" stroke-width="1"/>
-  <text x="125" y="78" font-family="serif" font-size="12" font-style="italic">θ</text>
-  
-  <!-- 箭頭定義 -->
-  <defs>
-    <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
-      <path d="M0,0 L0,6 L9,3 z" fill="#333"/>
-    </marker>
-  </defs>
+  <line x1="130" y1="105" x2="130" y2="70" stroke="#999" stroke-width="1" stroke-dasharray="3,3"/>
+  <path d="M 130,85 A 15,15 0 0,0 118,95" fill="none" stroke="#333" stroke-width="1"/>
+  <text x="108" y="82" font-family="Georgia, serif" font-size="12" font-style="italic">θ</text>
 </svg>

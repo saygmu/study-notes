@@ -1,31 +1,25 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 250">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 220">
   <!-- 天花板 -->
-  <line x1="40" y1="30" x2="160" y2="30" stroke="#333" stroke-width="2"/>
-  <line x1="50" y1="30" x2="45" y2="20" stroke="#333" stroke-width="1"/>
-  <line x1="70" y1="30" x2="65" y2="20" stroke="#333" stroke-width="1"/>
-  <line x1="90" y1="30" x2="85" y2="20" stroke="#333" stroke-width="1"/>
-  <line x1="110" y1="30" x2="105" y2="20" stroke="#333" stroke-width="1"/>
-  <line x1="130" y1="30" x2="125" y2="20" stroke="#333" stroke-width="1"/>
-  <line x1="150" y1="30" x2="145" y2="20" stroke="#333" stroke-width="1"/>
+  <line x1="30" y1="25" x2="130" y2="25" stroke="#333" stroke-width="2"/>
+  <line x1="40" y1="25" x2="35" y2="15" stroke="#333" stroke-width="1"/>
+  <line x1="60" y1="25" x2="55" y2="15" stroke="#333" stroke-width="1"/>
+  <line x1="80" y1="25" x2="75" y2="15" stroke="#333" stroke-width="1"/>
+  <line x1="100" y1="25" x2="95" y2="15" stroke="#333" stroke-width="1"/>
+  <line x1="120" y1="25" x2="115" y2="15" stroke="#333" stroke-width="1"/>
   
   <!-- 繩子 -->
-  <line x1="100" y1="30" x2="100" y2="120" stroke="#333" stroke-width="2"/>
+  <line x1="80" y1="25" x2="80" y2="100" stroke="#333" stroke-width="2"/>
   
   <!-- 物體 -->
-  <circle cx="100" cy="140" r="20" fill="#e8e8e8" stroke="#333" stroke-width="2"/>
+  <circle cx="80" cy="115" r="18" fill="#e8e8e8" stroke="#333" stroke-width="2"/>
   
-  <!-- 張力 T（向上） -->
-  <line x1="100" y1="115" x2="100" y2="55" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
-  <text x="110" y="80" font-family="serif" font-size="14" font-style="italic">T</text>
+  <!-- 張力 T（向上）-->
+  <line x1="80" y1="90" x2="80" y2="50" stroke="#333" stroke-width="2"/>
+  <polygon points="80,40 75,50 85,50" fill="#333"/>
+  <text x="88" y="60" font-family="Georgia, serif" font-size="14" font-style="italic">T</text>
   
-  <!-- 重力 W（向下） -->
-  <line x1="100" y1="165" x2="100" y2="225" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
-  <text x="110" y="215" font-family="serif" font-size="14" font-style="italic">W</text>
-  
-  <!-- 箭頭定義 -->
-  <defs>
-    <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
-      <path d="M0,0 L0,6 L9,3 z" fill="#333"/>
-    </marker>
-  </defs>
+  <!-- 重力 W（向下）-->
+  <line x1="80" y1="138" x2="80" y2="185" stroke="#333" stroke-width="2"/>
+  <polygon points="80,195 75,185 85,185" fill="#333"/>
+  <text x="88" y="190" font-family="Georgia, serif" font-size="14" font-style="italic">W</text>
 </svg>
