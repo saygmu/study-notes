@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 250">
+  <!-- 天花板 -->
+  <line x1="40" y1="30" x2="160" y2="30" stroke="#333" stroke-width="2"/>
+  <line x1="50" y1="30" x2="45" y2="20" stroke="#333" stroke-width="1"/>
+  <line x1="70" y1="30" x2="65" y2="20" stroke="#333" stroke-width="1"/>
+  <line x1="90" y1="30" x2="85" y2="20" stroke="#333" stroke-width="1"/>
+  <line x1="110" y1="30" x2="105" y2="20" stroke="#333" stroke-width="1"/>
+  <line x1="130" y1="30" x2="125" y2="20" stroke="#333" stroke-width="1"/>
+  <line x1="150" y1="30" x2="145" y2="20" stroke="#333" stroke-width="1"/>
+  
+  <!-- 繩子 -->
+  <line x1="100" y1="30" x2="100" y2="120" stroke="#333" stroke-width="2"/>
+  
+  <!-- 物體 -->
+  <circle cx="100" cy="140" r="20" fill="#e8e8e8" stroke="#333" stroke-width="2"/>
+  
+  <!-- 張力 T（向上） -->
+  <line x1="100" y1="115" x2="100" y2="55" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="110" y="80" font-family="serif" font-size="14" font-style="italic">T</text>
+  
+  <!-- 重力 W（向下） -->
+  <line x1="100" y1="165" x2="100" y2="225" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="110" y="215" font-family="serif" font-size="14" font-style="italic">W</text>
+  
+  <!-- 箭頭定義 -->
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#333"/>
+    </marker>
+  </defs>
+</svg>

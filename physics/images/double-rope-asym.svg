@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 220">
+  <!-- 天花板 -->
+  <line x1="20" y1="30" x2="260" y2="30" stroke="#333" stroke-width="2"/>
+  <line x1="30" y1="30" x2="25" y2="20" stroke="#333" stroke-width="1"/>
+  <line x1="60" y1="30" x2="55" y2="20" stroke="#333" stroke-width="1"/>
+  <line x1="90" y1="30" x2="85" y2="20" stroke="#333" stroke-width="1"/>
+  <line x1="120" y1="30" x2="115" y2="20" stroke="#333" stroke-width="1"/>
+  <line x1="150" y1="30" x2="145" y2="20" stroke="#333" stroke-width="1"/>
+  <line x1="180" y1="30" x2="175" y2="20" stroke="#333" stroke-width="1"/>
+  <line x1="210" y1="30" x2="205" y2="20" stroke="#333" stroke-width="1"/>
+  <line x1="240" y1="30" x2="235" y2="20" stroke="#333" stroke-width="1"/>
+  
+  <!-- 左繩（角度較大）-->
+  <line x1="50" y1="30" x2="130" y2="130" stroke="#333" stroke-width="2"/>
+  
+  <!-- 右繩（角度較小）-->
+  <line x1="240" y1="30" x2="130" y2="130" stroke="#333" stroke-width="2"/>
+  
+  <!-- 物體 -->
+  <circle cx="130" cy="145" r="18" fill="#e8e8e8" stroke="#333" stroke-width="2"/>
+  
+  <!-- 左張力 Tₐ -->
+  <line x1="120" y1="128" x2="70" y2="58" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="50" y="55" font-family="serif" font-size="13" font-style="italic">Tₐ</text>
+  
+  <!-- 右張力 Tᵦ -->
+  <line x1="145" y1="133" x2="210" y2="63" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="215" y="60" font-family="serif" font-size="13" font-style="italic">Tᵦ</text>
+  
+  <!-- 重力 W -->
+  <line x1="130" y1="168" x2="130" y2="210" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="138" y="205" font-family="serif" font-size="14" font-style="italic">W</text>
+  
+  <!-- 水平虛線參考 -->
+  <line x1="50" y1="130" x2="210" y2="130" stroke="#999" stroke-width="1" stroke-dasharray="4,4"/>
+  
+  <!-- 角度 α -->
+  <path d="M 95,130 A 25,25 0 0,0 85,110" fill="none" stroke="#333" stroke-width="1"/>
+  <text x="78" y="118" font-family="serif" font-size="12" font-style="italic">α</text>
+  
+  <!-- 角度 β -->
+  <path d="M 165,130 A 25,25 0 0,1 178,112" fill="none" stroke="#333" stroke-width="1"/>
+  <text x="175" y="118" font-family="serif" font-size="12" font-style="italic">β</text>
+  
+  <!-- 箭頭定義 -->
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#333"/>
+    </marker>
+  </defs>
+</svg>
