@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>靜力平衡 完全攻略</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap');
+    
+    * { box-sizing: border-box; }
+    
+    body {
+      font-family: 'Noto Sans TC', -apple-system, sans-serif;
+      max-width: 850px;
+      margin: 0 auto;
+      padding: 20px;
+      font-size: 16px;
+      line-height: 1.8;
+      color: #333;
+      background: #fafafa;
+    }
+    
+    h1 {
+      text-align: center;
+      color: #2c3e50;
+      border-bottom: 3px solid #e74c3c;
+      padding-bottom: 15px;
+      font-size: 1.8em;
+    }
+    
+    h2 {
+      color: #c0392b;
+      border-left: 4px solid #e74c3c;
+      padding-left: 12px;
+      margin-top: 40px;
+      font-size: 1.3em;
+    }
+    
+    h3 {
+      color: #27ae60;
+      font-size: 1.1em;
+      margin-top: 25px;
+    }
+    
+    .formula-box {
+      background: linear-gradient(135deg, #e7494922, #f3935122);
+      border: 2px solid #e74c3c;
+      border-radius: 12px;
+      padding: 20px;
+      margin: 20px 0;
+      text-align: center;
+    }
+    
+    .formula {
+      font-size: 1.3em;
+      font-weight: bold;
+      color: #c0392b;
+    }
+    
+    .formula-box p {
+      margin: 10px 0 0 0;
+      color: #555;
+    }
+    
+    .box {
+      background: #fff;
+      border-radius: 12px;
+      padding: 20px;
+      margin: 20px 0;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+    
+    .warning-box {
+      background: #fff3e0;
+      border-left: 4px solid #ff9800;
+      padding: 15px 20px;
+      margin: 20px 0;
+      border-radius: 0 8px 8px 0;
+    }
+    
+    .tip-box {
+      background: #e3f2fd;
+      border-left: 4px solid #2196f3;
+      padding: 15px 20px;
+      margin: 20px 0;
+      border-radius: 0 8px 8px 0;
+    }
+    
+    .example-box {
+      background: #f3e5f5;
+      border: 1px solid #9c27b0;
+      border-radius: 12px;
+      padding: 20px;
+      margin: 20px 0;
+    }
+    
+    .example-title {
+      color: #7b1fa2;
+      font-weight: bold;
+      font-size: 1.1em;
+      margin-bottom: 15px;
+    }
+
+    .scenario-box {
+      background: #fff;
+      border: 2px solid #3498db;
+      border-radius: 12px;
+      padding: 20px;
+      margin: 25px 0;
+      box-shadow: 0 3px 10px rgba(52, 152, 219, 0.1);
+    }
+
+    .scenario-title {
+      color: #2980b9;
+      font-weight: bold;
+      font-size: 1.15em;
+      margin-bottom: 15px;
+      padding-bottom: 10px;
+      border-bottom: 2px dashed #bde0fe;
+    }
+    
+    .key-point {
+      background: #ffebee;
+      border-radius: 4px;
+      padding: 2px 8px;
+      font-weight: bold;
+      color: #c0392b;
+    }
+    
+    .diagram {
+      background: #f8f9fa;
+      border: 1px solid #dee2e6;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      line-height: 1.4;
+      white-space: pre;
+      overflow-x: auto;
+    }
+    
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+      background: #fff;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+    
+    th {
+      background: #e74c3c;
+      color: white;
+      padding: 12px 15px;
+      text-align: left;
+      font-weight: 500;
+    }
+    
+    td {
+      padding: 12px 15px;
+      border-bottom: 1px solid #eee;
+    }
+    
+    tr:hover {
+      background: #fff5f5;
+    }
+
+    .practice-box {
+      background: #e8f5e9;
+      border: 2px solid #4caf50;
+      border-radius: 12px;
+      padding: 20px;
+      margin: 25px 0;
+    }
+
+    .practice-title {
+      color: #2e7d32;
+      font-weight: bold;
+      font-size: 1.1em;
+      margin-bottom: 10px;
+    }
+
+    .answer {
+      background: #f1f8e9;
+      border-radius: 8px;
+      padding: 15px;
+      margin-top: 15px;
+      border: 1px dashed #81c784;
+    }
+
+    .answer-toggle {
+      background: #4caf50;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 20px;
+      cursor: pointer;
+      font-size: 14px;
+      margin-top: 10px;
+    }
+
+    .answer-toggle:hover {
+      background: #43a047;
+    }
+
+    .answer-content {
+      display: none;
+      margin-top: 15px;
+      padding-top: 15px;
+      border-top: 1px solid #c8e6c9;
+    }
+
+    .summary-box {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      border-radius: 12px;
+      padding: 25px;
+      margin: 30px 0;
+    }
+
+    .summary-box h2 {
+      color: white;
+      border-left-color: white;
+    }
+
+    .summary-box li {
+      margin: 10px 0;
+    }
+
+    .step-list {
+      counter-reset: step;
+      list-style: none;
+      padding-left: 0;
+    }
+
+    .step-list li {
+      counter-increment: step;
+      padding: 12px 15px 12px 50px;
+      margin: 10px 0;
+      background: #fff;
+      border-radius: 8px;
+      position: relative;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    }
+
+    .step-list li::before {
+      content: counter(step);
+      position: absolute;
+      left: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: #e74c3c;
+      color: white;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 14px;
+    }
+
+    @media print {
+      body { background: white; }
+      .answer-toggle { display: none; }
+      .answer-content { display: block !important; }
+    }
+  </style>
+</head>
+<body>
+
+<h1>⚖️ 靜力平衡 完全攻略</h1>
+
+<h2>一、什麼是靜力平衡？</h2>
+
+<div class="box">
+  <p>當一個物體處於<span class="key-point">靜止狀態</span>且<span class="key-point">保持靜止</span>，我們說它處於「靜力平衡」。</p>
+  <p>簡單說：不動，而且會繼續不動。</p>
+</div>
+
+<div class="formula-box">
+  <div class="formula">平衡條件</div>
+  <p><strong>平移平衡：</strong>ΣF = 0（合力為零）</p>
+  <p><strong>轉動平衡：</strong>Στ = 0（合力矩為零）</p>
+</div>
+
+<div class="tip-box">
+  💡 <strong>實用分解：</strong><br>
+  • ΣFₓ = 0（水平方向的力平衡）<br>
+  • ΣFᵧ = 0（垂直方向的力平衡）<br>
+  • Στ = 0（對任意點的力矩平衡）
+</div>
+
+<h2>二、常見的力</h2>
+
+<table>
+  <tr>
+    <th>力的名稱</th>
+    <th>符號</th>
+    <th>方向</th>
+    <th>說明</th>
+  </tr>
+  <tr>
+    <td><strong>重力</strong></td>
+    <td>W 或 mg</td>
+    <td>鉛直向下</td>
+    <td>W = mg，作用於質心</td>
+  </tr>
+  <tr>
+    <td><strong>正向力</strong></td>
+    <td>N</td>
+    <td>垂直接觸面，指向物體</td>
+    <td>接觸面對物體的支撐力</td>
+  </tr>
+  <tr>
+    <td><strong>摩擦力</strong></td>
+    <td>f</td>
+    <td>平行接觸面</td>
+    <td>靜摩擦 f ≤ μₛN</td>
+  </tr>
+  <tr>
+    <td><strong>張力</strong></td>
+    <td>T</td>
+    <td>沿繩方向，拉離物體</td>
+    <td>繩子對物體的拉力</td>
+  </tr>
+  <tr>
+    <td><strong>彈力</strong></td>
+    <td>F</td>
+    <td>沿彈簧方向</td>
+    <td>F = kx（虎克定律）</td>
+  </tr>
+</table>
+
+<h2>三、畫受力圖的步驟</h2>
+
+<ol class="step-list">
+  <li><strong>確定研究對象</strong>：把物體隔離出來思考</li>
+  <li><strong>畫重力</strong>：從質心向下畫 W = mg</li>
+  <li><strong>找接觸點</strong>：每個接觸點可能有正向力和摩擦力</li>
+  <li><strong>畫正向力</strong>：垂直接觸面，指向物體</li>
+  <li><strong>畫摩擦力</strong>：平行接觸面，與相對運動趨勢相反</li>
+  <li><strong>畫其他力</strong>：張力、外力等</li>
+  <li><strong>檢查</strong>：每個力都要有來源！</li>
+</ol>
+
+<div class="warning-box">
+  ⚠️ <strong>常見錯誤：</strong>憑空畫出不存在的力！每個力一定要有施力者。
+</div>
+
+<h2>四、常見情境分析</h2>
+
+<!-- 情境 1 -->
+<div class="scenario-box">
+  <div class="scenario-title">📦 情境 1：水平面上的物體（有外力推）</div>
+  
+  <div class="diagram">        ↑ N
+        │
+    ←f  ■ → F（外力）
+        │
+        ↓ W</div>
+  
+  <p><strong>平衡條件：</strong></p>
+  <ul>
+    <li>水平：F = f</li>
+    <li>垂直：N = W = mg</li>
+  </ul>
+</div>
+
+<!-- 情境 2 -->
+<div class="scenario-box">
+  <div class="scenario-title">📐 情境 2：斜面上的靜止物體</div>
+  
+  <div class="diagram">           ↗ N（垂直斜面向上）
+          ╱
+    ↖ f  ■    （摩擦力沿斜面向上）
+          ╲
+           ↘ W分解
+        θ ╱
+    ━━━━━━</div>
+  
+  <div class="tip-box">
+    💡 <strong>分解重力是關鍵！</strong><br>
+    • 沿斜面分量：W sinθ（向下滑的趨勢）<br>
+    • 垂直斜面分量：W cosθ（壓入斜面）
+  </div>
+  
+  <p><strong>平衡條件：</strong></p>
+  <ul>
+    <li>沿斜面：<span class="key-point">f = mg sinθ</span></li>
+    <li>垂直斜面：<span class="key-point">N = mg cosθ</span></li>
+  </ul>
+  
+  <p><strong>靜摩擦臨界條件：</strong> f ≤ μₛN → tanθ ≤ μₛ</p>
+</div>
+
+<!-- 情境 3 -->
+<div class="scenario-box">
+  <div class="scenario-title">🧵 情境 3：單繩懸掛</div>
+  
+  <div class="diagram">      ───┬───
+         │
+         │ T
+         │
+         ●
+         │
+         ↓ W</div>
+  
+  <p><strong>平衡條件：</strong></p>
+  <ul>
+    <li>T = W = mg</li>
+  </ul>
+  <p>最單純的情況，張力等於重量。</p>
+</div>
+
+<!-- 情境 4 -->
+<div class="scenario-box">
+  <div class="scenario-title">🎭 情境 4：雙繩對稱懸掛</div>
+  
+  <div class="diagram">    ────┬────────┬────
+        ╲          ╱
+      T₁ ╲   θ   ╱ T₂
+          ╲    ╱
+           ╲  ╱
+            ●
+            │
+            ↓ W</div>
+  
+  <p><strong>當兩繩對稱，各與垂直線夾角 θ：</strong></p>
+  <ul>
+    <li>垂直：2T cosθ = W → <span class="key-point">T = W/(2cosθ)</span></li>
+    <li>水平：自動平衡（兩邊對稱抵消）</li>
+  </ul>
+  
+  <div class="warning-box">
+    ⚠️ <strong>重要觀察：</strong>角度越大（繩子越水平），cosθ 越小，張力 T 越大！<br>
+    極端情況：θ → 90° 時，T → ∞（不可能水平掛住東西）
+  </div>
+</div>
+
+<!-- 情境 5 -->
+<div class="scenario-box">
+  <div class="scenario-title">⚖️ 情境 5：雙繩不對稱懸掛</div>
+  
+  <div class="diagram">    ──┬──────────┬──
+      ╲            ╱
+    Tₐ ╲ α      β╱ Tᵦ
+        ╲      ╱
+         ╲    ╱
+          ╲  ╱
+           ●
+           │
+           ↓ W</div>
+  
+  <p><strong>平衡條件（α、β 為與水平的夾角）：</strong></p>
+  <ul>
+    <li>水平：Tₐ cosα = Tᵦ cosβ</li>
+    <li>垂直：Tₐ sinα + Tᵦ sinβ = W</li>
+  </ul>
+  
+  <p>兩個方程式，可解兩個未知數（Tₐ 和 Tᵦ）</p>
+</div>
+
+<!-- 情境 6 -->
+<div class="scenario-box">
+  <div class="scenario-title">🪜 情境 6：靠牆的梯子（經典力矩題）</div>
+  
+  <div class="diagram">            │
+            │← N₂（牆的正向力）
+          ╱│
+         ╱ │
+        ╱  │
+       ╱ ● │  （●是質心，受 W 向下）
+      ╱    │
+     ╱     │
+────■──────┴────
+    ↑  →
+    N₁  f₁</div>
+  
+  <p><strong>設定：</strong>梯子長 L，與地面夾角 θ，牆面光滑（無摩擦）</p>
+  
+  <p><strong>平衡條件：</strong></p>
+  <ul>
+    <li>水平：f₁ = N₂</li>
+    <li>垂直：N₁ = W</li>
+    <li>力矩（對底端取）：N₂ · L sinθ = W · (L/2) cosθ</li>
+  </ul>
+  
+  <div class="tip-box">
+    💡 <strong>選支點技巧：</strong>選在未知力最多的點當支點，可以消掉那些力的力矩（力臂=0）！
+  </div>
+</div>
+
+<h2>五、解題流程</h2>
+
+<div class="box">
+  <ol class="step-list">
+    <li>選定研究對象</li>
+    <li>畫受力圖（標示所有力）</li>
+    <li>建立座標系（選方便的方向，斜面題可沿斜面建座標）</li>
+    <li>列平衡方程式：ΣFₓ = 0、ΣFᵧ = 0、（需要時）Στ = 0</li>
+    <li>解方程式，求未知數</li>
+  </ol>
+</div>
+
+<h2>六、練習題</h2>
+
+<!-- 練習 1 -->
+<div class="practice-box">
+  <div class="practice-title">📝 練習 1：斜面問題</div>
+  <p>一個質量 5 kg 的物體靜止在傾角 30° 的斜面上。求：</p>
+  <p>(a) 正向力 N &nbsp;&nbsp; (b) 靜摩擦力 f &nbsp;&nbsp; (g = 10 m/s²)</p>
+  
+  <button class="answer-toggle" onclick="toggleAnswer(this)">顯示答案</button>
+  <div class="answer-content">
+    <div class="answer">
+      <p>W = mg = 5 × 10 = 50 N</p>
+      <p><strong>(a)</strong> N = W cos30° = 50 × (√3/2) ≈ <strong>43.3 N</strong></p>
+      <p><strong>(b)</strong> f = W sin30° = 50 × 0.5 = <strong>25 N</strong></p>
+    </div>
+  </div>
+</div>
+
+<!-- 練習 2 -->
+<div class="practice-box">
+  <div class="practice-title">📝 練習 2：對稱雙繩懸掛</div>
+  <p>一個重 100 N 的招牌被兩條繩子對稱懸掛，每條繩子與垂直線夾角 45°。求繩子張力 T。</p>
+  
+  <button class="answer-toggle" onclick="toggleAnswer(this)">顯示答案</button>
+  <div class="answer-content">
+    <div class="answer">
+      <p>垂直方向：2T cos45° = W</p>
+      <p>T = W / (2 cos45°) = 100 / (2 × √2/2) = 100 / √2</p>
+      <p>T ≈ <strong>70.7 N</strong></p>
+    </div>
+  </div>
+</div>
+
+<!-- 練習 3 -->
+<div class="practice-box">
+  <div class="practice-title">📝 練習 3：不對稱懸掛</div>
+  <p>一物體重 W，被兩繩懸掛。繩 A 與水平夾角 60°，繩 B 與水平夾角 30°。求 Tₐ 和 Tᵦ（以 W 表示）。</p>
+  
+  <button class="answer-toggle" onclick="toggleAnswer(this)">顯示答案</button>
+  <div class="answer-content">
+    <div class="answer">
+      <p><strong>水平：</strong>Tₐ cos60° = Tᵦ cos30°</p>
+      <p>Tₐ × 0.5 = Tᵦ × (√3/2) → Tₐ = √3 Tᵦ</p>
+      
+      <p><strong>垂直：</strong>Tₐ sin60° + Tᵦ sin30° = W</p>
+      <p>√3 Tᵦ × (√3/2) + Tᵦ × 0.5 = W</p>
+      <p>1.5 Tᵦ + 0.5 Tᵦ = W → 2 Tᵦ = W</p>
+      
+      <p><strong>Tᵦ = W/2</strong></p>
+      <p><strong>Tₐ = √3 W/2 ≈ 0.866 W</strong></p>
+    </div>
+  </div>
+</div>
+
+<!-- 練習 4 -->
+<div class="practice-box">
+  <div class="practice-title">📝 練習 4：梯子問題</div>
+  <p>一把長 4 m、重 200 N 的均勻梯子斜靠在光滑牆上（牆面無摩擦），與地面夾角 60°。求：</p>
+  <p>(a) 牆對梯子的正向力 N₂ &nbsp;&nbsp; (b) 地面對梯子的摩擦力 f</p>
+  
+  <button class="answer-toggle" onclick="toggleAnswer(this)">顯示答案</button>
+  <div class="answer-content">
+    <div class="answer">
+      <p>設梯子底端為支點，對其取力矩：</p>
+      <p>N₂ × L sinθ = W × (L/2) cosθ</p>
+      <p>N₂ × 4 × sin60° = 200 × 2 × cos60°</p>
+      <p>N₂ × 4 × (√3/2) = 200 × 2 × 0.5</p>
+      <p>N₂ × 2√3 = 200</p>
+      <p><strong>(a) N₂ ≈ 57.7 N</strong></p>
+      
+      <p>水平平衡：f = N₂</p>
+      <p><strong>(b) f ≈ 57.7 N</strong></p>
+    </div>
+  </div>
+</div>
+
+<div class="summary-box">
+  <h2>✨ 重點整理</h2>
+  <ul>
+    <li>✅ 靜力平衡 = <strong>合力為零</strong> + <strong>合力矩為零</strong></li>
+    <li>✅ 斜面問題：N = mg cosθ，f = mg sinθ（要背！）</li>
+    <li>✅ 懸掛問題：角度越水平，張力越大</li>
+    <li>✅ 梯子問題：選擇適當支點可以消掉未知力</li>
+    <li>✅ <strong>畫受力圖是解題關鍵，每個力都要有來源！</strong></li>
+  </ul>
+</div>
+
+<p style="text-align: center; color: #888; margin-top: 40px;">
+  製作日期：2026-02-12 ｜ AB御用秘書 🦞
+</p>
+
+<script>
+function toggleAnswer(btn) {
+  const content = btn.nextElementSibling;
+  if (content.style.display === 'block') {
+    content.style.display = 'none';
+    btn.textContent = '顯示答案';
+  } else {
+    content.style.display = 'block';
+    btn.textContent = '隱藏答案';
+  }
+}
+</script>
+
+</body>
+</html>
