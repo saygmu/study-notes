@@ -3,238 +3,312 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>函數的定義域與值域 完全攻略</title>
+  <title>函數的定義域與值域</title>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600&family=Noto+Sans+TC:wght@300;400;500&display=swap');
     
-    * { box-sizing: border-box; }
-    
-    body {
-      font-family: 'Noto Sans TC', -apple-system, sans-serif;
-      max-width: 850px;
-      margin: 0 auto;
-      padding: 20px;
-      font-size: 16px;
-      line-height: 1.8;
-      color: #333;
-      background: #fafafa;
+    :root {
+      --bg: #fefefe;
+      --text: #2d2d2d;
+      --muted: #888;
+      --accent: #4a4a4a;
+      --border: #e8e8e8;
+      --card: #fff;
+    }
+
+    [data-theme="dark"] {
+      --bg: #1a1a1a;
+      --text: #e8e8e8;
+      --muted: #888;
+      --accent: #ccc;
+      --border: #333;
+      --card: #242424;
     }
     
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    body {
+      font-family: 'Noto Sans TC', sans-serif;
+      font-weight: 300;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 2;
+      font-size: 16px;
+      transition: all 0.3s ease;
+    }
+
+    .container {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 60px 24px;
+    }
+
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+      padding: 16px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 100;
+      font-size: 14px;
+    }
+
+    nav a {
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    nav a:hover { color: var(--text); }
+
+    .nav-actions {
+      display: flex;
+      gap: 20px;
+    }
+
+    .nav-actions button {
+      background: none;
+      border: none;
+      color: var(--muted);
+      cursor: pointer;
+      font-size: 14px;
+      font-family: inherit;
+      transition: color 0.2s;
+    }
+
+    .nav-actions button:hover { color: var(--text); }
+
     h1 {
-      text-align: center;
-      color: #2c3e50;
-      border-bottom: 3px solid #3498db;
-      padding-bottom: 15px;
-      font-size: 1.8em;
+      font-family: 'Noto Serif TC', serif;
+      font-weight: 600;
+      font-size: 2.5rem;
+      margin: 40px 0 16px;
+      letter-spacing: 2px;
+    }
+
+    .subtitle {
+      color: var(--muted);
+      margin-bottom: 60px;
+      font-size: 14px;
     }
     
     h2 {
-      color: #2980b9;
-      border-left: 4px solid #3498db;
-      padding-left: 12px;
-      margin-top: 40px;
-      font-size: 1.3em;
+      font-family: 'Noto Serif TC', serif;
+      font-weight: 600;
+      font-size: 1.25rem;
+      margin: 60px 0 24px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border);
+      letter-spacing: 1px;
     }
     
     h3 {
-      color: #27ae60;
-      font-size: 1.1em;
-      margin-top: 25px;
+      font-weight: 500;
+      font-size: 1rem;
+      margin: 32px 0 16px;
+      color: var(--accent);
     }
-    
-    .formula-box {
-      background: linear-gradient(135deg, #3498db22, #2ecc7122);
-      border: 2px solid #3498db;
-      border-radius: 12px;
-      padding: 20px;
-      margin: 20px 0;
-      text-align: center;
-    }
-    
+
+    p { margin-bottom: 16px; }
+
     .formula {
-      font-size: 1.3em;
-      font-weight: bold;
-      color: #2980b9;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 24px;
+      margin: 24px 0;
+      text-align: center;
+      font-size: 1.1rem;
     }
-    
-    .formula-box p {
-      margin: 10px 0 0 0;
-      color: #555;
+
+    .formula-main {
+      font-family: 'Times New Roman', serif;
+      font-size: 1.3rem;
+      margin-bottom: 8px;
     }
-    
-    .box {
-      background: #fff;
-      border-radius: 12px;
-      padding: 20px;
-      margin: 20px 0;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+
+    .formula-note {
+      font-size: 0.85rem;
+      color: var(--muted);
     }
-    
-    .warning-box {
-      background: #fff3e0;
-      border-left: 4px solid #ff9800;
-      padding: 15px 20px;
-      margin: 20px 0;
-      border-radius: 0 8px 8px 0;
-    }
-    
-    .tip-box {
-      background: #e3f2fd;
-      border-left: 4px solid #2196f3;
-      padding: 15px 20px;
-      margin: 20px 0;
-      border-radius: 0 8px 8px 0;
-    }
-    
-    .example-box {
-      background: #e8f5e9;
-      border: 1px solid #4caf50;
-      border-radius: 12px;
-      padding: 20px;
-      margin: 20px 0;
-    }
-    
-    .example-title {
-      color: #2e7d32;
-      font-weight: bold;
-      font-size: 1.1em;
-      margin-bottom: 10px;
-    }
-    
+
     table {
       width: 100%;
       border-collapse: collapse;
-      margin: 20px 0;
-      background: #fff;
-      border-radius: 8px;
-      overflow: hidden;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      margin: 24px 0;
+      font-size: 0.95rem;
+    }
+    
+    th, td {
+      padding: 12px 16px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
     }
     
     th {
-      background: #3498db;
-      color: white;
-      padding: 12px 15px;
-      text-align: left;
+      font-weight: 500;
+      color: var(--muted);
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
     }
-    
-    td {
-      padding: 12px 15px;
-      border-bottom: 1px solid #eee;
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 32px;
+      margin: 32px 0;
     }
-    
-    tr:hover { background: #f8f9fa; }
-    
+
+    .card-title {
+      font-weight: 500;
+      margin-bottom: 20px;
+      font-size: 1.05rem;
+    }
+
     .math {
       font-family: 'Times New Roman', serif;
       font-style: italic;
     }
-    
+
     .step {
-      background: #fff;
-      border-left: 3px solid #3498db;
-      padding: 10px 15px;
-      margin: 10px 0;
+      background: var(--card);
+      border-left: 2px solid var(--border);
+      padding: 16px 20px;
+      margin: 16px 0;
+      font-size: 0.95rem;
     }
-    
+
     .answer {
-      background: #d4edda;
-      border: 1px solid #28a745;
-      border-radius: 8px;
-      padding: 10px 15px;
-      margin-top: 15px;
-      font-weight: bold;
+      margin-top: 16px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border);
+      font-weight: 500;
     }
-    
-    .method-card {
-      background: #fff;
-      border-radius: 12px;
-      padding: 20px;
-      margin: 20px 0;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-      border-top: 4px solid #9b59b6;
+
+    .note {
+      background: var(--card);
+      border-left: 2px solid var(--border);
+      padding: 16px 20px;
+      margin: 24px 0;
+      font-size: 0.95rem;
+      color: var(--muted);
     }
-    
-    .method-title {
-      color: #8e44ad;
-      font-weight: bold;
-      font-size: 1.15em;
-      margin-bottom: 15px;
-    }
-    
-    .mnemonic {
-      background: linear-gradient(135deg, #f093fb, #f5576c);
-      color: white;
-      padding: 20px;
-      border-radius: 12px;
-      margin: 30px 0;
-      text-align: center;
-      font-size: 1.1em;
-    }
-    
-    details {
-      background: #fff;
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      margin: 15px 0;
-    }
-    
-    summary {
-      padding: 12px 15px;
-      cursor: pointer;
-      font-weight: bold;
-      color: #3498db;
-    }
-    
-    details[open] summary {
-      border-bottom: 1px solid #ddd;
-    }
-    
-    details > div {
-      padding: 15px;
-    }
-    
+
+    .note strong { color: var(--text); }
+
     .practice {
-      background: #fff8e1;
-      border: 2px dashed #ffc107;
+      border: 1px solid var(--border);
       border-radius: 12px;
-      padding: 20px;
-      margin: 25px 0;
+      padding: 24px;
+      margin: 24px 0;
     }
-    
-    .practice-title {
-      color: #f57c00;
-      font-weight: bold;
-      font-size: 1.1em;
-      margin-bottom: 10px;
+
+    .practice-num {
+      font-size: 0.8rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 12px;
+    }
+
+    .answer-btn {
+      background: none;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      padding: 8px 16px;
+      border-radius: 20px;
+      cursor: pointer;
+      font-size: 13px;
+      margin-top: 16px;
+      transition: all 0.2s;
+      font-family: inherit;
+    }
+
+    .answer-btn:hover {
+      border-color: var(--text);
+      color: var(--text);
+    }
+
+    .answer-content {
+      display: none;
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border);
+      font-size: 0.95rem;
+    }
+
+    .mnemonic {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 32px;
+      margin: 32px 0;
+      text-align: center;
+    }
+
+    .mnemonic-title {
+      font-size: 0.8rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 16px;
     }
 
     footer {
       text-align: center;
-      margin-top: 50px;
-      padding: 20px;
-      color: #999;
-      font-size: 0.9em;
+      padding: 40px 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    @media print {
+      nav { display: none; }
+      .container { padding-top: 0; }
+      .answer-content { display: block !important; }
+    }
+
+    @media (max-width: 600px) {
+      .container { padding: 80px 16px 40px; }
+      h1 { font-size: 1.8rem; }
+      .card { padding: 20px; }
     }
   </style>
 </head>
 <body>
 
-<h1>📐 函數的定義域與值域 完全攻略</h1>
+<nav>
+  <a href="../index.html">← 返回</a>
+  <div class="nav-actions">
+    <button onclick="window.print()">列印</button>
+    <button onclick="toggleTheme()">◐</button>
+  </div>
+</nav>
 
-<h2>一、基本概念</h2>
+<div class="container">
 
-<div class="formula-box">
-  <div class="formula">定義域 (Domain)</div>
-  <p>函數 <span class="math">f(x)</span> 中，所有<strong>可代入</strong>的 <span class="math">x</span> 值所形成的集合</p>
+<h1>函數的定義域與值域</h1>
+<p class="subtitle">Domain and Range</p>
+
+<h2>基本概念</h2>
+
+<div class="formula">
+  <div class="formula-main">定義域 (Domain)</div>
+  <div class="formula-note">函數 f(x) 中，所有<strong>可代入</strong>的 x 值所形成的集合</div>
 </div>
 
-<div class="formula-box">
-  <div class="formula">值域 (Range)</div>
-  <p>函數 <span class="math">f(x)</span> 中，所有<strong>可能輸出</strong>的 <span class="math">y</span> 值所形成的集合</p>
+<div class="formula">
+  <div class="formula-main">值域 (Range)</div>
+  <div class="formula-note">函數 f(x) 中，所有<strong>可能輸出</strong>的 y 值所形成的集合</div>
 </div>
 
-<h2>二、求定義域的常見限制</h2>
+<h2>求定義域的常見限制</h2>
 
 <table>
   <tr>
@@ -245,38 +319,38 @@
   <tr>
     <td>分式</td>
     <td>分母 ≠ 0</td>
-    <td><span class="math">1/(x−2)</span> → <span class="math">x ≠ 2</span></td>
+    <td><span class="math">1/(x−2)</span> → x ≠ 2</td>
   </tr>
   <tr>
     <td>偶次根號</td>
     <td>被開方數 ≥ 0</td>
-    <td><span class="math">√(x−3)</span> → <span class="math">x ≥ 3</span></td>
+    <td><span class="math">√(x−3)</span> → x ≥ 3</td>
   </tr>
   <tr>
     <td>對數</td>
     <td>真數 > 0</td>
-    <td><span class="math">log(x+1)</span> → <span class="math">x > −1</span></td>
+    <td><span class="math">log(x+1)</span> → x > −1</td>
   </tr>
   <tr>
     <td>指數</td>
     <td>無限制</td>
-    <td><span class="math">2ˣ</span> → <span class="math">x ∈ ℝ</span></td>
+    <td><span class="math">2ˣ</span> → x ∈ ℝ</td>
   </tr>
   <tr>
     <td>多項式</td>
     <td>無限制</td>
-    <td><span class="math">x² + 3x</span> → <span class="math">x ∈ ℝ</span></td>
+    <td><span class="math">x² + 3x</span> → x ∈ ℝ</td>
   </tr>
 </table>
 
-<div class="warning-box">
-  <strong>⚠️ 注意</strong>：遇到複合函數，要<strong>同時滿足</strong>所有限制條件！
+<div class="note">
+  <strong>⚠️ 注意</strong>：遇到複合函數，要同時滿足所有限制條件！
 </div>
 
-<h2>三、定義域例題</h2>
+<h2>定義域例題</h2>
 
-<div class="example-box">
-  <div class="example-title">例題 1：分式函數</div>
+<div class="card">
+  <div class="card-title">例題 1：分式函數</div>
   <p><span class="math">f(x) = (x+1) / (x²−4)</span></p>
   
   <div class="step">
@@ -289,8 +363,8 @@
   <div class="answer">定義域：{x ∈ ℝ | x ≠ ±2}</div>
 </div>
 
-<div class="example-box">
-  <div class="example-title">例題 2：根號函數</div>
+<div class="card">
+  <div class="card-title">例題 2：根號函數</div>
   <p><span class="math">f(x) = √(2x−6)</span></p>
   
   <div class="step">
@@ -302,8 +376,8 @@
   <div class="answer">定義域：[3, +∞)</div>
 </div>
 
-<div class="example-box">
-  <div class="example-title">例題 3：對數函數</div>
+<div class="card">
+  <div class="card-title">例題 3：對數函數</div>
   <p><span class="math">f(x) = log₂(x²−x−6)</span></p>
   
   <div class="step">
@@ -316,111 +390,111 @@
   <div class="answer">定義域：(−∞, −2) ∪ (3, +∞)</div>
 </div>
 
-<div class="example-box">
-  <div class="example-title">例題 4：複合限制</div>
+<div class="card">
+  <div class="card-title">例題 4：複合限制</div>
   <p><span class="math">f(x) = √(x+4) / (x−1)</span></p>
   
   <div class="step">
     <strong>解：</strong>需同時滿足：<br>
-    ① 根號內 ≥ 0：<span class="math">x + 4 ≥ 0</span> → <span class="math">x ≥ −4</span><br>
-    ② 分母 ≠ 0：<span class="math">x ≠ 1</span>
+    ① 根號內 ≥ 0：x + 4 ≥ 0 → x ≥ −4<br>
+    ② 分母 ≠ 0：x ≠ 1
   </div>
   
   <div class="answer">定義域：[−4, 1) ∪ (1, +∞)</div>
 </div>
 
-<div class="example-box">
-  <div class="example-title">例題 5：根號套根號</div>
+<div class="card">
+  <div class="card-title">例題 5：根號套根號</div>
   <p><span class="math">f(x) = √(4 − √x)</span></p>
   
   <div class="step">
     <strong>解：</strong>由內而外：<br>
-    ① 內層：<span class="math">x ≥ 0</span><br>
-    ② 外層：<span class="math">4 − √x ≥ 0</span> → <span class="math">√x ≤ 4</span> → <span class="math">x ≤ 16</span>
+    ① 內層：x ≥ 0<br>
+    ② 外層：4 − √x ≥ 0 → √x ≤ 4 → x ≤ 16
   </div>
   
   <div class="answer">定義域：[0, 16]</div>
 </div>
 
-<h2>四、求值域的方法</h2>
+<h2>求值域的方法</h2>
 
-<div class="method-card">
-  <div class="method-title">方法 1：配方法（二次函數）</div>
+<div class="card">
+  <div class="card-title">方法 1：配方法（二次函數）</div>
   <p><span class="math">f(x) = x² − 4x + 7</span></p>
   
   <div class="step">
     <strong>解：</strong>配方<br>
-    <span class="math">= (x−2)² + 3</span><br>
+    = (x−2)² + 3<br>
     頂點為 (2, 3)，開口向上
   </div>
   
   <div class="answer">值域：[3, +∞)</div>
 </div>
 
-<div class="method-card">
-  <div class="method-title">方法 2：判別式法</div>
-  <p><span class="math">y = (x²+1) / (x²−1)</span>（<span class="math">x ≠ ±1</span>）</p>
+<div class="card">
+  <div class="card-title">方法 2：判別式法</div>
+  <p><span class="math">y = (x²+1) / (x²−1)</span>（x ≠ ±1）</p>
   
   <div class="step">
     <strong>解：</strong>整理成 x 的方程式<br>
-    <span class="math">y(x²−1) = x² + 1</span><br>
-    <span class="math">yx² − y = x² + 1</span><br>
-    <span class="math">x²(y−1) = y + 1</span><br>
-    <span class="math">x² = (y+1)/(y−1)</span><br><br>
-    因為 <span class="math">x² ≥ 0</span>，所以 <span class="math">(y+1)/(y−1) ≥ 0</span><br>
-    解不等式：<span class="math">y ≤ −1</span> 或 <span class="math">y > 1</span>
+    y(x²−1) = x² + 1<br>
+    yx² − y = x² + 1<br>
+    x²(y−1) = y + 1<br>
+    x² = (y+1)/(y−1)<br><br>
+    因為 x² ≥ 0，所以 (y+1)/(y−1) ≥ 0<br>
+    解不等式：y ≤ −1 或 y > 1
   </div>
   
   <div class="answer">值域：(−∞, −1] ∪ (1, +∞)</div>
 </div>
 
-<div class="method-card">
-  <div class="method-title">方法 3：單調性分析</div>
-  <p><span class="math">f(x) = √(x−2) + 3</span>，<span class="math">x ≥ 2</span></p>
+<div class="card">
+  <div class="card-title">方法 3：單調性分析</div>
+  <p><span class="math">f(x) = √(x−2) + 3</span>，x ≥ 2</p>
   
   <div class="step">
     <strong>解：</strong><br>
-    • <span class="math">√(x−2)</span> 隨 x 增大而增大（遞增）<br>
-    • 當 <span class="math">x = 2</span> 時，<span class="math">f(2) = 0 + 3 = 3</span>（最小值）<br>
-    • 當 <span class="math">x → +∞</span> 時，<span class="math">f(x) → +∞</span>
+    · √(x−2) 隨 x 增大而增大（遞增）<br>
+    · 當 x = 2 時，f(2) = 0 + 3 = 3（最小值）<br>
+    · 當 x → +∞ 時，f(x) → +∞
   </div>
   
   <div class="answer">值域：[3, +∞)</div>
 </div>
 
-<div class="method-card">
-  <div class="method-title">方法 4：換元法</div>
+<div class="card">
+  <div class="card-title">方法 4：換元法</div>
   <p><span class="math">f(x) = x + √(1−x)</span></p>
   
   <div class="step">
-    <strong>解：</strong>令 <span class="math">t = √(1−x)</span>，則 <span class="math">t ≥ 0</span>，且 <span class="math">x = 1 − t²</span><br><br>
-    <span class="math">f = (1−t²) + t = −t² + t + 1</span><br>
-    <span class="math">= −(t − 1/2)² + 5/4</span><br><br>
-    • <span class="math">t ≥ 0</span> 時，最大值在 <span class="math">t = 1/2</span> 處，<span class="math">f_max = 5/4</span><br>
-    • 當 <span class="math">t → +∞</span>，<span class="math">f → −∞</span>
+    <strong>解：</strong>令 t = √(1−x)，則 t ≥ 0，且 x = 1 − t²<br><br>
+    f = (1−t²) + t = −t² + t + 1<br>
+    = −(t − ½)² + 5/4<br><br>
+    · t ≥ 0 時，最大值在 t = ½ 處，f_max = 5/4<br>
+    · 當 t → +∞，f → −∞
   </div>
   
   <div class="answer">值域：(−∞, 5/4]</div>
 </div>
 
-<div class="method-card">
-  <div class="method-title">方法 5：分離常數法</div>
-  <p><span class="math">f(x) = (2x−1)/(x+1)</span>，<span class="math">x > 0</span></p>
+<div class="card">
+  <div class="card-title">方法 5：分離常數法</div>
+  <p><span class="math">f(x) = (2x−1)/(x+1)</span>，x > 0</p>
   
   <div class="step">
     <strong>解：</strong>改寫<br>
-    <span class="math">f(x) = [2(x+1)−3]/(x+1) = 2 − 3/(x+1)</span><br><br>
-    當 <span class="math">x > 0</span>：<br>
-    • <span class="math">x + 1 > 1</span><br>
-    • <span class="math">0 < 3/(x+1) < 3</span><br>
-    • <span class="math">−3 < −3/(x+1) < 0</span><br>
-    • <span class="math">−1 < 2 − 3/(x+1) < 2</span>
+    f(x) = [2(x+1)−3]/(x+1) = 2 − 3/(x+1)<br><br>
+    當 x > 0：<br>
+    · x + 1 > 1<br>
+    · 0 < 3/(x+1) < 3<br>
+    · −3 < −3/(x+1) < 0<br>
+    · −1 < 2 − 3/(x+1) < 2
   </div>
   
   <div class="answer">值域：(−1, 2)</div>
 </div>
 
-<h2>五、常見函數的值域</h2>
+<h2>常見函數的值域</h2>
 
 <table>
   <tr>
@@ -438,72 +512,90 @@
   <tr><td><span class="math">y = tan x</span></td><td>ℝ</td></tr>
 </table>
 
-<h2>六、綜合練習</h2>
+<h2>綜合練習</h2>
 
 <div class="practice">
-  <div class="practice-title">🎯 練習 1</div>
+  <div class="practice-num">練習 1</div>
   <p>求 <span class="math">f(x) = √(x−1) + √(5−x)</span> 的定義域與值域。</p>
   
-  <details>
-    <summary>點擊看答案</summary>
-    <div>
-      <strong>定義域：</strong>[1, 5]<br><br>
-      
-      <strong>值域：</strong><br>
-      令 <span class="math">y = √(x−1) + √(5−x)</span><br>
-      <span class="math">y² = (x−1) + 2√[(x−1)(5−x)] + (5−x) = 4 + 2√[(x−1)(5−x)]</span><br><br>
-      
-      設 <span class="math">t = (x−1)(5−x) = −x²+6x−5 = −(x−3)² + 4</span><br>
-      當 <span class="math">x ∈ [1,5]</span> 時，<span class="math">t ∈ [0, 4]</span><br><br>
-      
-      所以 <span class="math">y² ∈ [4, 8]</span><br>
-      <span class="math">y ∈ [2, 2√2]</span>
-    </div>
-  </details>
+  <button class="answer-btn" onclick="toggleAnswer(this)">顯示答案</button>
+  <div class="answer-content">
+    <strong>定義域：</strong>[1, 5]<br><br>
+    
+    <strong>值域：</strong><br>
+    令 y = √(x−1) + √(5−x)<br>
+    y² = (x−1) + 2√[(x−1)(5−x)] + (5−x) = 4 + 2√[(x−1)(5−x)]<br><br>
+    
+    設 t = (x−1)(5−x) = −x²+6x−5 = −(x−3)² + 4<br>
+    當 x ∈ [1,5] 時，t ∈ [0, 4]<br><br>
+    
+    所以 y² ∈ [4, 8]<br>
+    <strong>y ∈ [2, 2√2]</strong>
+  </div>
 </div>
 
 <div class="practice">
-  <div class="practice-title">🎯 練習 2</div>
+  <div class="practice-num">練習 2</div>
   <p>求 <span class="math">f(x) = (x²+2x+3)/(x²+1)</span> 的值域。</p>
   
-  <details>
-    <summary>點擊看答案</summary>
-    <div>
-      用判別式法：<br><br>
-      <span class="math">y(x²+1) = x²+2x+3</span><br>
-      <span class="math">(y−1)x² − 2x + (y−3) = 0</span><br><br>
-      
-      <strong>情況 1：</strong><span class="math">y = 1</span> 時，<span class="math">−2x − 2 = 0</span>，<span class="math">x = −1</span>（有解）<br><br>
-      
-      <strong>情況 2：</strong><span class="math">y ≠ 1</span> 時，需 Δ ≥ 0<br>
-      <span class="math">4 − 4(y−1)(y−3) ≥ 0</span><br>
-      <span class="math">1 − (y²−4y+3) ≥ 0</span><br>
-      <span class="math">y² − 4y + 2 ≤ 0</span><br>
-      <span class="math">y = (4 ± √8)/2 = 2 ± √2</span><br>
-      <span class="math">2−√2 ≤ y ≤ 2+√2</span><br><br>
-      
-      <strong>值域：[2−√2, 2+√2]</strong>
-    </div>
-  </details>
+  <button class="answer-btn" onclick="toggleAnswer(this)">顯示答案</button>
+  <div class="answer-content">
+    用判別式法：<br><br>
+    y(x²+1) = x²+2x+3<br>
+    (y−1)x² − 2x + (y−3) = 0<br><br>
+    
+    <strong>情況 1：</strong>y = 1 時，−2x − 2 = 0，x = −1（有解）<br><br>
+    
+    <strong>情況 2：</strong>y ≠ 1 時，需 Δ ≥ 0<br>
+    4 − 4(y−1)(y−3) ≥ 0<br>
+    1 − (y²−4y+3) ≥ 0<br>
+    y² − 4y + 2 ≤ 0<br>
+    y = (4 ± √8)/2 = 2 ± √2<br>
+    2−√2 ≤ y ≤ 2+√2<br><br>
+    
+    <strong>值域：[2−√2, 2+√2]</strong>
+  </div>
 </div>
 
-<h2>七、解題口訣</h2>
+<h2>解題口訣</h2>
 
 <div class="mnemonic">
-  <strong>🎵 定義域找限制</strong><br>
-  分母不為零，根號要非負，<br>
-  對數真數正，通通要注意！
+  <div class="mnemonic-title">定義域找限制</div>
+  <p>分母不為零，根號要非負，<br>對數真數正，通通要注意！</p>
 </div>
 
 <div class="mnemonic">
-  <strong>🎵 值域求法記</strong><br>
-  二次配方找頂點，分式判別看 delta，<br>
-  單調分析端點值，複雜換元化簡易！
+  <div class="mnemonic-title">值域求法記</div>
+  <p>二次配方找頂點，分式判別看 delta，<br>單調分析端點值，複雜換元化簡易！</p>
 </div>
 
 <footer>
-  Made with 🦞 by AB御用秘書
+  made with care
 </footer>
+
+</div>
+
+<script>
+function toggleTheme() {
+  const html = document.documentElement;
+  if (html.getAttribute('data-theme') === 'dark') {
+    html.removeAttribute('data-theme');
+  } else {
+    html.setAttribute('data-theme', 'dark');
+  }
+}
+
+function toggleAnswer(btn) {
+  const content = btn.nextElementSibling;
+  if (content.style.display === 'block') {
+    content.style.display = 'none';
+    btn.textContent = '顯示答案';
+  } else {
+    content.style.display = 'block';
+    btn.textContent = '隱藏答案';
+  }
+}
+</script>
 
 </body>
 </html>
