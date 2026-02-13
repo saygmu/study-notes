@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>公式計算機</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600&family=Noto+Sans+TC:wght@300;400;500&display=swap');
+    
+    :root {
+      --bg: #fefefe;
+      --text: #2d2d2d;
+      --muted: #888;
+      --accent: #4a4a4a;
+      --border: #e8e8e8;
+      --card: #fff;
+    }
+
+    [data-theme="dark"] {
+      --bg: #1a1a1a;
+      --text: #e8e8e8;
+      --muted: #888;
+      --accent: #ccc;
+      --border: #333;
+      --card: #242424;
+    }
+    
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    body {
+      font-family: 'Noto Sans TC', sans-serif;
+      font-weight: 300;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.8;
+      font-size: 16px;
+      transition: all 0.3s ease;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 60px 24px;
+    }
+
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+      padding: 16px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 100;
+      font-size: 14px;
+    }
+
+    nav a {
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    nav a:hover { color: var(--text); }
+
+    .nav-actions button {
+      background: none;
+      border: none;
+      color: var(--muted);
+      cursor: pointer;
+      font-size: 14px;
+      font-family: inherit;
+      transition: color 0.2s;
+    }
+
+    .nav-actions button:hover { color: var(--text); }
+
+    h1 {
+      font-family: 'Noto Serif TC', serif;
+      font-weight: 600;
+      font-size: 2.5rem;
+      margin: 40px 0 16px;
+      letter-spacing: 2px;
+    }
+
+    .subtitle {
+      color: var(--muted);
+      margin-bottom: 40px;
+      font-size: 14px;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 32px;
+      flex-wrap: wrap;
+    }
+
+    .tab {
+      padding: 8px 20px;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      background: var(--card);
+      color: var(--muted);
+      cursor: pointer;
+      font-size: 14px;
+      font-family: inherit;
+      transition: all 0.2s;
+    }
+
+    .tab:hover {
+      border-color: var(--text);
+      color: var(--text);
+    }
+
+    .tab.active {
+      background: var(--text);
+      color: var(--bg);
+      border-color: var(--text);
+    }
+
+    .section {
+      display: none;
+    }
+
+    .section.active {
+      display: block;
+    }
+
+    .calc-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 20px;
+    }
+
+    .calc-title {
+      font-weight: 500;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .calc-formula {
+      font-family: 'Times New Roman', serif;
+      font-style: italic;
+      color: var(--muted);
+      margin-bottom: 16px;
+      font-size: 1.1rem;
+    }
+
+    .calc-inputs {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .input-group {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .input-group label {
+      font-size: 12px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .input-group input, .input-group select {
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      font-size: 16px;
+      font-family: inherit;
+      background: var(--bg);
+      color: var(--text);
+      transition: border-color 0.2s;
+    }
+
+    .input-group input:focus, .input-group select:focus {
+      outline: none;
+      border-color: var(--text);
+    }
+
+    .calc-btn {
+      padding: 10px 24px;
+      background: var(--text);
+      color: var(--bg);
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+      font-family: inherit;
+      transition: opacity 0.2s;
+    }
+
+    .calc-btn:hover {
+      opacity: 0.8;
+    }
+
+    .calc-result {
+      margin-top: 16px;
+      padding: 16px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      font-family: 'Times New Roman', serif;
+      font-size: 1.2rem;
+      display: none;
+    }
+
+    .calc-result.show {
+      display: block;
+    }
+
+    .result-label {
+      font-family: 'Noto Sans TC', sans-serif;
+      font-size: 12px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 4px;
+    }
+
+    .result-value {
+      font-size: 1.4rem;
+      font-weight: bold;
+    }
+
+    footer {
+      text-align: center;
+      padding: 40px 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    @media (max-width: 600px) {
+      .container { padding: 80px 16px 40px; }
+      h1 { font-size: 1.8rem; }
+      .calc-inputs { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="../index.html">← 返回</a>
+  <div class="nav-actions">
+    <button onclick="toggleTheme()">◐</button>
+  </div>
+</nav>
+
+<div class="container">
+
+<h1>公式計算機</h1>
+<p class="subtitle">Formula Calculator</p>
+
+<div class="tabs">
+  <button class="tab active" onclick="showSection('physics')">物理</button>
+  <button class="tab" onclick="showSection('chemistry')">化學</button>
+  <button class="tab" onclick="showSection('math')">數學</button>
+</div>
+
+<!-- 物理 -->
+<div id="physics" class="section active">
+  
+  <div class="calc-card">
+    <div class="calc-title">等加速度運動</div>
+    <div class="calc-formula">v = v₀ + at ， x = v₀t + ½at²</div>
+    <div class="calc-inputs">
+      <div class="input-group">
+        <label>初速 v₀ (m/s)</label>
+        <input type="number" id="kin-v0" step="any">
+      </div>
+      <div class="input-group">
+        <label>加速度 a (m/s²)</label>
+        <input type="number" id="kin-a" step="any">
+      </div>
+      <div class="input-group">
+        <label>時間 t (s)</label>
+        <input type="number" id="kin-t" step="any">
+      </div>
+    </div>
+    <button class="calc-btn" onclick="calcKinematics()">計算</button>
+    <div class="calc-result" id="kin-result">
+      <div class="result-label">結果</div>
+      <div class="result-value" id="kin-value"></div>
+    </div>
+  </div>
+
+  <div class="calc-card">
+    <div class="calc-title">牛頓第二定律</div>
+    <div class="calc-formula">F = ma</div>
+    <div class="calc-inputs">
+      <div class="input-group">
+        <label>求解</label>
+        <select id="newton-solve">
+          <option value="F">力 F</option>
+          <option value="m">質量 m</option>
+          <option value="a">加速度 a</option>
+        </select>
+      </div>
+      <div class="input-group">
+        <label>質量 m (kg)</label>
+        <input type="number" id="newton-m" step="any">
+      </div>
+      <div class="input-group">
+        <label>加速度 a (m/s²)</label>
+        <input type="number" id="newton-a" step="any">
+      </div>
+      <div class="input-group">
+        <label>力 F (N)</label>
+        <input type="number" id="newton-F" step="any">
+      </div>
+    </div>
+    <button class="calc-btn" onclick="calcNewton()">計算</button>
+    <div class="calc-result" id="newton-result">
+      <div class="result-label">結果</div>
+      <div class="result-value" id="newton-value"></div>
+    </div>
+  </div>
+
+  <div class="calc-card">
+    <div class="calc-title">功與動能</div>
+    <div class="calc-formula">W = Fd ， KE = ½mv²</div>
+    <div class="calc-inputs">
+      <div class="input-group">
+        <label>計算項目</label>
+        <select id="energy-type">
+          <option value="W">功 W = Fd</option>
+          <option value="KE">動能 KE = ½mv²</option>
+        </select>
+      </div>
+      <div class="input-group">
+        <label>力 F / 質量 m</label>
+        <input type="number" id="energy-1" step="any">
+      </div>
+      <div class="input-group">
+        <label>距離 d / 速度 v</label>
+        <input type="number" id="energy-2" step="any">
+      </div>
+    </div>
+    <button class="calc-btn" onclick="calcEnergy()">計算</button>
+    <div class="calc-result" id="energy-result">
+      <div class="result-label">結果</div>
+      <div class="result-value" id="energy-value"></div>
+    </div>
+  </div>
+
+  <div class="calc-card">
+    <div class="calc-title">萬有引力</div>
+    <div class="calc-formula">F = GMm/r² ， g = GM/r²</div>
+    <div class="calc-inputs">
+      <div class="input-group">
+        <label>質量 M (kg)</label>
+        <input type="number" id="grav-M" step="any" placeholder="5.97e24">
+      </div>
+      <div class="input-group">
+        <label>質量 m (kg)</label>
+        <input type="number" id="grav-m" step="any">
+      </div>
+      <div class="input-group">
+        <label>距離 r (m)</label>
+        <input type="number" id="grav-r" step="any" placeholder="6.37e6">
+      </div>
+    </div>
+    <button class="calc-btn" onclick="calcGravity()">計算</button>
+    <div class="calc-result" id="grav-result">
+      <div class="result-label">結果</div>
+      <div class="result-value" id="grav-value"></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- 化學 -->
+<div id="chemistry" class="section">
+  
+  <div class="calc-card">
+    <div class="calc-title">莫耳數計算</div>
+    <div class="calc-formula">n = m/M = N/Nₐ = V/22.4(STP)</div>
+    <div class="calc-inputs">
+      <div class="input-group">
+        <label>已知項目</label>
+        <select id="mole-type">
+          <option value="mass">質量 (g)</option>
+          <option value="particles">粒子數</option>
+          <option value="volume">氣體體積 STP (L)</option>
+        </select>
+      </div>
+      <div class="input-group">
+        <label>數值</label>
+        <input type="number" id="mole-value" step="any">
+      </div>
+      <div class="input-group">
+        <label>莫耳質量 M (g/mol)</label>
+        <input type="number" id="mole-M" step="any" placeholder="質量法需填">
+      </div>
+    </div>
+    <button class="calc-btn" onclick="calcMole()">計算</button>
+    <div class="calc-result" id="mole-result">
+      <div class="result-label">結果</div>
+      <div class="result-value" id="mole-value-result"></div>
+    </div>
+  </div>
+
+  <div class="calc-card">
+    <div class="calc-title">濃度換算</div>
+    <div class="calc-formula">M = n/V ， m% = (溶質/溶液)×100%</div>
+    <div class="calc-inputs">
+      <div class="input-group">
+        <label>計算項目</label>
+        <select id="conc-type">
+          <option value="M">體積莫耳濃度 M</option>
+          <option value="percent">質量百分濃度 %</option>
+          <option value="ppm">ppm</option>
+        </select>
+      </div>
+      <div class="input-group">
+        <label>溶質量 (mol 或 g)</label>
+        <input type="number" id="conc-solute" step="any">
+      </div>
+      <div class="input-group">
+        <label>溶液量 (L 或 g)</label>
+        <input type="number" id="conc-solution" step="any">
+      </div>
+    </div>
+    <button class="calc-btn" onclick="calcConcentration()">計算</button>
+    <div class="calc-result" id="conc-result">
+      <div class="result-label">結果</div>
+      <div class="result-value" id="conc-value"></div>
+    </div>
+  </div>
+
+  <div class="calc-card">
+    <div class="calc-title">理想氣體</div>
+    <div class="calc-formula">PV = nRT （R = 0.082 atm·L/mol·K）</div>
+    <div class="calc-inputs">
+      <div class="input-group">
+        <label>求解</label>
+        <select id="gas-solve">
+          <option value="P">壓力 P (atm)</option>
+          <option value="V">體積 V (L)</option>
+          <option value="n">莫耳數 n</option>
+          <option value="T">溫度 T (K)</option>
+        </select>
+      </div>
+      <div class="input-group">
+        <label>P (atm)</label>
+        <input type="number" id="gas-P" step="any">
+      </div>
+      <div class="input-group">
+        <label>V (L)</label>
+        <input type="number" id="gas-V" step="any">
+      </div>
+      <div class="input-group">
+        <label>n (mol)</label>
+        <input type="number" id="gas-n" step="any">
+      </div>
+      <div class="input-group">
+        <label>T (K)</label>
+        <input type="number" id="gas-T" step="any">
+      </div>
+    </div>
+    <button class="calc-btn" onclick="calcGas()">計算</button>
+    <div class="calc-result" id="gas-result">
+      <div class="result-label">結果</div>
+      <div class="result-value" id="gas-value"></div>
+    </div>
+  </div>
+
+  <div class="calc-card">
+    <div class="calc-title">稀釋公式</div>
+    <div class="calc-formula">M₁V₁ = M₂V₂</div>
+    <div class="calc-inputs">
+      <div class="input-group">
+        <label>求解</label>
+        <select id="dilute-solve">
+          <option value="V2">稀釋後體積 V₂</option>
+          <option value="M2">稀釋後濃度 M₂</option>
+        </select>
+      </div>
+      <div class="input-group">
+        <label>M₁ (原濃度)</label>
+        <input type="number" id="dilute-M1" step="any">
+      </div>
+      <div class="input-group">
+        <label>V₁ (原體積)</label>
+        <input type="number" id="dilute-V1" step="any">
+      </div>
+      <div class="input-group">
+        <label>M₂ 或 V₂</label>
+        <input type="number" id="dilute-2" step="any">
+      </div>
+    </div>
+    <button class="calc-btn" onclick="calcDilute()">計算</button>
+    <div class="calc-result" id="dilute-result">
+      <div class="result-label">結果</div>
+      <div class="result-value" id="dilute-value"></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- 數學 -->
+<div id="math" class="section">
+  
+  <div class="calc-card">
+    <div class="calc-title">一元二次方程式</div>
+    <div class="calc-formula">ax² + bx + c = 0 → x = (-b ± √(b²-4ac)) / 2a</div>
+    <div class="calc-inputs">
+      <div class="input-group">
+        <label>a</label>
+        <input type="number" id="quad-a" step="any">
+      </div>
+      <div class="input-group">
+        <label>b</label>
+        <input type="number" id="quad-b" step="any">
+      </div>
+      <div class="input-group">
+        <label>c</label>
+        <input type="number" id="quad-c" step="any">
+      </div>
+    </div>
+    <button class="calc-btn" onclick="calcQuadratic()">計算</button>
+    <div class="calc-result" id="quad-result">
+      <div class="result-label">結果</div>
+      <div class="result-value" id="quad-value"></div>
+    </div>
+  </div>
+
+  <div class="calc-card">
+    <div class="calc-title">等差數列</div>
+    <div class="calc-formula">aₙ = a₁ + (n-1)d ， Sₙ = n(a₁+aₙ)/2</div>
+    <div class="calc-inputs">
+      <div class="input-group">
+        <label>首項 a₁</label>
+        <input type="number" id="ap-a1" step="any">
+      </div>
+      <div class="input-group">
+        <label>公差 d</label>
+        <input type="number" id="ap-d" step="any">
+      </div>
+      <div class="input-group">
+        <label>項數 n</label>
+        <input type="number" id="ap-n" step="any">
+      </div>
+    </div>
+    <button class="calc-btn" onclick="calcAP()">計算</button>
+    <div class="calc-result" id="ap-result">
+      <div class="result-label">結果</div>
+      <div class="result-value" id="ap-value"></div>
+    </div>
+  </div>
+
+  <div class="calc-card">
+    <div class="calc-title">等比數列</div>
+    <div class="calc-formula">aₙ = a₁ · rⁿ⁻¹ ， Sₙ = a₁(1-rⁿ)/(1-r)</div>
+    <div class="calc-inputs">
+      <div class="input-group">
+        <label>首項 a₁</label>
+        <input type="number" id="gp-a1" step="any">
+      </div>
+      <div class="input-group">
+        <label>公比 r</label>
+        <input type="number" id="gp-r" step="any">
+      </div>
+      <div class="input-group">
+        <label>項數 n</label>
+        <input type="number" id="gp-n" step="any">
+      </div>
+    </div>
+    <button class="calc-btn" onclick="calcGP()">計算</button>
+    <div class="calc-result" id="gp-result">
+      <div class="result-label">結果</div>
+      <div class="result-value" id="gp-value"></div>
+    </div>
+  </div>
+
+  <div class="calc-card">
+    <div class="calc-title">排列組合</div>
+    <div class="calc-formula">P(n,r) = n!/(n-r)! ， C(n,r) = n!/[r!(n-r)!]</div>
+    <div class="calc-inputs">
+      <div class="input-group">
+        <label>類型</label>
+        <select id="perm-type">
+          <option value="P">排列 P(n,r)</option>
+          <option value="C">組合 C(n,r)</option>
+          <option value="factorial">階乘 n!</option>
+        </select>
+      </div>
+      <div class="input-group">
+        <label>n</label>
+        <input type="number" id="perm-n" step="1">
+      </div>
+      <div class="input-group">
+        <label>r</label>
+        <input type="number" id="perm-r" step="1">
+      </div>
+    </div>
+    <button class="calc-btn" onclick="calcPerm()">計算</button>
+    <div class="calc-result" id="perm-result">
+      <div class="result-label">結果</div>
+      <div class="result-value" id="perm-value"></div>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  made with care
+</footer>
+
+</div>
+
+<script>
+function toggleTheme() {
+  const html = document.documentElement;
+  if (html.getAttribute('data-theme') === 'dark') {
+    html.removeAttribute('data-theme');
+  } else {
+    html.setAttribute('data-theme', 'dark');
+  }
+}
+
+function showSection(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  event.target.classList.add('active');
+}
+
+function showResult(id, value) {
+  const el = document.getElementById(id);
+  el.classList.add('show');
+  document.getElementById(id.replace('-result', '-value')).innerHTML = value;
+}
+
+// 物理
+function calcKinematics() {
+  const v0 = parseFloat(document.getElementById('kin-v0').value);
+  const a = parseFloat(document.getElementById('kin-a').value);
+  const t = parseFloat(document.getElementById('kin-t').value);
+  const v = v0 + a * t;
+  const x = v0 * t + 0.5 * a * t * t;
+  showResult('kin-result', `末速 v = ${v.toFixed(4)} m/s<br>位移 x = ${x.toFixed(4)} m`);
+}
+
+function calcNewton() {
+  const solve = document.getElementById('newton-solve').value;
+  const m = parseFloat(document.getElementById('newton-m').value);
+  const a = parseFloat(document.getElementById('newton-a').value);
+  const F = parseFloat(document.getElementById('newton-F').value);
+  let result;
+  if (solve === 'F') result = `F = ${(m * a).toFixed(4)} N`;
+  else if (solve === 'm') result = `m = ${(F / a).toFixed(4)} kg`;
+  else result = `a = ${(F / m).toFixed(4)} m/s²`;
+  showResult('newton-result', result);
+}
+
+function calcEnergy() {
+  const type = document.getElementById('energy-type').value;
+  const v1 = parseFloat(document.getElementById('energy-1').value);
+  const v2 = parseFloat(document.getElementById('energy-2').value);
+  let result;
+  if (type === 'W') result = `W = ${(v1 * v2).toFixed(4)} J`;
+  else result = `KE = ${(0.5 * v1 * v2 * v2).toFixed(4)} J`;
+  showResult('energy-result', result);
+}
+
+function calcGravity() {
+  const G = 6.674e-11;
+  const M = parseFloat(document.getElementById('grav-M').value);
+  const m = parseFloat(document.getElementById('grav-m').value);
+  const r = parseFloat(document.getElementById('grav-r').value);
+  const F = G * M * m / (r * r);
+  const g = G * M / (r * r);
+  showResult('grav-result', `F = ${F.toExponential(4)} N<br>g = ${g.toFixed(4)} m/s²`);
+}
+
+// 化學
+function calcMole() {
+  const type = document.getElementById('mole-type').value;
+  const value = parseFloat(document.getElementById('mole-value').value);
+  const M = parseFloat(document.getElementById('mole-M').value);
+  const Na = 6.022e23;
+  let n;
+  if (type === 'mass') n = value / M;
+  else if (type === 'particles') n = value / Na;
+  else n = value / 22.4;
+  showResult('mole-result', `n = ${n.toFixed(6)} mol`);
+}
+
+function calcConcentration() {
+  const type = document.getElementById('conc-type').value;
+  const solute = parseFloat(document.getElementById('conc-solute').value);
+  const solution = parseFloat(document.getElementById('conc-solution').value);
+  let result;
+  if (type === 'M') result = `M = ${(solute / solution).toFixed(4)} mol/L`;
+  else if (type === 'percent') result = `${(solute / solution * 100).toFixed(4)} %`;
+  else result = `${(solute / solution * 1e6).toFixed(4)} ppm`;
+  showResult('conc-result', result);
+}
+
+function calcGas() {
+  const R = 0.082;
+  const solve = document.getElementById('gas-solve').value;
+  const P = parseFloat(document.getElementById('gas-P').value);
+  const V = parseFloat(document.getElementById('gas-V').value);
+  const n = parseFloat(document.getElementById('gas-n').value);
+  const T = parseFloat(document.getElementById('gas-T').value);
+  let result;
+  if (solve === 'P') result = `P = ${(n * R * T / V).toFixed(4)} atm`;
+  else if (solve === 'V') result = `V = ${(n * R * T / P).toFixed(4)} L`;
+  else if (solve === 'n') result = `n = ${(P * V / (R * T)).toFixed(6)} mol`;
+  else result = `T = ${(P * V / (n * R)).toFixed(2)} K`;
+  showResult('gas-result', result);
+}
+
+function calcDilute() {
+  const solve = document.getElementById('dilute-solve').value;
+  const M1 = parseFloat(document.getElementById('dilute-M1').value);
+  const V1 = parseFloat(document.getElementById('dilute-V1').value);
+  const val2 = parseFloat(document.getElementById('dilute-2').value);
+  let result;
+  if (solve === 'V2') result = `V₂ = ${(M1 * V1 / val2).toFixed(4)}`;
+  else result = `M₂ = ${(M1 * V1 / val2).toFixed(4)}`;
+  showResult('dilute-result', result);
+}
+
+// 數學
+function calcQuadratic() {
+  const a = parseFloat(document.getElementById('quad-a').value);
+  const b = parseFloat(document.getElementById('quad-b').value);
+  const c = parseFloat(document.getElementById('quad-c').value);
+  const D = b * b - 4 * a * c;
+  let result;
+  if (D < 0) {
+    const real = (-b / (2 * a)).toFixed(4);
+    const imag = (Math.sqrt(-D) / (2 * a)).toFixed(4);
+    result = `x = ${real} ± ${imag}i （虛根）`;
+  } else if (D === 0) {
+    result = `x = ${(-b / (2 * a)).toFixed(4)} （重根）`;
+  } else {
+    const x1 = (-b + Math.sqrt(D)) / (2 * a);
+    const x2 = (-b - Math.sqrt(D)) / (2 * a);
+    result = `x₁ = ${x1.toFixed(4)}<br>x₂ = ${x2.toFixed(4)}`;
+  }
+  result += `<br>判別式 D = ${D}`;
+  showResult('quad-result', result);
+}
+
+function calcAP() {
+  const a1 = parseFloat(document.getElementById('ap-a1').value);
+  const d = parseFloat(document.getElementById('ap-d').value);
+  const n = parseFloat(document.getElementById('ap-n').value);
+  const an = a1 + (n - 1) * d;
+  const Sn = n * (a1 + an) / 2;
+  showResult('ap-result', `第 ${n} 項 aₙ = ${an}<br>前 ${n} 項和 Sₙ = ${Sn}`);
+}
+
+function calcGP() {
+  const a1 = parseFloat(document.getElementById('gp-a1').value);
+  const r = parseFloat(document.getElementById('gp-r').value);
+  const n = parseFloat(document.getElementById('gp-n').value);
+  const an = a1 * Math.pow(r, n - 1);
+  const Sn = r === 1 ? a1 * n : a1 * (1 - Math.pow(r, n)) / (1 - r);
+  showResult('gp-result', `第 ${n} 項 aₙ = ${an.toFixed(4)}<br>前 ${n} 項和 Sₙ = ${Sn.toFixed(4)}`);
+}
+
+function factorial(n) {
+  if (n <= 1) return 1;
+  let result = 1;
+  for (let i = 2; i <= n; i++) result *= i;
+  return result;
+}
+
+function calcPerm() {
+  const type = document.getElementById('perm-type').value;
+  const n = parseInt(document.getElementById('perm-n').value);
+  const r = parseInt(document.getElementById('perm-r').value);
+  let result;
+  if (type === 'factorial') {
+    result = `${n}! = ${factorial(n)}`;
+  } else if (type === 'P') {
+    result = `P(${n},${r}) = ${factorial(n) / factorial(n - r)}`;
+  } else {
+    result = `C(${n},${r}) = ${factorial(n) / (factorial(r) * factorial(n - r))}`;
+  }
+  showResult('perm-result', result);
+}
+</script>
+
+</body>
+</html>

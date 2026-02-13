@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>複習儀表板</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600&family=Noto+Sans+TC:wght@300;400;500&display=swap');
+    
+    :root {
+      --bg: #fefefe;
+      --text: #2d2d2d;
+      --muted: #888;
+      --accent: #4a4a4a;
+      --border: #e8e8e8;
+      --card: #fff;
+      --success: #22c55e;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+    }
+
+    [data-theme="dark"] {
+      --bg: #1a1a1a;
+      --text: #e8e8e8;
+      --muted: #888;
+      --accent: #ccc;
+      --border: #333;
+      --card: #242424;
+    }
+    
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    body {
+      font-family: 'Noto Sans TC', sans-serif;
+      font-weight: 300;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.8;
+      font-size: 16px;
+      transition: all 0.3s ease;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 60px 24px;
+    }
+
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+      padding: 16px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 100;
+      font-size: 14px;
+    }
+
+    nav a {
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    nav a:hover { color: var(--text); }
+
+    .nav-actions {
+      display: flex;
+      gap: 20px;
+    }
+
+    .nav-actions button {
+      background: none;
+      border: none;
+      color: var(--muted);
+      cursor: pointer;
+      font-size: 14px;
+      font-family: inherit;
+      transition: color 0.2s;
+    }
+
+    .nav-actions button:hover { color: var(--text); }
+
+    h1 {
+      font-family: 'Noto Serif TC', serif;
+      font-weight: 600;
+      font-size: 2.5rem;
+      margin: 40px 0 16px;
+      letter-spacing: 2px;
+    }
+
+    .subtitle {
+      color: var(--muted);
+      margin-bottom: 40px;
+      font-size: 14px;
+    }
+
+    .last-update {
+      color: var(--muted);
+      font-size: 13px;
+      margin-bottom: 40px;
+    }
+
+    .overview {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-bottom: 48px;
+    }
+
+    .stat-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+      text-align: center;
+    }
+
+    .stat-number {
+      font-family: 'Noto Serif TC', serif;
+      font-size: 2.5rem;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .stat-number.success { color: var(--success); }
+    .stat-number.warning { color: var(--warning); }
+    .stat-number.danger { color: var(--danger); }
+
+    .stat-label {
+      font-size: 13px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    h2 {
+      font-family: 'Noto Serif TC', serif;
+      font-weight: 600;
+      font-size: 1.25rem;
+      margin: 48px 0 24px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border);
+      letter-spacing: 1px;
+    }
+
+    .subject-section {
+      margin-bottom: 40px;
+    }
+
+    .subject-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+
+    .subject-title {
+      font-weight: 500;
+      font-size: 1.1rem;
+    }
+
+    .subject-progress {
+      font-size: 14px;
+      color: var(--muted);
+    }
+
+    .progress-bar {
+      height: 8px;
+      background: var(--border);
+      border-radius: 4px;
+      overflow: hidden;
+      margin-bottom: 20px;
+    }
+
+    .progress-fill {
+      height: 100%;
+      border-radius: 4px;
+      transition: width 0.5s ease;
+    }
+
+    .progress-fill.success { background: var(--success); }
+    .progress-fill.warning { background: var(--warning); }
+    .progress-fill.danger { background: var(--danger); }
+
+    .task-list {
+      list-style: none;
+    }
+
+    .task-item {
+      display: flex;
+      align-items: center;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border);
+      gap: 12px;
+    }
+
+    .task-item:last-child {
+      border-bottom: none;
+    }
+
+    .task-status {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      border: 2px solid var(--border);
+      flex-shrink: 0;
+    }
+
+    .task-status.done {
+      background: var(--success);
+      border-color: var(--success);
+    }
+
+    .task-status.overdue {
+      background: var(--danger);
+      border-color: var(--danger);
+    }
+
+    .task-content {
+      flex: 1;
+    }
+
+    .task-name {
+      margin-bottom: 2px;
+    }
+
+    .task-item.done .task-name {
+      text-decoration: line-through;
+      color: var(--muted);
+    }
+
+    .task-date {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .task-date.overdue {
+      color: var(--danger);
+      font-weight: 500;
+    }
+
+    .tag {
+      font-size: 11px;
+      padding: 2px 8px;
+      border-radius: 10px;
+      background: var(--border);
+      color: var(--muted);
+    }
+
+    .tag.overdue {
+      background: var(--danger);
+      color: white;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--muted);
+    }
+
+    .empty-state .emoji {
+      font-size: 3rem;
+      margin-bottom: 16px;
+    }
+
+    footer {
+      text-align: center;
+      padding: 40px 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    @media (max-width: 600px) {
+      .container { padding: 80px 16px 40px; }
+      h1 { font-size: 1.8rem; }
+      .overview { grid-template-columns: repeat(2, 1fr); }
+      .stat-number { font-size: 2rem; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="../index.html">← 返回</a>
+  <div class="nav-actions">
+    <button onclick="refreshData()">↻ 重新整理</button>
+    <button onclick="toggleTheme()">◐</button>
+  </div>
+</nav>
+
+<div class="container">
+
+<h1>複習儀表板</h1>
+<p class="subtitle">Review Dashboard</p>
+<p class="last-update" id="lastUpdate">載入中...</p>
+
+<div class="overview" id="overview">
+  <div class="stat-card">
+    <div class="stat-number" id="totalTasks">-</div>
+    <div class="stat-label">總任務</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-number success" id="completedTasks">-</div>
+    <div class="stat-label">已完成</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-number warning" id="pendingTasks">-</div>
+    <div class="stat-label">待完成</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-number danger" id="overdueTasks">-</div>
+    <div class="stat-label">已過期</div>
+  </div>
+</div>
+
+<div id="subjects">
+  <!-- 動態載入 -->
+</div>
+
+<footer>
+  made with care
+</footer>
+
+</div>
+
+<script>
+const DATA_URL = 'progress.json';
+
+function toggleTheme() {
+  const html = document.documentElement;
+  if (html.getAttribute('data-theme') === 'dark') {
+    html.removeAttribute('data-theme');
+  } else {
+    html.setAttribute('data-theme', 'dark');
+  }
+}
+
+function getProgressClass(percent) {
+  if (percent >= 70) return 'success';
+  if (percent >= 40) return 'warning';
+  return 'danger';
+}
+
+function formatDate(dateStr) {
+  const date = new Date(dateStr);
+  return `${date.getMonth() + 1}/${date.getDate()}`;
+}
+
+function isOverdue(dateStr) {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const taskDate = new Date(dateStr);
+  taskDate.setHours(0, 0, 0, 0);
+  return taskDate < today;
+}
+
+function renderDashboard(data) {
+  // 更新時間
+  document.getElementById('lastUpdate').textContent = 
+    `最後更新：${data.lastUpdate || '未知'}`;
+  
+  // 統計數據
+  let total = 0, completed = 0, pending = 0, overdue = 0;
+  
+  data.subjects.forEach(subject => {
+    subject.tasks.forEach(task => {
+      total++;
+      if (task.done) {
+        completed++;
+      } else if (isOverdue(task.date)) {
+        overdue++;
+      } else {
+        pending++;
+      }
+    });
+  });
+  
+  document.getElementById('totalTasks').textContent = total;
+  document.getElementById('completedTasks').textContent = completed;
+  document.getElementById('pendingTasks').textContent = pending;
+  document.getElementById('overdueTasks').textContent = overdue;
+  
+  // 各科目
+  const subjectsEl = document.getElementById('subjects');
+  subjectsEl.innerHTML = '';
+  
+  data.subjects.forEach(subject => {
+    const subjectTotal = subject.tasks.length;
+    const subjectDone = subject.tasks.filter(t => t.done).length;
+    const percent = subjectTotal > 0 ? Math.round(subjectDone / subjectTotal * 100) : 0;
+    const progressClass = getProgressClass(percent);
+    
+    const section = document.createElement('div');
+    section.className = 'subject-section';
+    section.innerHTML = `
+      <div class="subject-header">
+        <div class="subject-title">${subject.name}</div>
+        <div class="subject-progress">${subjectDone}/${subjectTotal} (${percent}%)</div>
+      </div>
+      <div class="progress-bar">
+        <div class="progress-fill ${progressClass}" style="width: ${percent}%"></div>
+      </div>
+      <ul class="task-list">
+        ${subject.tasks.map(task => {
+          const taskOverdue = !task.done && isOverdue(task.date);
+          return `
+            <li class="task-item ${task.done ? 'done' : ''}">
+              <div class="task-status ${task.done ? 'done' : (taskOverdue ? 'overdue' : '')}"></div>
+              <div class="task-content">
+                <div class="task-name">${task.name}</div>
+                <div class="task-date ${taskOverdue ? 'overdue' : ''}">${formatDate(task.date)}${taskOverdue ? ' ⚠️ 已過期' : ''}</div>
+              </div>
+              ${taskOverdue ? '<span class="tag overdue">過期</span>' : ''}
+            </li>
+          `;
+        }).join('')}
+      </ul>
+    `;
+    subjectsEl.appendChild(section);
+  });
+}
+
+async function loadData() {
+  try {
+    const res = await fetch(DATA_URL + '?t=' + Date.now());
+    if (!res.ok) throw new Error('Failed to load');
+    const data = await res.json();
+    renderDashboard(data);
+  } catch (e) {
+    document.getElementById('subjects').innerHTML = `
+      <div class="empty-state">
+        <div class="emoji">📊</div>
+        <p>無法載入資料</p>
+        <p style="font-size: 13px; margin-top: 8px;">請確認 progress.json 存在</p>
+      </div>
+    `;
+  }
+}
+
+function refreshData() {
+  loadData();
+}
+
+// 初始載入
+loadData();
+</script>
+
+</body>
+</html>
