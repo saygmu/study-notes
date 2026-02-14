@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>萬有引力與軌道運動 - 觀念引導</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            line-height: 1.8;
+            color: #1a1a1a;
+            background: #fafafa;
+            padding: 2rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        h1 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #000;
+        }
+        .subtitle {
+            color: #666;
+            margin-bottom: 2rem;
+            font-size: 0.95rem;
+        }
+        h2 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin: 2.5rem 0 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #000;
+        }
+        h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin: 1.5rem 0 0.8rem;
+            color: #333;
+        }
+        .formula-box {
+            background: #fff;
+            border: 1px solid #ddd;
+            border-left: 4px solid #000;
+            padding: 1.2rem 1.5rem;
+            margin: 1rem 0;
+            font-family: "Times New Roman", serif;
+            font-size: 1.1rem;
+        }
+        .formula-box .name {
+            font-family: -apple-system, sans-serif;
+            font-size: 0.85rem;
+            color: #666;
+            margin-bottom: 0.5rem;
+        }
+        .key-point {
+            background: #f5f5f5;
+            padding: 1rem 1.2rem;
+            margin: 1rem 0;
+            border-radius: 4px;
+        }
+        .key-point strong {
+            color: #000;
+        }
+        .thinking {
+            background: #fff;
+            border: 1px dashed #ccc;
+            padding: 1rem 1.2rem;
+            margin: 1rem 0;
+            color: #444;
+        }
+        .thinking::before {
+            content: "💡 思考方向";
+            display: block;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #000;
+        }
+        ul {
+            margin: 0.8rem 0 0.8rem 1.5rem;
+        }
+        li {
+            margin: 0.4rem 0;
+        }
+        .warning {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 1rem 1.2rem;
+            margin: 1rem 0;
+        }
+        .warning::before {
+            content: "⚠️ 常見錯誤";
+            display: block;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        .step {
+            counter-increment: step;
+            padding-left: 2rem;
+            position: relative;
+            margin: 0.8rem 0;
+        }
+        .step::before {
+            content: counter(step);
+            position: absolute;
+            left: 0;
+            width: 1.5rem;
+            height: 1.5rem;
+            background: #000;
+            color: #fff;
+            border-radius: 50%;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .steps {
+            counter-reset: step;
+            margin: 1rem 0;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 0.8rem;
+            text-align: left;
+        }
+        th {
+            background: #f5f5f5;
+            font-weight: 600;
+        }
+        .comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+        .comparison > div {
+            background: #fff;
+            border: 1px solid #ddd;
+            padding: 1rem;
+        }
+        @media (max-width: 600px) {
+            body { padding: 1rem; }
+            .comparison { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <h1>萬有引力與軌道運動</h1>
+    <p class="subtitle">觀念引導講義 — 不是背公式，是理解物理圖像</p>
+
+    <h2>一、核心公式與物理意義</h2>
+    
+    <h3>萬有引力定律</h3>
+    <div class="formula-box">
+        <div class="name">兩質點間的引力</div>
+        F = GMm / r²
+    </div>
+    <div class="key-point">
+        <strong>關鍵理解：</strong>r 是「質心到質心」的距離，不是表面到表面！
+    </div>
+
+    <h3>表面重力加速度</h3>
+    <div class="formula-box">
+        <div class="name">星球表面的 g 值</div>
+        g = GM / R²
+    </div>
+    <div class="thinking">
+        這其實就是把 F = mg 和 F = GMm/R² 結合：<br>
+        mg = GMm/R² → <strong>g = GM/R²</strong><br><br>
+        所以 g 取決於：星球質量 M 和半徑 R
+    </div>
+
+    <h3>軌道運動（等速圓周）</h3>
+    <div class="formula-box">
+        <div class="name">萬有引力 = 向心力</div>
+        GMm / r² = mv² / r = mω²r = m(4π²/T²)r
+    </div>
+    <div class="key-point">
+        <strong>這裡的 r 是軌道半徑</strong>（從星球中心算起），不是高度！<br>
+        如果衛星在「離地表 h」處，則 r = R + h
+    </div>
+
+    <h2>二、常見題型的思考框架</h2>
+
+    <h3>題型 A：比較不同位置的重力/重量</h3>
+    <div class="thinking">
+        <strong>問「在某高度的重量」：</strong>
+        <div class="steps">
+            <div class="step">確認 r = R + h（從星球中心算）</div>
+            <div class="step">用 g' = GM/r² 或直接比值法</div>
+            <div class="step">重量 W = mg'</div>
+        </div>
+    </div>
+    
+    <div class="warning">
+        「距地表 R」和「距地心 R」差很多！<br>
+        距地表 R → r = 2R<br>
+        距地心 R → r = R
+    </div>
+
+    <p><strong>比值技巧：</strong>如果地表 g₀ = GM/R²，在 r = 2R 處：</p>
+    <div class="formula-box">
+        g'/g₀ = (R/r)² = (R/2R)² = 1/4
+    </div>
+
+    <h3>題型 B：比較兩星球的 g 或質量</h3>
+    <div class="thinking">
+        <strong>已知兩星球的 g 比和 R 比，求 M 比：</strong><br><br>
+        從 g = GM/R² 得到 <strong>M = gR²/G</strong><br><br>
+        所以：M₁/M₂ = (g₁/g₂)(R₁/R₂)²
+    </div>
+
+    <h3>題型 C：衛星軌道問題</h3>
+    <div class="thinking">
+        <strong>核心等式：</strong>GMm/r² = mv²/r<br><br>
+        整理後得到重要關係：
+        <ul>
+            <li>軌道速率：<strong>v = √(GM/r)</strong> — 軌道越高，速度越慢</li>
+            <li>週期：<strong>T² = (4π²/GM) r³</strong> — 這就是克卜勒第三定律</li>
+        </ul>
+    </div>
+
+    <div class="key-point">
+        <strong>克卜勒第三定律：</strong>T² ∝ r³<br>
+        同一顆中心星球，所有衛星都滿足 T²/r³ = 常數 = 4π²/GM
+    </div>
+
+    <h3>題型 D：太空艙內的「失重」</h3>
+    <div class="thinking">
+        太空人「飄浮」不是因為沒有重力！<br><br>
+        而是太空人和太空船<strong>一起做自由落體</strong>（都在軌道上繞地球）<br><br>
+        所以太空人相對太空船：<strong>合力 = 0</strong>（看起來像沒重量）
+    </div>
+
+    <h2>三、進階技巧</h2>
+
+    <h3>用「地表 g」簡化計算</h3>
+    <p>很多題目給 g = 10 m/s² 和 R，而不是 G 和 M。這時候：</p>
+    <div class="formula-box">
+        <div class="name">黃金替換</div>
+        GM = gR²
+    </div>
+    <p>任何看到 GM 的地方都可以換成 gR²，計算會簡單很多！</p>
+    
+    <p><strong>例如：</strong>在 r = 3R 處的軌道速率</p>
+    <div class="formula-box">
+        v = √(GM/r) = √(gR²/3R) = √(gR/3)
+    </div>
+
+    <h3>週期比與速率比</h3>
+    <table>
+        <tr>
+            <th>要比較的量</th>
+            <th>公式</th>
+            <th>與 r 的關係</th>
+        </tr>
+        <tr>
+            <td>軌道速率 v</td>
+            <td>v = √(GM/r)</td>
+            <td>v ∝ r<sup>-1/2</sup></td>
+        </tr>
+        <tr>
+            <td>角速度 ω</td>
+            <td>ω = √(GM/r³)</td>
+            <td>ω ∝ r<sup>-3/2</sup></td>
+        </tr>
+        <tr>
+            <td>週期 T</td>
+            <td>T = 2π√(r³/GM)</td>
+            <td>T ∝ r<sup>3/2</sup></td>
+        </tr>
+    </table>
+
+    <h3>密度相關問題</h3>
+    <div class="thinking">
+        如果題目問「密度比」，需要用到：<br><br>
+        M = ρ × (4/3)πR³<br><br>
+        代入 g = GM/R² 可得：<strong>g ∝ ρR</strong><br><br>
+        這在比較不同星球時很有用！
+    </div>
+
+    <h2>四、變形題：非平方反比力</h2>
+    <p>有些題目會說「在某平行世界，引力 ∝ 1/r³」之類的。</p>
+    
+    <div class="thinking">
+        <strong>處理方式：</strong>
+        <div class="steps">
+            <div class="step">把 F = GMm/r² 換成題目給的形式（如 F = GMm/r³）</div>
+            <div class="step">重新推導：F = mv²/r 或 F = m(4π²/T²)r</div>
+            <div class="step">找出新的 T² 與 r 的關係</div>
+        </div>
+    </div>
+
+    <p><strong>例如：</strong>若 F ∝ 1/r³，則</p>
+    <div class="formula-box">
+        GMm/r³ = m(4π²/T²)r<br>
+        → T² ∝ r⁴<br>
+        → T²/r⁴ = 常數（新的「克卜勒定律」）
+    </div>
+
+    <h2>五、快速檢查清單</h2>
+    <ul>
+        <li>☐ r 是從中心算還是從表面算？</li>
+        <li>☐ 要用 g = GM/R² 還是用題目給的 g 值？</li>
+        <li>☐ 是比較「同一星球不同衛星」還是「不同星球」？</li>
+        <li>☐ 週期、速率、角速度 — 要求的是哪一個？</li>
+        <li>☐ 有沒有用到 GM = gR² 簡化？</li>
+    </ul>
+
+    <hr style="margin: 3rem 0; border: none; border-top: 1px solid #ddd;">
+    <p style="color: #999; font-size: 0.85rem;">
+        📝 這份講義是觀念引導，不是題目詳解。理解了框架，題目自然會解。<br>
+        最後更新：2026/02/14
+    </p>
+</body>
+</html>
