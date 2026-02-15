@@ -1,5 +1,5 @@
 {
-  "lastUpdate": "2026/02/15 18:24",
+  "lastUpdate": "2026/02/16 00:24",
   "subjects": [
     {
       "name": "物理",
@@ -12,7 +12,7 @@
         {
           "name": "單元3: 牛頓運動定律",
           "date": "2026-02-05",
-          "done": true
+          "done": false
         },
         {
           "name": "單元2: 運動學",
