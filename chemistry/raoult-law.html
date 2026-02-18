@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>拉午耳定律：液相與氣相莫耳分率</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500&family=Noto+Serif+TC:wght@600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #fefefe;
+      --text: #2d2d2d;
+      --muted: #888;
+      --accent: #4a4a4a;
+      --border: #e8e8e8;
+      --card: #fff;
+    }
+
+    [data-theme="dark"] {
+      --bg: #1a1a1a;
+      --text: #e8e8e8;
+      --muted: #888;
+      --accent: #ccc;
+      --border: #333;
+      --card: #242424;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Noto Sans TC', sans-serif;
+      font-weight: 300;
+      font-size: 16px;
+      line-height: 2;
+      color: var(--text);
+      background: var(--bg);
+    }
+
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+      padding: 12px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 100;
+    }
+
+    nav a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 14px;
+    }
+
+    nav a:hover {
+      color: var(--text);
+    }
+
+    .nav-right {
+      display: flex;
+      gap: 16px;
+    }
+
+    .nav-right button {
+      background: none;
+      border: none;
+      color: var(--muted);
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    .nav-right button:hover {
+      color: var(--text);
+    }
+
+    .container {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 80px 24px 60px;
+    }
+
+    h1 {
+      font-family: 'Noto Serif TC', serif;
+      font-weight: 600;
+      font-size: 2rem;
+      letter-spacing: 2px;
+      margin-bottom: 8px;
+    }
+
+    .subtitle {
+      font-size: 14px;
+      color: var(--muted);
+      margin-bottom: 48px;
+    }
+
+    h2 {
+      font-family: 'Noto Serif TC', serif;
+      font-weight: 600;
+      font-size: 1.25rem;
+      margin-top: 48px;
+      margin-bottom: 20px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    p {
+      margin-bottom: 16px;
+    }
+
+    .formula {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 24px;
+      text-align: center;
+      margin: 24px 0;
+      background: var(--card);
+    }
+
+    .formula-main {
+      font-family: 'Times New Roman', serif;
+      font-size: 1.4rem;
+      margin-bottom: 8px;
+    }
+
+    .formula-note {
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+
+    .concept-box {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 28px;
+      margin: 24px 0;
+      background: var(--card);
+    }
+
+    .concept-box h3 {
+      font-size: 1rem;
+      font-weight: 500;
+      margin-bottom: 16px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 24px 0;
+    }
+
+    th {
+      text-align: left;
+      font-size: 0.85rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      padding: 12px 8px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    td {
+      padding: 12px 8px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .analogy {
+      border-left: 2px solid var(--border);
+      padding: 16px 20px;
+      margin: 24px 0;
+      color: var(--accent);
+    }
+
+    .analogy-title {
+      font-size: 0.85rem;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+
+    .steps {
+      counter-reset: step;
+      list-style: none;
+      padding: 0;
+    }
+
+    .steps li {
+      position: relative;
+      padding-left: 48px;
+      margin-bottom: 20px;
+    }
+
+    .steps li::before {
+      counter-increment: step;
+      content: counter(step);
+      position: absolute;
+      left: 0;
+      top: 4px;
+      width: 28px;
+      height: 28px;
+      border: 1px solid var(--border);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      color: var(--muted);
+    }
+
+    .highlight {
+      background: #fff3cd;
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+
+    [data-theme="dark"] .highlight {
+      background: #4a4000;
+    }
+
+    .summary {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 28px;
+      margin: 32px 0;
+      background: var(--card);
+    }
+
+    .summary h3 {
+      font-size: 1rem;
+      font-weight: 500;
+      margin-bottom: 16px;
+    }
+
+    .summary ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .summary li {
+      padding: 8px 0;
+      padding-left: 20px;
+      position: relative;
+    }
+
+    .summary li::before {
+      content: "→";
+      position: absolute;
+      left: 0;
+      color: var(--muted);
+    }
+
+    .example {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 28px;
+      margin: 24px 0;
+      background: var(--card);
+    }
+
+    .example-title {
+      font-size: 0.85rem;
+      color: var(--muted);
+      margin-bottom: 16px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .arrow {
+      text-align: center;
+      color: var(--muted);
+      font-size: 1.2rem;
+      margin: 12px 0;
+    }
+
+    footer {
+      margin-top: 60px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border);
+      font-size: 13px;
+      color: var(--muted);
+      text-align: center;
+    }
+
+    @media (max-width: 600px) {
+      h1 {
+        font-size: 1.75rem;
+      }
+      .container {
+        padding: 70px 16px 40px;
+      }
+    }
+
+    @media print {
+      nav {
+        display: none;
+      }
+      .container {
+        padding-top: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="../">← 返回</a>
+    <div class="nav-right">
+      <button onclick="window.print()">列印</button>
+      <button onclick="toggleTheme()">◐</button>
+    </div>
+  </nav>
+
+  <div class="container">
+    <h1>拉午耳定律</h1>
+    <p class="subtitle">液相與氣相莫耳分率的轉換</p>
+
+    <h2>核心觀念</h2>
+    
+    <p>混合液體蒸發時，<span class="highlight">液體裡的比例</span>和<span class="highlight">氣體裡的比例</span>會不一樣。</p>
+    
+    <p>原因：每種物質的揮發性（逃跑能力）不同。</p>
+
+    <div class="analogy">
+      <div class="analogy-title">比喻</div>
+      教室裡 A 和 B 各佔一半。A 愛翹課（揮發性強），B 很乖。<br>
+      去走廊看，滿滿都是 A —— 因為他一直跑出去。<br>
+      <strong>會逃的人，在外面的比例就會變高。</strong>
+    </div>
+
+    <h2>符號定義</h2>
+
+    <table>
+      <tr>
+        <th>符號</th>
+        <th>名稱</th>
+        <th>意義</th>
+      </tr>
+      <tr>
+        <td><strong>x</strong></td>
+        <td>液相莫耳分率</td>
+        <td>液體裡某成分的比例</td>
+      </tr>
+      <tr>
+        <td><strong>y</strong></td>
+        <td>氣相莫耳分率</td>
+        <td>蒸氣裡某成分的比例</td>
+      </tr>
+      <tr>
+        <td><strong>P</strong></td>
+        <td>分壓</td>
+        <td>該成分在氣相的壓力</td>
+      </tr>
+      <tr>
+        <td><strong>P°</strong></td>
+        <td>純蒸氣壓</td>
+        <td>純物質的揮發能力（查表常數）</td>
+      </tr>
+    </table>
+
+    <h2>公式</h2>
+
+    <div class="formula">
+      <div class="formula-main">P<sub>A</sub> = x<sub>A</sub> × P°<sub>A</sub></div>
+      <div class="formula-note">拉午耳定律：用液相比例算出氣相分壓</div>
+    </div>
+
+    <div class="formula">
+      <div class="formula-main">y<sub>A</sub> = P<sub>A</sub> ÷ (P<sub>A</sub> + P<sub>B</sub>)</div>
+      <div class="formula-note">道耳吞分壓定律：用分壓算出氣相比例</div>
+    </div>
+
+    <div class="concept-box">
+      <h3>重點整理</h3>
+      <table>
+        <tr>
+          <th></th>
+          <th>液相</th>
+          <th>氣相</th>
+        </tr>
+        <tr>
+          <td>比例符號</td>
+          <td>x</td>
+          <td>y</td>
+        </tr>
+        <tr>
+          <td>在哪裡</td>
+          <td>燒杯裡的液體</td>
+          <td>液體上方的蒸氣</td>
+        </tr>
+        <tr>
+          <td>誰決定</td>
+          <td>你配多少</td>
+          <td>x 和 P°（揮發能力）</td>
+        </tr>
+      </table>
+    </div>
+
+    <h2>計算流程</h2>
+
+    <ol class="steps">
+      <li>
+        <strong>算各自的分壓</strong><br>
+        P<sub>A</sub> = x<sub>A</sub> × P°<sub>A</sub><br>
+        P<sub>B</sub> = x<sub>B</sub> × P°<sub>B</sub>
+      </li>
+      <li>
+        <strong>算總壓</strong><br>
+        P<sub>總</sub> = P<sub>A</sub> + P<sub>B</sub>
+      </li>
+      <li>
+        <strong>算氣相比例</strong><br>
+        y<sub>A</sub> = P<sub>A</sub> ÷ P<sub>總</sub>
+      </li>
+    </ol>
+
+    <h2>分餾：為什麼純度會越來越高？</h2>
+
+    <p>每次「蒸發 → 冷凝」都會讓揮發性強的成分更濃縮。</p>
+
+    <div class="concept-box">
+      <h3>關鍵：冷凝後，y 變成新的 x</h3>
+      <p>氣體冷凝回液體時，氣相比例（y）直接變成下一輪的液相比例（x'）</p>
+    </div>
+
+    <div class="example">
+      <div class="example-title">範例流程</div>
+      
+      <strong>第一輪</strong>
+      <ol class="steps">
+        <li>起始液體：x<sub>A</sub> = 0.5</li>
+        <li>算分壓，再算 y<sub>A</sub> = 0.75</li>
+      </ol>
+      
+      <div class="arrow">↓ 冷凝 ↓</div>
+      
+      <strong>第二輪</strong>
+      <ol class="steps">
+        <li>新液體：x'<sub>A</sub> = 0.75（繼承上一輪的 y）</li>
+        <li>用同樣公式，算出 y'<sub>A</sub> = 0.9</li>
+      </ol>
+      
+      <div class="arrow">↓ 冷凝 ↓</div>
+      
+      <p style="text-align: center; color: var(--muted);">重複循環，純度越來越高...</p>
+    </div>
+
+    <div class="summary">
+      <h3>記住這些</h3>
+      <ul>
+        <li><strong>P° 永遠是常數</strong>（查表值，不會變）</li>
+        <li><strong>每輪改變的是 x</strong>（液相比例）</li>
+        <li><strong>冷凝 = y 變成新的 x</strong></li>
+        <li>揮發性強 → 氣相比例高 → 分餾後更純</li>
+      </ul>
+    </div>
+
+    <footer>
+      2026.02.18
+    </footer>
+  </div>
+
+  <script>
+    function toggleTheme() {
+      const html = document.documentElement;
+      const current = html.getAttribute('data-theme');
+      const next = current === 'dark' ? 'light' : 'dark';
+      html.setAttribute('data-theme', next);
+      localStorage.setItem('theme', next);
+    }
+
+    // Load saved theme
+    const saved = localStorage.getItem('theme');
+    if (saved) {
+      document.documentElement.setAttribute('data-theme', saved);
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      document.documentElement.setAttribute('data-theme', 'dark');
+    }
+  </script>
+</body>
+</html>
