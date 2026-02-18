@@ -124,7 +124,8 @@
     </style>
 </head>
 <body>
-    <div class="container">
+    <div id="theme-glow" style="position:fixed;inset:0;pointer-events:none;z-index:0;"></div>
+    <div class="container" style="position:relative;z-index:1;">
         <h1>MONO</h1>
         <p class="subtitle">一次專注一件事</p>
         
@@ -177,6 +178,7 @@
         </footer>
     </div>
     
+    <script src="theme.js"></script>
     <script>
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('sw.js');

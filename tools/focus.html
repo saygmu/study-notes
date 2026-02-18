@@ -11,13 +11,13 @@
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #0a0a0a;
-      --card: #141414;
-      --text: #e8e8e8;
-      --muted: #666;
-      --accent: #4ade80;
-      --accent-dim: #22543d;
-      --border: #222;
+      --bg: #fefefe;
+      --card: #ffffff;
+      --text: #2d2d2d;
+      --muted: #888;
+      --accent: #2d2d2d;
+      --accent-dim: rgba(45,45,45,0.1);
+      --border: #e8e8e8;
     }
 
     * {
@@ -129,8 +129,7 @@
     }
 
     .subject-btn.active {
-      border-color: var(--accent);
-      color: var(--accent);
+      border-color: currentColor;
       background: var(--accent-dim);
     }
 
@@ -360,6 +359,7 @@
   </style>
 </head>
 <body>
+  <div id="theme-glow" style="position:fixed;inset:0;pointer-events:none;z-index:0;"></div>
   <div class="glow" id="glow"></div>
   
   <nav>
@@ -742,5 +742,6 @@
     // Initialize on load
     init();
   </script>
+  <script src="../theme.js"></script>
 </body>
 </html>

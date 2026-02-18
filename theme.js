@@ -1,0 +1,231 @@
+// MONO Theme System
+const THEMES = {
+  light: {
+    name: '極簡白',
+    bg: '#fefefe',
+    card: '#ffffff',
+    text: '#2d2d2d',
+    muted: '#888',
+    accent: '#2d2d2d',
+    border: '#e8e8e8',
+    glow: 'none'
+  },
+  dark: {
+    name: '極簡黑',
+    bg: '#0a0a0a',
+    card: '#141414',
+    text: '#e8e8e8',
+    muted: '#666',
+    accent: '#e8e8e8',
+    border: '#222',
+    glow: 'none'
+  },
+  cute: {
+    name: '可愛粉',
+    bg: '#fff5f5',
+    card: '#ffffff',
+    text: '#5c4d4d',
+    muted: '#b8a0a0',
+    accent: '#f472b6',
+    border: '#fecdd3',
+    glow: 'none'
+  },
+  space: {
+    name: '星空',
+    bg: '#0f0f23',
+    card: '#1a1a35',
+    text: '#e0e0ff',
+    muted: '#7777aa',
+    accent: '#a78bfa',
+    border: '#2a2a4a',
+    glow: 'radial-gradient(ellipse at top, #1a1a4a 0%, transparent 60%)'
+  },
+  forest: {
+    name: '森林',
+    bg: '#0d1f0d',
+    card: '#142814',
+    text: '#d4e8d4',
+    muted: '#6a8a6a',
+    accent: '#4ade80',
+    border: '#1f3d1f',
+    glow: 'none'
+  },
+  ocean: {
+    name: '海洋',
+    bg: '#0c1929',
+    card: '#0f2238',
+    text: '#d4e8f4',
+    muted: '#6a9ab8',
+    accent: '#38bdf8',
+    border: '#1a3a5a',
+    glow: 'radial-gradient(ellipse at bottom, #0a2a4a 0%, transparent 60%)'
+  }
+};
+
+function getTheme() {
+  return localStorage.getItem('mono_theme') || 'light';
+}
+
+function setTheme(themeId) {
+  const theme = THEMES[themeId];
+  if (!theme) return;
+  
+  localStorage.setItem('mono_theme', themeId);
+  applyTheme(theme);
+}
+
+function applyTheme(theme) {
+  const root = document.documentElement;
+  root.style.setProperty('--bg', theme.bg);
+  root.style.setProperty('--card', theme.card);
+  root.style.setProperty('--text', theme.text);
+  root.style.setProperty('--muted', theme.muted);
+  root.style.setProperty('--accent', theme.accent);
+  root.style.setProperty('--border', theme.border);
+  
+  // Apply glow background if exists
+  const glowEl = document.getElementById('theme-glow');
+  if (glowEl) {
+    glowEl.style.background = theme.glow;
+  }
+  
+  // Update meta theme-color
+  const metaTheme = document.querySelector('meta[name="theme-color"]');
+  if (metaTheme) {
+    metaTheme.setAttribute('content', theme.bg);
+  }
+}
+
+function initTheme() {
+  const themeId = getTheme();
+  const theme = THEMES[themeId];
+  if (theme) {
+    applyTheme(theme);
+  }
+}
+
+function createSettingsButton() {
+  const btn = document.createElement('button');
+  btn.innerHTML = '◐';
+  btn.className = 'theme-toggle-btn';
+  btn.onclick = openThemeModal;
+  btn.style.cssText = `
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    border: 1px solid var(--border);
+    background: var(--card);
+    color: var(--muted);
+    font-size: 20px;
+    cursor: pointer;
+    z-index: 1000;
+    transition: all 0.2s;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  `;
+  document.body.appendChild(btn);
+}
+
+function openThemeModal() {
+  // Remove existing modal
+  const existing = document.getElementById('theme-modal');
+  if (existing) existing.remove();
+  
+  const currentTheme = getTheme();
+  
+  const modal = document.createElement('div');
+  modal.id = 'theme-modal';
+  modal.style.cssText = `
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+    padding: 20px;
+  `;
+  
+  modal.innerHTML = `
+    <div style="
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px;
+      max-width: 320px;
+      width: 100%;
+    ">
+      <div style="
+        font-size: 14px;
+        color: var(--muted);
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        margin-bottom: 16px;
+      ">主題</div>
+      
+      <div id="theme-options" style="
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
+      ">
+        ${Object.entries(THEMES).map(([id, theme]) => `
+          <button onclick="selectTheme('${id}')" style="
+            padding: 12px;
+            border: 2px solid ${id === currentTheme ? 'var(--accent)' : 'var(--border)'};
+            border-radius: 8px;
+            background: ${theme.bg};
+            color: ${theme.text};
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: inherit;
+          ">
+            ${theme.name}
+          </button>
+        `).join('')}
+      </div>
+      
+      <button onclick="closeThemeModal()" style="
+        width: 100%;
+        margin-top: 16px;
+        padding: 12px;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        background: transparent;
+        color: var(--muted);
+        font-size: 14px;
+        cursor: pointer;
+        font-family: inherit;
+      ">關閉</button>
+    </div>
+  `;
+  
+  modal.onclick = (e) => {
+    if (e.target === modal) closeThemeModal();
+  };
+  
+  document.body.appendChild(modal);
+}
+
+function selectTheme(themeId) {
+  setTheme(themeId);
+  openThemeModal(); // Refresh modal to show selection
+}
+
+function closeThemeModal() {
+  const modal = document.getElementById('theme-modal');
+  if (modal) modal.remove();
+}
+
+// Auto-init
+document.addEventListener('DOMContentLoaded', () => {
+  initTheme();
+  createSettingsButton();
+});
+
+// Also init immediately if DOM already loaded
+if (document.readyState !== 'loading') {
+  initTheme();
+}
