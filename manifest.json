@@ -1,12 +1,12 @@
 {
-  "name": "講義庫",
-  "short_name": "講義庫",
-  "description": "Abigail's Study Notes",
-  "start_url": "/study-notes/",
+  "name": "MONO",
+  "short_name": "MONO",
+  "description": "Focus on one thing at a time",
+  "start_url": "/study-notes/tools/focus.html",
   "scope": "/study-notes/",
   "display": "standalone",
-  "background_color": "#fefefe",
-  "theme_color": "#2d2d2d",
+  "background_color": "#0a0a0a",
+  "theme_color": "#0a0a0a",
   "icons": [
     {
       "src": "icons/icon-192.png",
