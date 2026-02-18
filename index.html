@@ -174,8 +174,19 @@
         </div>
         
         <footer>
-            made with care · <span id="version">v1.0.7</span>
+            made with care · <span id="version">v1.0.8</span>
+            <br><a href="#" onclick="clearCache()" style="font-size:11px;color:var(--muted);">清除快取</a>
         </footer>
+        
+        <script>
+        function clearCache() {
+            if(confirm('清除快取並重新載入？')) {
+                if('caches' in window) caches.keys().then(n=>n.forEach(k=>caches.delete(k)));
+                if('serviceWorker' in navigator) navigator.serviceWorker.getRegistrations().then(r=>r.forEach(x=>x.unregister()));
+                setTimeout(()=>location.reload(true),500);
+            }
+        }
+        </script>
     </div>
     
     <script src="theme.js"></script>
