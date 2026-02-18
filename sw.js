@@ -1,4 +1,4 @@
-const CACHE_NAME = 'study-notes-v1';
+const CACHE_NAME = 'mono-v2';
 const OFFLINE_URL = '/study-notes/';
 
 // Files to cache immediately
@@ -31,15 +31,20 @@ self.addEventListener('activate', event => {
   self.clients.claim();
 });
 
-// Fetch: network first, fallback to cache
+// Fetch: always network first for HTML, cache for assets
 self.addEventListener('fetch', event => {
   if (event.request.method !== 'GET') return;
+  
+  const url = new URL(event.request.url);
+  const isHTML = event.request.headers.get('accept')?.includes('text/html') || 
+                 url.pathname.endsWith('.html') || 
+                 url.pathname.endsWith('/');
 
   event.respondWith(
     fetch(event.request)
       .then(response => {
-        // Cache successful responses
-        if (response.ok) {
+        // Only cache non-HTML assets
+        if (response.ok && !isHTML) {
           const clone = response.clone();
           caches.open(CACHE_NAME).then(cache => {
             cache.put(event.request, clone);
