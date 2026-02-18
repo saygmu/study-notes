@@ -289,6 +289,11 @@
       margin-top: 4px;
     }
 
+    .history-wrapper {
+      position: relative;
+      overflow: hidden;
+    }
+
     .history-item {
       display: flex;
       justify-content: space-between;
@@ -298,23 +303,37 @@
       font-size: 14px;
       position: relative;
       transition: transform 0.2s ease;
+      background: var(--card);
     }
 
     .history-item:last-child {
       border: none;
     }
 
-    .history-item .delete-hint {
+    .delete-btn {
       position: absolute;
-      right: -60px;
-      color: #f87171;
-      font-size: 12px;
-      opacity: 0;
-      transition: opacity 0.2s;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      width: 70px;
+      background: #f87171;
+      color: white;
+      border: none;
+      font-size: 13px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transform: translateX(100%);
+      transition: transform 0.2s ease;
     }
 
-    .history-item.swiping .delete-hint {
-      opacity: 1;
+    .history-wrapper.show-delete .delete-btn {
+      transform: translateX(0);
+    }
+
+    .history-wrapper.show-delete .history-item {
+      transform: translateX(-70px);
     }
 
     .history-subject {
@@ -405,7 +424,7 @@
   </div>
 
   <div class="quote" id="quote"></div>
-  <div style="position:fixed;bottom:8px;left:12px;font-size:11px;color:var(--muted);opacity:0.5;z-index:1000;">v1.1.0</div>
+  <div style="position:fixed;bottom:8px;left:12px;font-size:11px;color:var(--muted);opacity:0.5;z-index:1000;">v1.1.1</div>
 
   <div class="overlay" id="overlay" onclick="toggleStats()"></div>
   
@@ -723,10 +742,12 @@
         const subjectData = subjects.find(sub => sub.id === s.subject);
         const color = subjectData?.color || 'var(--accent)';
         return `
-          <div class="history-item" data-index="${i}" ontouchstart="handleTouchStart(event)" ontouchmove="handleTouchMove(event)" ontouchend="handleTouchEnd(event)">
-            <span style="color: ${color};">${s.subjectName}</span>
-            <span class="history-time">${formatDuration(s.duration, true)}</span>
-            <span class="delete-hint">刪除</span>
+          <div class="history-wrapper" data-index="${i}">
+            <div class="history-item" ontouchstart="handleTouchStart(event)" ontouchmove="handleTouchMove(event)" ontouchend="handleTouchEnd(event)">
+              <span style="color: ${color};">${s.subjectName}</span>
+              <span class="history-time">${formatDuration(s.duration, true)}</span>
+            </div>
+            <button class="delete-btn" onclick="deleteSession(${i})">刪除</button>
           </div>
         `;
       }).join('') || '<div style="color: var(--muted); font-size: 14px;">還沒有記錄</div>';
@@ -810,41 +831,31 @@
 
     // Swipe to delete
     let touchStartX = 0;
-    let touchCurrentX = 0;
-    let swipingElement = null;
+    let currentWrapper = null;
 
     function handleTouchStart(e) {
+      // Close any other open delete buttons
+      document.querySelectorAll('.history-wrapper.show-delete').forEach(el => {
+        el.classList.remove('show-delete');
+      });
+      
       touchStartX = e.touches[0].clientX;
-      swipingElement = e.currentTarget;
+      currentWrapper = e.currentTarget.parentElement;
     }
 
     function handleTouchMove(e) {
-      if (!swipingElement) return;
-      touchCurrentX = e.touches[0].clientX;
-      const diff = touchStartX - touchCurrentX;
+      if (!currentWrapper) return;
+      const diff = touchStartX - e.touches[0].clientX;
       
-      if (diff > 20) {
-        swipingElement.classList.add('swiping');
-        swipingElement.style.transform = `translateX(${Math.max(-80, -diff)}px)`;
-      } else {
-        swipingElement.style.transform = '';
-        swipingElement.classList.remove('swiping');
+      if (diff > 50) {
+        currentWrapper.classList.add('show-delete');
+      } else if (diff < -30) {
+        currentWrapper.classList.remove('show-delete');
       }
     }
 
     function handleTouchEnd(e) {
-      if (!swipingElement) return;
-      const diff = touchStartX - touchCurrentX;
-      
-      if (diff > 80) {
-        // Delete this record
-        const index = parseInt(swipingElement.dataset.index);
-        deleteSession(index);
-      } else {
-        swipingElement.style.transform = '';
-        swipingElement.classList.remove('swiping');
-      }
-      swipingElement = null;
+      currentWrapper = null;
     }
 
     function deleteSession(index) {
