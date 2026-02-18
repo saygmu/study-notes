@@ -37,8 +37,8 @@ function createStars(container) {
       50% { opacity: 1; }
     }
     @keyframes shoot {
-      0% { transform: translateX(0) translateY(0); opacity: 1; }
-      100% { transform: translateX(-200px) translateY(200px); opacity: 0; }
+      0% { transform: rotate(-45deg) translateX(0); opacity: 1; }
+      100% { transform: rotate(-45deg) translateX(250px); opacity: 0; }
     }
     .star {
       position: absolute;
@@ -47,10 +47,9 @@ function createStars(container) {
     }
     .shooting-star {
       position: absolute;
-      width: 2px;
       height: 2px;
-      background: linear-gradient(to right, #fff, transparent);
-      border-radius: 50%;
+      background: linear-gradient(to right, transparent, #fff);
+      border-radius: 2px;
     }
   `;
   container.appendChild(style);
