@@ -7,9 +7,26 @@
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600&family=Noto+Sans+TC:wght@300;400;500&display=swap');
     
-    :root { --bg: #fefefe; --card: #fff; --text: #2d2d2d; --muted: #888; --accent: #2d2d2d; --border: #e8e8e8; --highlight: #fff3cd; }
-    
+    :root {
+      --bg: #fefefe;
+      --text: #2d2d2d;
+      --muted: #888;
+      --accent: #4a4a4a;
+      --border: #e8e8e8;
+      --card: #fff;
+      --success: #22c55e;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+    }
 
+    [data-theme="dark"] {
+      --bg: #1a1a1a;
+      --text: #e8e8e8;
+      --muted: #888;
+      --accent: #ccc;
+      --border: #333;
+      --card: #242424;
+    }
     
     * { box-sizing: border-box; margin: 0; padding: 0; }
     
@@ -268,13 +285,11 @@
   </style>
 </head>
 <body>
-  
 
 <nav>
   <a href="../index.html">← 返回</a>
   <div class="nav-actions">
     <button onclick="refreshData()">↻ 重新整理</button>
-    
   </div>
 </nav>
 
@@ -316,8 +331,115 @@
 <script>
 const DATA_URL = 'progress.json';
 
+function getProgressClass(percent) {
+  if (percent >= 70) return 'success';
+  if (percent >= 40) return 'warning';
+  return 'danger';
+}
 
-  <script src="../theme.js"></script>
+function formatDate(dateStr) {
+  const date = new Date(dateStr);
+  return `${date.getMonth() + 1}/${date.getDate()}`;
+}
+
+function isOverdue(dateStr) {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const taskDate = new Date(dateStr);
+  taskDate.setHours(0, 0, 0, 0);
+  return taskDate < today;
+}
+
+function renderDashboard(data) {
+  // 更新時間
+  document.getElementById('lastUpdate').textContent = 
+    `最後更新：${data.lastUpdate || '未知'}`;
   
+  // 統計數據
+  let total = 0, completed = 0, pending = 0, overdue = 0;
+  
+  data.subjects.forEach(subject => {
+    subject.tasks.forEach(task => {
+      total++;
+      if (task.done) {
+        completed++;
+      } else if (isOverdue(task.date)) {
+        overdue++;
+      } else {
+        pending++;
+      }
+    });
+  });
+  
+  document.getElementById('totalTasks').textContent = total;
+  document.getElementById('completedTasks').textContent = completed;
+  document.getElementById('pendingTasks').textContent = pending;
+  document.getElementById('overdueTasks').textContent = overdue;
+  
+  // 各科目
+  const subjectsEl = document.getElementById('subjects');
+  subjectsEl.innerHTML = '';
+  
+  data.subjects.forEach(subject => {
+    const subjectTotal = subject.tasks.length;
+    const subjectDone = subject.tasks.filter(t => t.done).length;
+    const percent = subjectTotal > 0 ? Math.round(subjectDone / subjectTotal * 100) : 0;
+    const progressClass = getProgressClass(percent);
+    
+    const section = document.createElement('div');
+    section.className = 'subject-section';
+    section.innerHTML = `
+      <div class="subject-header">
+        <div class="subject-title">${subject.name}</div>
+        <div class="subject-progress">${subjectDone}/${subjectTotal} (${percent}%)</div>
+      </div>
+      <div class="progress-bar">
+        <div class="progress-fill ${progressClass}" style="width: ${percent}%"></div>
+      </div>
+      <ul class="task-list">
+        ${subject.tasks.map(task => {
+          const taskOverdue = !task.done && isOverdue(task.date);
+          return `
+            <li class="task-item ${task.done ? 'done' : ''}">
+              <div class="task-status ${task.done ? 'done' : (taskOverdue ? 'overdue' : '')}"></div>
+              <div class="task-content">
+                <div class="task-name">${task.name}</div>
+                <div class="task-date ${taskOverdue ? 'overdue' : ''}">${formatDate(task.date)}${taskOverdue ? ' ⚠️ 已過期' : ''}</div>
+              </div>
+              ${taskOverdue ? '<span class="tag overdue">過期</span>' : ''}
+            </li>
+          `;
+        }).join('')}
+      </ul>
+    `;
+    subjectsEl.appendChild(section);
+  });
+}
+
+async function loadData() {
+  try {
+    const res = await fetch(DATA_URL + '?t=' + Date.now());
+    if (!res.ok) throw new Error('Failed to load');
+    const data = await res.json();
+    renderDashboard(data);
+  } catch (e) {
+    document.getElementById('subjects').innerHTML = `
+      <div class="empty-state">
+        <div class="emoji">📊</div>
+        <p>無法載入資料</p>
+        <p style="font-size: 13px; margin-top: 8px;">請確認 progress.json 存在</p>
+      </div>
+    `;
+  }
+}
+
+function refreshData() {
+  loadData();
+}
+
+// 初始載入
+loadData();
+</script>
+<script src="../theme.js"></script>
 </body>
 </html>
