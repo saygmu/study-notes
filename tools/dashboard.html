@@ -418,11 +418,15 @@ function renderDashboard(data) {
 
 async function loadData() {
   try {
+    console.log('Fetching data...');
     const res = await fetch(DATA_URL + '?t=' + Date.now());
-    if (!res.ok) throw new Error('Failed to load');
+    console.log('Response:', res.status);
+    if (!res.ok) throw new Error('Failed to load: ' + res.status);
     const data = await res.json();
+    console.log('Data loaded:', data.subjects?.length, 'subjects');
     renderDashboard(data);
   } catch (e) {
+    console.error('Load error:', e);
     document.getElementById('subjects').innerHTML = `
       <div class="empty-state">
         <div class="emoji">📊</div>
@@ -438,7 +442,8 @@ function refreshData() {
 }
 
 // 初始載入
-loadData();
+console.log('Dashboard starting...');
+loadData().then(() => console.log('Load complete')).catch(e => alert('載入失敗: ' + e.message));
 </script>
 <script src="../theme.js"></script>
 </body>
