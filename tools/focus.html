@@ -296,10 +296,25 @@
       padding: 12px 0;
       border-bottom: 1px solid var(--border);
       font-size: 14px;
+      position: relative;
+      transition: transform 0.2s ease;
     }
 
     .history-item:last-child {
       border: none;
+    }
+
+    .history-item .delete-hint {
+      position: absolute;
+      right: -60px;
+      color: #f87171;
+      font-size: 12px;
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+
+    .history-item.swiping .delete-hint {
+      opacity: 1;
     }
 
     .history-subject {
@@ -391,7 +406,7 @@
   </div>
 
   <div class="quote" id="quote"></div>
-  <div style="position:fixed;bottom:8px;left:12px;font-size:11px;color:var(--muted);opacity:0.5;z-index:1000;">v1.0.8</div>
+  <div style="position:fixed;bottom:8px;left:12px;font-size:11px;color:var(--muted);opacity:0.5;z-index:1000;">v1.0.9</div>
 
   <div class="overlay" id="overlay" onclick="toggleStats()"></div>
   
@@ -705,13 +720,14 @@
 
       // Render history
       const history = document.getElementById('history');
-      history.innerHTML = sessions.slice(0, 10).map(s => {
+      history.innerHTML = sessions.slice(0, 10).map((s, i) => {
         const subjectData = subjects.find(sub => sub.id === s.subject);
         const color = subjectData?.color || 'var(--accent)';
         return `
-          <div class="history-item">
+          <div class="history-item" data-index="${i}" ontouchstart="handleTouchStart(event)" ontouchmove="handleTouchMove(event)" ontouchend="handleTouchEnd(event)">
             <span style="color: ${color};">${s.subjectName}</span>
             <span class="history-time">${formatDuration(s.duration, true)}</span>
+            <span class="delete-hint">刪除</span>
           </div>
         `;
       }).join('') || '<div style="color: var(--muted); font-size: 14px;">還沒有記錄</div>';
@@ -791,6 +807,52 @@
       } else {
         window.location.href = '../';
       }
+    }
+
+    // Swipe to delete
+    let touchStartX = 0;
+    let touchCurrentX = 0;
+    let swipingElement = null;
+
+    function handleTouchStart(e) {
+      touchStartX = e.touches[0].clientX;
+      swipingElement = e.currentTarget;
+    }
+
+    function handleTouchMove(e) {
+      if (!swipingElement) return;
+      touchCurrentX = e.touches[0].clientX;
+      const diff = touchStartX - touchCurrentX;
+      
+      if (diff > 20) {
+        swipingElement.classList.add('swiping');
+        swipingElement.style.transform = `translateX(${Math.max(-80, -diff)}px)`;
+      } else {
+        swipingElement.style.transform = '';
+        swipingElement.classList.remove('swiping');
+      }
+    }
+
+    function handleTouchEnd(e) {
+      if (!swipingElement) return;
+      const diff = touchStartX - touchCurrentX;
+      
+      if (diff > 80) {
+        // Delete this record
+        const index = parseInt(swipingElement.dataset.index);
+        deleteSession(index);
+      } else {
+        swipingElement.style.transform = '';
+        swipingElement.classList.remove('swiping');
+      }
+      swipingElement = null;
+    }
+
+    function deleteSession(index) {
+      const sessions = JSON.parse(localStorage.getItem('focus_sessions') || '[]');
+      sessions.splice(index, 1);
+      localStorage.setItem('focus_sessions', JSON.stringify(sessions));
+      loadStats();
     }
 
     // Add shake animation
