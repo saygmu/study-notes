@@ -427,25 +427,69 @@
     </div>
 
     <div class="example">
-      <div class="example-title">範例流程</div>
+      <div class="example-title">範例計算</div>
       
-      <strong>第一輪</strong>
+      <p><strong>已知條件</strong></p>
+      <ul style="list-style: none; padding-left: 0; margin-bottom: 24px;">
+        <li>• A 和 B 混合液體，各佔一半：x<sub>A</sub> = 0.5，x<sub>B</sub> = 0.5</li>
+        <li>• A 的純蒸氣壓：P°<sub>A</sub> = 300 mmHg（揮發性強）</li>
+        <li>• B 的純蒸氣壓：P°<sub>B</sub> = 100 mmHg（揮發性弱）</li>
+      </ul>
+
+      <p><strong>第一輪：液體 → 氣體</strong></p>
       <ol class="steps">
-        <li>起始液體：x<sub>A</sub> = 0.5</li>
-        <li>算分壓，再算 y<sub>A</sub> = 0.75</li>
+        <li>
+          <strong>算 A 的分壓</strong><br>
+          P<sub>A</sub> = x<sub>A</sub> × P°<sub>A</sub> = 0.5 × 300 = <strong>150 mmHg</strong>
+        </li>
+        <li>
+          <strong>算 B 的分壓</strong><br>
+          P<sub>B</sub> = x<sub>B</sub> × P°<sub>B</sub> = 0.5 × 100 = <strong>50 mmHg</strong>
+        </li>
+        <li>
+          <strong>算總壓</strong><br>
+          P<sub>總</sub> = 150 + 50 = <strong>200 mmHg</strong>
+        </li>
+        <li>
+          <strong>算 A 的氣相莫耳分率</strong><br>
+          y<sub>A</sub> = P<sub>A</sub> ÷ P<sub>總</sub> = 150 ÷ 200 = <strong>0.75</strong>
+        </li>
       </ol>
       
-      <div class="arrow">↓ 冷凝 ↓</div>
+      <p style="margin-top: 16px; padding: 12px; background: var(--card); border-radius: 8px; border: 1px solid var(--border);">
+        📌 液體各佔 50%，但氣體中 A 佔了 75%！因為 A 比較會揮發
+      </p>
       
-      <strong>第二輪</strong>
+      <div class="arrow">↓ 冷凝：氣體變回液體 ↓</div>
+      
+      <p><strong>第二輪：新液體 → 氣體</strong></p>
+      <p style="margin-bottom: 16px; color: var(--muted);">冷凝後，y 變成新的 x：x'<sub>A</sub> = 0.75，x'<sub>B</sub> = 0.25</p>
       <ol class="steps">
-        <li>新液體：x'<sub>A</sub> = 0.75（繼承上一輪的 y）</li>
-        <li>用同樣公式，算出 y'<sub>A</sub> = 0.9</li>
+        <li>
+          <strong>算 A 的分壓</strong><br>
+          P<sub>A</sub> = 0.75 × 300 = <strong>225 mmHg</strong>
+        </li>
+        <li>
+          <strong>算 B 的分壓</strong><br>
+          P<sub>B</sub> = 0.25 × 100 = <strong>25 mmHg</strong>
+        </li>
+        <li>
+          <strong>算總壓</strong><br>
+          P<sub>總</sub> = 225 + 25 = <strong>250 mmHg</strong>
+        </li>
+        <li>
+          <strong>算 A 的氣相莫耳分率</strong><br>
+          y'<sub>A</sub> = 225 ÷ 250 = <strong>0.9</strong>
+        </li>
       </ol>
+
+      <p style="margin-top: 16px; padding: 12px; background: var(--card); border-radius: 8px; border: 1px solid var(--border);">
+        📌 第二輪氣體中 A 已經佔 90% 了！
+      </p>
       
-      <div class="arrow">↓ 冷凝 ↓</div>
+      <div class="arrow">↓ 再冷凝、再蒸發... ↓</div>
       
-      <p style="text-align: center; color: var(--muted);">重複循環，純度越來越高...</p>
+      <p style="text-align: center; color: var(--muted);">每一輪 A 的比例：0.5 → 0.75 → 0.9 → ...</p>
     </div>
 
     <div class="summary">
