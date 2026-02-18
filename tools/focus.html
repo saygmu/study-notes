@@ -363,7 +363,7 @@
   <div class="glow" id="glow"></div>
   
   <nav>
-    <a href="../">← 返回</a>
+    <a href="#" onclick="handleBack(event)">← 返回</a>
     <div class="nav-right">
       <button onclick="toggleStats()">統計</button>
     </div>
@@ -395,17 +395,20 @@
   <div class="overlay" id="overlay" onclick="toggleStats()"></div>
   
   <div class="stats-panel" id="statsPanel">
-    <div class="stats-title">本週統計</div>
+    <div class="stats-title">總覽</div>
     
     <div class="stat-card">
       <div class="stat-value" id="totalTime">0h</div>
-      <div class="stat-label">總專注時間</div>
+      <div class="stat-label">本週總時數</div>
     </div>
     
     <div class="stat-card">
       <div class="stat-value" id="todayTime">0m</div>
       <div class="stat-label">今日專注</div>
     </div>
+    
+    <div class="stats-title" style="margin-top: 32px;">科目分布</div>
+    <div id="subjectChart" style="margin-bottom: 24px;"></div>
     
     <div class="stats-title" style="margin-top: 32px;">最近記錄</div>
     <div id="history"></div>
@@ -498,6 +501,9 @@
     }
 
     function selectSubject(id) {
+      // Don't allow switching while running
+      if (isRunning) return;
+      
       currentSubject = subjects.find(s => s.id === id);
       
       // Update UI
@@ -647,25 +653,63 @@
 
       let todayTotal = 0;
       let weekTotal = 0;
+      const subjectTotals = {};
 
       sessions.forEach(s => {
         const date = new Date(s.date).getTime();
         if (date >= todayStart) todayTotal += s.duration;
-        if (date >= weekStart) weekTotal += s.duration;
+        if (date >= weekStart) {
+          weekTotal += s.duration;
+          // Track per-subject
+          if (!subjectTotals[s.subject]) {
+            subjectTotals[s.subject] = { name: s.subjectName, duration: 0 };
+          }
+          subjectTotals[s.subject].duration += s.duration;
+        }
       });
 
       // Update UI
       document.getElementById('todayTime').textContent = formatDuration(todayTotal);
       document.getElementById('totalTime').textContent = formatDuration(weekTotal);
 
+      // Render subject chart
+      const chartContainer = document.getElementById('subjectChart');
+      const subjectEntries = Object.entries(subjectTotals).sort((a, b) => b[1].duration - a[1].duration);
+      
+      if (subjectEntries.length === 0) {
+        chartContainer.innerHTML = '<div style="color: var(--muted); font-size: 14px;">還沒有記錄</div>';
+      } else {
+        const maxDuration = Math.max(...subjectEntries.map(e => e[1].duration));
+        chartContainer.innerHTML = subjectEntries.map(([id, data]) => {
+          const subjectData = subjects.find(s => s.id === id);
+          const color = subjectData?.color || 'var(--accent)';
+          const percent = maxDuration > 0 ? (data.duration / maxDuration * 100) : 0;
+          return `
+            <div style="margin-bottom: 12px;">
+              <div style="display: flex; justify-content: space-between; margin-bottom: 4px; font-size: 13px;">
+                <span style="color: ${color};">${data.name}</span>
+                <span style="color: var(--muted); font-family: 'Space Mono', monospace;">${formatDuration(data.duration)}</span>
+              </div>
+              <div style="height: 8px; background: var(--border); border-radius: 4px; overflow: hidden;">
+                <div style="height: 100%; width: ${percent}%; background: ${color}; border-radius: 4px; transition: width 0.3s;"></div>
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+
       // Render history
       const history = document.getElementById('history');
-      history.innerHTML = sessions.slice(0, 10).map(s => `
-        <div class="history-item">
-          <span class="history-subject">${s.subjectName}</span>
-          <span class="history-time">${formatDuration(s.duration)}</span>
-        </div>
-      `).join('') || '<div style="color: var(--muted); font-size: 14px;">還沒有記錄</div>';
+      history.innerHTML = sessions.slice(0, 10).map(s => {
+        const subjectData = subjects.find(sub => sub.id === s.subject);
+        const color = subjectData?.color || 'var(--accent)';
+        return `
+          <div class="history-item">
+            <span style="color: ${color};">${s.subjectName}</span>
+            <span class="history-time">${formatDuration(s.duration)}</span>
+          </div>
+        `;
+      }).join('') || '<div style="color: var(--muted); font-size: 14px;">還沒有記錄</div>';
     }
 
     function formatDuration(secs) {
@@ -726,6 +770,16 @@
     function toggleStats() {
       document.getElementById('statsPanel').classList.toggle('open');
       document.getElementById('overlay').classList.toggle('open');
+    }
+
+    function handleBack(e) {
+      e.preventDefault();
+      const statsPanel = document.getElementById('statsPanel');
+      if (statsPanel.classList.contains('open')) {
+        toggleStats();
+      } else {
+        window.location.href = '../';
+      }
     }
 
     // Add shake animation
