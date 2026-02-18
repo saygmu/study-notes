@@ -8,7 +8,7 @@ const THEMES = {
     muted: '#888',
     accent: '#2d2d2d',
     border: '#e8e8e8',
-    glow: 'none'
+    highlight: '#fff3cd'
   },
   dark: {
     name: '極簡黑',
@@ -18,7 +18,7 @@ const THEMES = {
     muted: '#666',
     accent: '#e8e8e8',
     border: '#222',
-    glow: 'none'
+    highlight: '#3d3d00'
   },
   cute: {
     name: '可愛粉',
@@ -28,7 +28,7 @@ const THEMES = {
     muted: '#b8a0a0',
     accent: '#f472b6',
     border: '#fecdd3',
-    glow: 'none'
+    highlight: '#fce7f3'
   },
   space: {
     name: '星空',
@@ -38,7 +38,7 @@ const THEMES = {
     muted: '#7777aa',
     accent: '#a78bfa',
     border: '#2a2a4a',
-    glow: 'radial-gradient(ellipse at top, #1a1a4a 0%, transparent 60%)'
+    highlight: '#2e1a47'
   },
   forest: {
     name: '森林',
@@ -48,7 +48,7 @@ const THEMES = {
     muted: '#6a8a6a',
     accent: '#4ade80',
     border: '#1f3d1f',
-    glow: 'none'
+    highlight: '#1a3d1a'
   },
   ocean: {
     name: '海洋',
@@ -58,7 +58,7 @@ const THEMES = {
     muted: '#6a9ab8',
     accent: '#38bdf8',
     border: '#1a3a5a',
-    glow: 'radial-gradient(ellipse at bottom, #0a2a4a 0%, transparent 60%)'
+    highlight: '#0a2a4a'
   }
 };
 
@@ -82,12 +82,7 @@ function applyTheme(theme) {
   root.style.setProperty('--muted', theme.muted);
   root.style.setProperty('--accent', theme.accent);
   root.style.setProperty('--border', theme.border);
-  
-  // Apply glow background if exists
-  const glowEl = document.getElementById('theme-glow');
-  if (glowEl) {
-    glowEl.style.background = theme.glow;
-  }
+  root.style.setProperty('--highlight', theme.highlight);
   
   // Update meta theme-color
   const metaTheme = document.querySelector('meta[name="theme-color"]');

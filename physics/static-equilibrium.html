@@ -329,13 +329,13 @@
 
     /* 重點標記 */
     mark {
-      background: #fff3cd;
+      background: var(--highlight, #fff3cd);
       padding: 1px 4px;
       border-radius: 2px;
     }
 
     [data-theme="dark"] mark {
-      background: #4a4000;
+      background: var(--highlight, #4a4000);
     }
 
     @media print {
@@ -352,7 +352,7 @@
   </style>
 </head>
 <body>
-  <div id="theme-glow" style="position:fixed;inset:0;pointer-events:none;z-index:0;"></div>
+  
 
 <nav>
   <a href="../index.html">← 返回</a>
@@ -553,6 +553,6 @@ function toggleAnswer(btn) {
 
 
   <script src="../theme.js"></script>
-  <script src="../theme-effects.js"></script>
+  
 </body>
 </html>
