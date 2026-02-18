@@ -134,6 +134,12 @@
       background: var(--accent-dim);
     }
 
+    .subject-btn.add-btn {
+      border-style: dashed;
+      font-size: 18px;
+      padding: 8px 14px;
+    }
+
     /* Timer display */
     .timer-display {
       font-family: 'Space Mono', monospace;
@@ -413,13 +419,19 @@
     let interval = null;
     let sessionStart = null;
 
-    // Subjects (matching her study categories)
-    const subjects = [
+    // Default subjects
+    const defaultSubjects = [
       { id: 'physics', name: '物理', color: '#60a5fa' },
       { id: 'math', name: '數學', color: '#f472b6' },
       { id: 'chemistry', name: '化學', color: '#4ade80' },
       { id: 'yinhang', name: '引航化學', color: '#facc15' }
     ];
+
+    // Load subjects from localStorage or use defaults
+    let subjects = JSON.parse(localStorage.getItem('focus_subjects')) || defaultSubjects;
+
+    // Available colors for new subjects
+    const colors = ['#60a5fa', '#f472b6', '#4ade80', '#facc15', '#a78bfa', '#fb923c', '#2dd4bf', '#e879f9'];
 
     // Motivational quotes
     const quotes = [
@@ -449,10 +461,40 @@
     function renderSubjects() {
       const container = document.getElementById('subjects');
       container.innerHTML = subjects.map(s => `
-        <button class="subject-btn" data-id="${s.id}" onclick="selectSubject('${s.id}')">
+        <button class="subject-btn" data-id="${s.id}" onclick="selectSubject('${s.id}')" oncontextmenu="deleteSubject(event, '${s.id}')">
           ${s.name}
         </button>
-      `).join('');
+      `).join('') + `
+        <button class="subject-btn add-btn" onclick="addSubject()">+</button>
+      `;
+    }
+
+    function addSubject() {
+      const name = prompt('新增科目名稱：');
+      if (!name || !name.trim()) return;
+      
+      const id = 'custom_' + Date.now();
+      const color = colors[subjects.length % colors.length];
+      
+      subjects.push({ id, name: name.trim(), color });
+      localStorage.setItem('focus_subjects', JSON.stringify(subjects));
+      renderSubjects();
+    }
+
+    function deleteSubject(e, id) {
+      e.preventDefault();
+      // Don't delete if it's the current subject while running
+      if (isRunning && currentSubject?.id === id) return;
+      
+      if (confirm('刪除這個科目？')) {
+        subjects = subjects.filter(s => s.id !== id);
+        localStorage.setItem('focus_subjects', JSON.stringify(subjects));
+        if (currentSubject?.id === id) {
+          currentSubject = null;
+          document.getElementById('sessionInfo').textContent = '選擇科目開始專注';
+        }
+        renderSubjects();
+      }
     }
 
     function selectSubject(id) {
