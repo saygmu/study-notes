@@ -194,6 +194,19 @@ function openThemeModal() {
         cursor: pointer;
         font-family: inherit;
       ">關閉</button>
+      
+      <button onclick="forceRefresh()" style="
+        width: 100%;
+        margin-top: 8px;
+        padding: 12px;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        background: transparent;
+        color: var(--muted);
+        font-size: 14px;
+        cursor: pointer;
+        font-family: inherit;
+      ">🔄 強制更新</button>
     </div>
   `;
   
@@ -212,6 +225,25 @@ function selectTheme(themeId) {
 function closeThemeModal() {
   const modal = document.getElementById('theme-modal');
   if (modal) modal.remove();
+}
+
+function forceRefresh() {
+  // Clear service worker cache
+  if ('caches' in window) {
+    caches.keys().then(names => {
+      names.forEach(name => caches.delete(name));
+    });
+  }
+  // Unregister service worker
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.getRegistrations().then(registrations => {
+      registrations.forEach(reg => reg.unregister());
+    });
+  }
+  // Hard refresh
+  setTimeout(() => {
+    window.location.reload(true);
+  }, 500);
 }
 
 // Auto-init
