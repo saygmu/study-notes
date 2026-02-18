@@ -2,7 +2,7 @@
   "name": "MONO",
   "short_name": "MONO",
   "description": "Focus on one thing at a time",
-  "start_url": "/study-notes/tools/focus.html",
+  "start_url": "/study-notes/",
   "scope": "/study-notes/",
   "display": "standalone",
   "background_color": "#0a0a0a",
