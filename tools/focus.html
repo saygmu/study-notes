@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>專注</title>
+  <link rel="manifest" href="../manifest.json">
+  <meta name="theme-color" content="#0a0a0a">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0a0a0a;
+      --card: #141414;
+      --text: #e8e8e8;
+      --muted: #666;
+      --accent: #4ade80;
+      --accent-dim: #22543d;
+      --border: #222;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      font-family: 'Noto Sans TC', sans-serif;
+      font-weight: 300;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      min-height: 100dvh;
+      overflow-x: hidden;
+    }
+
+    /* Ambient glow */
+    .glow {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, var(--accent-dim) 0%, transparent 70%);
+      opacity: 0;
+      transition: opacity 2s ease;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .glow.active {
+      opacity: 0.3;
+    }
+
+    /* Navigation */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      padding: 16px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 100;
+      background: linear-gradient(to bottom, var(--bg) 60%, transparent);
+    }
+
+    nav a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 14px;
+    }
+
+    .nav-right {
+      display: flex;
+      gap: 16px;
+    }
+
+    .nav-right button {
+      background: none;
+      border: none;
+      color: var(--muted);
+      cursor: pointer;
+      font-size: 14px;
+      padding: 4px 8px;
+    }
+
+    /* Main container */
+    .container {
+      min-height: 100vh;
+      min-height: 100dvh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 80px 24px 120px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Subject selector */
+    .subjects {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 48px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .subject-btn {
+      padding: 8px 16px;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      background: transparent;
+      color: var(--muted);
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-family: inherit;
+    }
+
+    .subject-btn:hover {
+      border-color: var(--muted);
+    }
+
+    .subject-btn.active {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: var(--accent-dim);
+    }
+
+    /* Timer display */
+    .timer-display {
+      font-family: 'Space Mono', monospace;
+      font-size: clamp(4rem, 20vw, 8rem);
+      font-weight: 700;
+      letter-spacing: -4px;
+      margin-bottom: 12px;
+      transition: transform 0.3s ease;
+    }
+
+    .timer-display.pulse {
+      animation: pulse 1s ease-in-out;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.02); }
+    }
+
+    /* Session info */
+    .session-info {
+      font-size: 14px;
+      color: var(--muted);
+      margin-bottom: 48px;
+      text-align: center;
+    }
+
+    .session-info span {
+      color: var(--accent);
+    }
+
+    /* Controls */
+    .controls {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+    }
+
+    .btn-main {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      border: 2px solid var(--accent);
+      background: transparent;
+      color: var(--accent);
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-family: inherit;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .btn-main:hover {
+      background: var(--accent);
+      color: var(--bg);
+    }
+
+    .btn-main.running {
+      border-color: #f87171;
+      color: #f87171;
+    }
+
+    .btn-main.running:hover {
+      background: #f87171;
+      color: var(--bg);
+    }
+
+    .btn-secondary {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--muted);
+      font-size: 12px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-family: inherit;
+    }
+
+    .btn-secondary:hover {
+      border-color: var(--muted);
+      color: var(--text);
+    }
+
+    /* Quote */
+    .quote {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      text-align: center;
+      padding: 24px;
+      font-size: 13px;
+      color: var(--muted);
+      font-style: italic;
+      background: linear-gradient(to top, var(--bg) 60%, transparent);
+    }
+
+    /* Stats panel */
+    .stats-panel {
+      position: fixed;
+      top: 0;
+      right: -320px;
+      width: 320px;
+      height: 100%;
+      background: var(--card);
+      border-left: 1px solid var(--border);
+      padding: 80px 24px 24px;
+      transition: right 0.3s ease;
+      overflow-y: auto;
+      z-index: 99;
+    }
+
+    .stats-panel.open {
+      right: 0;
+    }
+
+    .stats-title {
+      font-size: 14px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 24px;
+    }
+
+    .stat-card {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 16px;
+    }
+
+    .stat-value {
+      font-family: 'Space Mono', monospace;
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    .stat-label {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+
+    .history-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 14px;
+    }
+
+    .history-item:last-child {
+      border: none;
+    }
+
+    .history-subject {
+      color: var(--accent);
+    }
+
+    .history-time {
+      color: var(--muted);
+      font-family: 'Space Mono', monospace;
+    }
+
+    /* Overlay */
+    .overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+      z-index: 98;
+    }
+
+    .overlay.open {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    /* Streak indicator */
+    .streak {
+      position: fixed;
+      top: 60px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .streak-fire {
+      font-size: 16px;
+    }
+
+    .streak-count {
+      color: var(--accent);
+      font-weight: 500;
+    }
+
+    /* Responsive */
+    @media (max-width: 480px) {
+      .stats-panel {
+        width: 100%;
+        right: -100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="glow" id="glow"></div>
+  
+  <nav>
+    <a href="../">← 返回</a>
+    <div class="nav-right">
+      <button onclick="toggleStats()">統計</button>
+    </div>
+  </nav>
+
+  <div class="streak" id="streak" style="display: none;">
+    <span class="streak-fire">🔥</span>
+    <span>連續 <span class="streak-count" id="streakCount">0</span> 天</span>
+  </div>
+
+  <div class="container">
+    <div class="subjects" id="subjects"></div>
+    
+    <div class="timer-display" id="timer">00:00</div>
+    
+    <div class="session-info" id="sessionInfo">
+      選擇科目開始專注
+    </div>
+    
+    <div class="controls">
+      <button class="btn-secondary" onclick="resetTimer()">重置</button>
+      <button class="btn-main" id="mainBtn" onclick="toggleTimer()">開始</button>
+      <button class="btn-secondary" onclick="toggleStats()">記錄</button>
+    </div>
+  </div>
+
+  <div class="quote" id="quote"></div>
+
+  <div class="overlay" id="overlay" onclick="toggleStats()"></div>
+  
+  <div class="stats-panel" id="statsPanel">
+    <div class="stats-title">本週統計</div>
+    
+    <div class="stat-card">
+      <div class="stat-value" id="totalTime">0h</div>
+      <div class="stat-label">總專注時間</div>
+    </div>
+    
+    <div class="stat-card">
+      <div class="stat-value" id="todayTime">0m</div>
+      <div class="stat-label">今日專注</div>
+    </div>
+    
+    <div class="stats-title" style="margin-top: 32px;">最近記錄</div>
+    <div id="history"></div>
+  </div>
+
+  <script>
+    // State
+    let currentSubject = null;
+    let isRunning = false;
+    let seconds = 0;
+    let interval = null;
+    let sessionStart = null;
+
+    // Subjects (matching her study categories)
+    const subjects = [
+      { id: 'physics', name: '物理', color: '#60a5fa' },
+      { id: 'math', name: '數學', color: '#f472b6' },
+      { id: 'chemistry', name: '化學', color: '#4ade80' },
+      { id: 'yinhang', name: '引航化學', color: '#facc15' }
+    ];
+
+    // Motivational quotes
+    const quotes = [
+      "專注是通往精通的唯一道路。",
+      "每一分鐘的專注，都是對未來的投資。",
+      "慢慢來，比較快。",
+      "現在的努力，是給未來的禮物。",
+      "不要追求完美，追求進步。",
+      "休息是為了走更長的路。",
+      "你比你想像的更強大。",
+      "一次專注一件事。",
+      "深呼吸，繼續前進。",
+      "今天的你，會感謝現在努力的自己。"
+    ];
+
+    // Initialize
+    function init() {
+      renderSubjects();
+      loadStats();
+      showRandomQuote();
+      updateStreak();
+      
+      // Change quote every 5 minutes
+      setInterval(showRandomQuote, 300000);
+    }
+
+    function renderSubjects() {
+      const container = document.getElementById('subjects');
+      container.innerHTML = subjects.map(s => `
+        <button class="subject-btn" data-id="${s.id}" onclick="selectSubject('${s.id}')">
+          ${s.name}
+        </button>
+      `).join('');
+    }
+
+    function selectSubject(id) {
+      currentSubject = subjects.find(s => s.id === id);
+      
+      // Update UI
+      document.querySelectorAll('.subject-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.id === id);
+      });
+      
+      document.getElementById('sessionInfo').innerHTML = `
+        準備專注 <span>${currentSubject.name}</span>
+      `;
+
+      // Update accent color
+      document.documentElement.style.setProperty('--accent', currentSubject.color);
+      document.documentElement.style.setProperty('--accent-dim', currentSubject.color + '22');
+    }
+
+    function toggleTimer() {
+      if (!currentSubject) {
+        // Shake effect
+        document.getElementById('subjects').style.animation = 'shake 0.3s ease';
+        setTimeout(() => {
+          document.getElementById('subjects').style.animation = '';
+        }, 300);
+        return;
+      }
+
+      if (isRunning) {
+        stopTimer();
+      } else {
+        startTimer();
+      }
+    }
+
+    function startTimer() {
+      isRunning = true;
+      sessionStart = Date.now();
+      
+      const btn = document.getElementById('mainBtn');
+      btn.textContent = '停止';
+      btn.classList.add('running');
+      
+      document.getElementById('glow').classList.add('active');
+      document.getElementById('sessionInfo').innerHTML = `
+        正在專注 <span>${currentSubject.name}</span>
+      `;
+
+      interval = setInterval(() => {
+        seconds++;
+        updateDisplay();
+      }, 1000);
+
+      // Prevent screen sleep
+      if ('wakeLock' in navigator) {
+        navigator.wakeLock.request('screen').catch(() => {});
+      }
+    }
+
+    function stopTimer() {
+      isRunning = false;
+      clearInterval(interval);
+      
+      const btn = document.getElementById('mainBtn');
+      btn.textContent = '開始';
+      btn.classList.remove('running');
+      
+      document.getElementById('glow').classList.remove('active');
+
+      // Save session if more than 1 minute
+      if (seconds >= 60) {
+        saveSession();
+      }
+
+      document.getElementById('sessionInfo').innerHTML = `
+        已完成 <span>${formatTime(seconds)}</span> 的專注
+      `;
+    }
+
+    function resetTimer() {
+      if (isRunning) {
+        stopTimer();
+      }
+      seconds = 0;
+      updateDisplay();
+      
+      if (currentSubject) {
+        document.getElementById('sessionInfo').innerHTML = `
+          準備專注 <span>${currentSubject.name}</span>
+        `;
+      } else {
+        document.getElementById('sessionInfo').textContent = '選擇科目開始專注';
+      }
+    }
+
+    function updateDisplay() {
+      const display = document.getElementById('timer');
+      display.textContent = formatTime(seconds);
+      
+      // Pulse animation every minute
+      if (seconds > 0 && seconds % 60 === 0) {
+        display.classList.add('pulse');
+        setTimeout(() => display.classList.remove('pulse'), 1000);
+      }
+
+      // Update page title
+      document.title = isRunning ? `${formatTime(seconds)} - 專注中` : '專注';
+    }
+
+    function formatTime(secs) {
+      const h = Math.floor(secs / 3600);
+      const m = Math.floor((secs % 3600) / 60);
+      const s = secs % 60;
+      
+      if (h > 0) {
+        return `${h}:${pad(m)}:${pad(s)}`;
+      }
+      return `${pad(m)}:${pad(s)}`;
+    }
+
+    function pad(n) {
+      return n.toString().padStart(2, '0');
+    }
+
+    function saveSession() {
+      const sessions = JSON.parse(localStorage.getItem('focus_sessions') || '[]');
+      sessions.unshift({
+        subject: currentSubject.id,
+        subjectName: currentSubject.name,
+        duration: seconds,
+        date: new Date().toISOString()
+      });
+      
+      // Keep last 100 sessions
+      if (sessions.length > 100) sessions.pop();
+      
+      localStorage.setItem('focus_sessions', JSON.stringify(sessions));
+      loadStats();
+      updateStreak();
+    }
+
+    function loadStats() {
+      const sessions = JSON.parse(localStorage.getItem('focus_sessions') || '[]');
+      
+      // Calculate totals
+      const now = new Date();
+      const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
+      const weekStart = todayStart - (now.getDay() * 86400000);
+
+      let todayTotal = 0;
+      let weekTotal = 0;
+
+      sessions.forEach(s => {
+        const date = new Date(s.date).getTime();
+        if (date >= todayStart) todayTotal += s.duration;
+        if (date >= weekStart) weekTotal += s.duration;
+      });
+
+      // Update UI
+      document.getElementById('todayTime').textContent = formatDuration(todayTotal);
+      document.getElementById('totalTime').textContent = formatDuration(weekTotal);
+
+      // Render history
+      const history = document.getElementById('history');
+      history.innerHTML = sessions.slice(0, 10).map(s => `
+        <div class="history-item">
+          <span class="history-subject">${s.subjectName}</span>
+          <span class="history-time">${formatDuration(s.duration)}</span>
+        </div>
+      `).join('') || '<div style="color: var(--muted); font-size: 14px;">還沒有記錄</div>';
+    }
+
+    function formatDuration(secs) {
+      const h = Math.floor(secs / 3600);
+      const m = Math.floor((secs % 3600) / 60);
+      
+      if (h > 0) return `${h}h ${m}m`;
+      return `${m}m`;
+    }
+
+    function updateStreak() {
+      const sessions = JSON.parse(localStorage.getItem('focus_sessions') || '[]');
+      if (sessions.length === 0) return;
+
+      // Calculate streak
+      let streak = 0;
+      let checkDate = new Date();
+      checkDate.setHours(0, 0, 0, 0);
+
+      // Check if studied today
+      const todaySession = sessions.find(s => {
+        const d = new Date(s.date);
+        d.setHours(0, 0, 0, 0);
+        return d.getTime() === checkDate.getTime();
+      });
+
+      if (!todaySession) {
+        // Check yesterday
+        checkDate.setDate(checkDate.getDate() - 1);
+      }
+
+      while (true) {
+        const hasSession = sessions.some(s => {
+          const d = new Date(s.date);
+          d.setHours(0, 0, 0, 0);
+          return d.getTime() === checkDate.getTime();
+        });
+
+        if (hasSession) {
+          streak++;
+          checkDate.setDate(checkDate.getDate() - 1);
+        } else {
+          break;
+        }
+      }
+
+      if (streak > 0) {
+        document.getElementById('streak').style.display = 'flex';
+        document.getElementById('streakCount').textContent = streak;
+      }
+    }
+
+    function showRandomQuote() {
+      const quote = quotes[Math.floor(Math.random() * quotes.length)];
+      document.getElementById('quote').textContent = quote;
+    }
+
+    function toggleStats() {
+      document.getElementById('statsPanel').classList.toggle('open');
+      document.getElementById('overlay').classList.toggle('open');
+    }
+
+    // Add shake animation
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes shake {
+        0%, 100% { transform: translateX(0); }
+        25% { transform: translateX(-5px); }
+        75% { transform: translateX(5px); }
+      }
+    `;
+    document.head.appendChild(style);
+
+    // Initialize on load
+    init();
+  </script>
+</body>
+</html>
