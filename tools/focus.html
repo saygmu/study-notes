@@ -462,7 +462,7 @@
   </div>
 
   <div class="quote" id="quote"></div>
-  <div style="position:fixed;bottom:8px;left:12px;font-size:11px;color:var(--muted);opacity:0.5;z-index:50;">v1.6.4 · <a href="#" onclick="clearCache()" style="color:inherit;">清除快取</a></div>
+  <div style="position:fixed;bottom:8px;left:12px;font-size:11px;color:var(--muted);opacity:0.5;z-index:50;">v1.6.5 · <a href="#" onclick="clearCache()" style="color:inherit;">清除快取</a></div>
   <script>
     function clearCache() {
       if(confirm('清除快取並重新載入？')) {
@@ -567,6 +567,9 @@
       updateStreak();
       updateCloudUI();
       restoreTimerState(); // Restore timer if it was running
+      
+      // Auto-sync from cloud if connected
+      autoSyncFromCloud();
       
       // Change quote every 5 minutes
       setInterval(showRandomQuote, 300000);
@@ -1216,6 +1219,53 @@
         updateCloudUI();
       } catch (err) {
         alert('同步失敗：' + err.message);
+      }
+    }
+    
+    // Auto-sync from cloud on page load (silent, no alerts)
+    async function autoSyncFromCloud() {
+      const pin = getCloudPin();
+      if (!pin) return;
+      
+      try {
+        const res = await fetch(`${CLOUD_API}/sessions`, {
+          headers: { 'X-Pin': pin }
+        });
+        
+        if (!res.ok) return;
+        
+        const data = await res.json();
+        const cloudSessions = data.sessions || [];
+        const localSessions = JSON.parse(localStorage.getItem('focus_sessions') || '[]');
+        
+        // Merge: use timestamp to avoid duplicates
+        const localTimestamps = new Set(localSessions.map(s => s.timestamp || new Date(s.date).getTime()));
+        const newSessions = cloudSessions.filter(s => !localTimestamps.has(s.timestamp));
+        
+        if (newSessions.length > 0) {
+          const merged = [...localSessions];
+          newSessions.forEach(s => {
+            merged.push({
+              subject: s.subject,
+              subjectName: s.subjectName,
+              duration: s.duration,
+              date: s.date,
+              timestamp: s.timestamp
+            });
+          });
+          
+          // Sort by date descending
+          merged.sort((a, b) => new Date(b.date) - new Date(a.date));
+          
+          localStorage.setItem('focus_sessions', JSON.stringify(merged));
+          loadStats();
+          console.log(`Auto-synced ${newSessions.length} new sessions from cloud`);
+        }
+        
+        localStorage.setItem('focus_last_sync', Date.now().toString());
+        updateCloudUI();
+      } catch (err) {
+        console.error('Auto-sync failed:', err);
       }
     }
 
