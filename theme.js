@@ -19,6 +19,10 @@
   r.style.setProperty('--accent', t.accent);
   r.style.setProperty('--border', t.border);
   r.style.setProperty('--highlight', t.highlight);
+  // Inject global mark style
+  const style = document.createElement('style');
+  style.textContent = 'mark { background: var(--highlight); padding: 2px 6px; border-radius: 4px; }';
+  document.head.appendChild(style);
 })();
 
 const THEMES = {
