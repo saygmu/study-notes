@@ -459,8 +459,8 @@
 </head>
 <body>
   <nav>
-    <a href="focus.html?v=159">← 返回計時器</a>
-    <a href="#" onclick="clearCache()" style="font-size: 12px;">v1.5.9 清除快取</a>
+    <a href="focus.html?v=160">← 返回計時器</a>
+    <a href="#" onclick="clearCache()" style="font-size: 12px;">v1.6.0 清除快取</a>
   </nav>
   <script>
     function clearCache() {
@@ -564,6 +564,29 @@
         <button onclick="exportData()" style="flex:1; padding: 14px; background: var(--card); border: 1px solid var(--border); border-radius: 12px; color: var(--text); font-size: 14px; cursor: pointer;">匯出</button>
         <button onclick="document.getElementById('importFile').click()" style="flex:1; padding: 14px; background: var(--card); border: 1px solid var(--border); border-radius: 12px; color: var(--text); font-size: 14px; cursor: pointer;">匯入</button>
         <input type="file" id="importFile" accept=".json" onchange="importData(event)" style="display:none;">
+      </div>
+    </div>
+
+    <!-- Subject Management -->
+    <div class="section">
+      <div class="section-title">科目管理</div>
+      <div id="subjectList"></div>
+      <button onclick="showAddSubject()" style="width: 100%; padding: 14px; background: var(--card); border: 1px solid var(--border); border-radius: 12px; color: var(--text); font-size: 14px; cursor: pointer; margin-top: 12px;">+ 新增科目</button>
+    </div>
+
+    <!-- Add/Edit Subject Modal -->
+    <div id="subjectModal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.7); z-index: 200; align-items: center; justify-content: center; padding: 24px;">
+      <div style="background: var(--card); border-radius: 16px; padding: 24px; width: 100%; max-width: 320px;">
+        <div style="font-size: 16px; font-weight: 500; margin-bottom: 20px; color: var(--text);" id="modalTitle">新增科目</div>
+        <input type="text" id="subjectNameInput" placeholder="科目名稱" style="width: 100%; padding: 14px; background: var(--bg); border: 1px solid var(--border); border-radius: 12px; color: var(--text); font-size: 14px; margin-bottom: 16px; box-sizing: border-box;">
+        <div style="margin-bottom: 16px;">
+          <div style="font-size: 13px; color: var(--muted); margin-bottom: 8px;">選擇顏色</div>
+          <div id="colorPicker" style="display: flex; flex-wrap: wrap; gap: 8px;"></div>
+        </div>
+        <div style="display: flex; gap: 12px;">
+          <button onclick="closeSubjectModal()" style="flex: 1; padding: 14px; background: var(--bg); border: 1px solid var(--border); border-radius: 12px; color: var(--text); font-size: 14px; cursor: pointer;">取消</button>
+          <button onclick="saveSubject()" style="flex: 1; padding: 14px; background: var(--accent); border: none; border-radius: 12px; color: var(--bg); font-size: 14px; cursor: pointer;">儲存</button>
+        </div>
       </div>
     </div>
   </div>
@@ -1348,9 +1371,122 @@
       event.target.value = '';
     }
 
+    // Subject Management
+    const availableColors = ['#60a5fa', '#f472b6', '#4ade80', '#facc15', '#a78bfa', '#fb923c', '#2dd4bf', '#e879f9', '#f87171', '#94a3b8'];
+    let editingSubjectId = null;
+    let selectedColor = availableColors[0];
+
+    function renderSubjectList() {
+      const list = document.getElementById('subjectList');
+      list.innerHTML = subjects.map((s, i) => `
+        <div style="display: flex; align-items: center; gap: 12px; padding: 14px 16px; background: var(--card); border: 1px solid var(--border); border-radius: 12px; margin-bottom: 10px;">
+          <div style="width: 24px; height: 24px; border-radius: 6px; background: ${s.color}; flex-shrink: 0;"></div>
+          <div style="flex: 1; font-size: 14px; color: var(--text);">${s.name}</div>
+          <div style="display: flex; gap: 8px;">
+            ${i > 0 ? `<button onclick="moveSubject(${i}, -1)" style="width: 32px; height: 32px; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; color: var(--muted); cursor: pointer;">↑</button>` : ''}
+            ${i < subjects.length - 1 ? `<button onclick="moveSubject(${i}, 1)" style="width: 32px; height: 32px; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; color: var(--muted); cursor: pointer;">↓</button>` : ''}
+            <button onclick="editSubject('${s.id}')" style="width: 32px; height: 32px; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; color: var(--muted); cursor: pointer;">✎</button>
+            <button onclick="deleteSubject('${s.id}')" style="width: 32px; height: 32px; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; color: #f87171; cursor: pointer;">✕</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function renderColorPicker() {
+      const picker = document.getElementById('colorPicker');
+      picker.innerHTML = availableColors.map(c => `
+        <button onclick="selectColor('${c}')" style="width: 36px; height: 36px; border-radius: 10px; background: ${c}; border: 3px solid ${c === selectedColor ? 'var(--text)' : 'transparent'}; cursor: pointer;"></button>
+      `).join('');
+    }
+
+    function selectColor(color) {
+      selectedColor = color;
+      renderColorPicker();
+    }
+
+    function showAddSubject() {
+      editingSubjectId = null;
+      selectedColor = availableColors[0];
+      document.getElementById('modalTitle').textContent = '新增科目';
+      document.getElementById('subjectNameInput').value = '';
+      renderColorPicker();
+      document.getElementById('subjectModal').style.display = 'flex';
+    }
+
+    function editSubject(id) {
+      const subject = subjects.find(s => s.id === id);
+      if (!subject) return;
+      
+      editingSubjectId = id;
+      selectedColor = subject.color;
+      document.getElementById('modalTitle').textContent = '編輯科目';
+      document.getElementById('subjectNameInput').value = subject.name;
+      renderColorPicker();
+      document.getElementById('subjectModal').style.display = 'flex';
+    }
+
+    function closeSubjectModal() {
+      document.getElementById('subjectModal').style.display = 'none';
+    }
+
+    function saveSubject() {
+      const name = document.getElementById('subjectNameInput').value.trim();
+      if (!name) {
+        alert('請輸入科目名稱');
+        return;
+      }
+
+      if (editingSubjectId) {
+        // Edit existing
+        const idx = subjects.findIndex(s => s.id === editingSubjectId);
+        if (idx !== -1) {
+          subjects[idx].name = name;
+          subjects[idx].color = selectedColor;
+        }
+      } else {
+        // Add new
+        const id = 'subject_' + Date.now();
+        subjects.push({ id, name, color: selectedColor });
+      }
+
+      localStorage.setItem('focus_subjects', JSON.stringify(subjects));
+      renderSubjectList();
+      renderFilters();
+      closeSubjectModal();
+    }
+
+    function deleteSubject(id) {
+      const subject = subjects.find(s => s.id === id);
+      if (!subject) return;
+      
+      // Check if subject has records
+      const hasRecords = sessions.some(s => s.subject === id);
+      const msg = hasRecords 
+        ? `確定要刪除「${subject.name}」？\n⚠️ 這個科目有專注紀錄，紀錄不會被刪除` 
+        : `確定要刪除「${subject.name}」？`;
+      
+      if (!confirm(msg)) return;
+      
+      subjects = subjects.filter(s => s.id !== id);
+      localStorage.setItem('focus_subjects', JSON.stringify(subjects));
+      renderSubjectList();
+      renderFilters();
+    }
+
+    function moveSubject(index, direction) {
+      const newIndex = index + direction;
+      if (newIndex < 0 || newIndex >= subjects.length) return;
+      
+      [subjects[index], subjects[newIndex]] = [subjects[newIndex], subjects[index]];
+      localStorage.setItem('focus_subjects', JSON.stringify(subjects));
+      renderSubjectList();
+      renderFilters();
+    }
+
     // Init
     init();
     updateCloudUI();
+    renderSubjectList();
   </script>
   <script src="../theme-effects.js"></script>
 </body>
