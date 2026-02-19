@@ -1,5 +1,5 @@
 {
-  "lastUpdate": "2026/02/19 11:19",
+  "lastUpdate": "2026/02/20 04:22",
   "subjects": [
     {
       "name": "物理",
@@ -292,22 +292,22 @@
         {
           "name": "第二冊 2-1: 化學鍵概論",
           "date": "2026-02-20",
-          "done": false
+          "done": true
         },
         {
           "name": "第二冊 2-2: 離子鍵與共價鍵",
           "date": "2026-02-20",
-          "done": false
+          "done": true
         },
         {
           "name": "第二冊 2-3: 極性與氫鍵與範德華力",
           "date": "2026-02-21",
-          "done": false
+          "done": true
         },
         {
           "name": "第二冊 2-4: 鍵結能與晶格能",
           "date": "2026-02-21",
-          "done": false
+          "done": true
         },
         {
           "name": "第二冊 3-1: 化學反應速率",
@@ -317,7 +317,7 @@
         {
           "name": "第二冊 2-5: 分子間的作用力",
           "date": "2026-02-22",
-          "done": false
+          "done": true
         },
         {
           "name": "第二冊 3-2: 碰撞學說與活化能",
@@ -382,6 +382,36 @@
         {
           "name": "第三冊 2-6: 緩衝溶液",
           "date": "2026-03-01",
+          "done": false
+        }
+      ]
+    },
+    {
+      "name": "focus_sessions",
+      "tasks": [
+        {
+          "name": "",
+          "date": "2026-02-19",
+          "done": false
+        },
+        {
+          "name": "",
+          "date": "2026-02-19",
+          "done": false
+        },
+        {
+          "name": "",
+          "date": "2026-02-19",
+          "done": false
+        },
+        {
+          "name": "",
+          "date": "2026-02-19",
+          "done": false
+        },
+        {
+          "name": "",
+          "date": "2026-02-19",
           "done": false
         }
       ]
