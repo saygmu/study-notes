@@ -425,7 +425,7 @@
   </div>
 
   <div class="quote" id="quote"></div>
-  <div style="position:fixed;bottom:8px;left:12px;font-size:11px;color:var(--muted);opacity:0.5;z-index:1000;">v1.4.7 · <a href="#" onclick="clearCache()" style="color:inherit;">清除快取</a></div>
+  <div style="position:fixed;bottom:8px;left:12px;font-size:11px;color:var(--muted);opacity:0.5;z-index:1000;">v1.4.8 · <a href="#" onclick="clearCache()" style="color:inherit;">清除快取</a></div>
   <script>
     function clearCache() {
       if(confirm('清除快取並重新載入？')) {
@@ -456,6 +456,13 @@
     
     <div class="stats-title" style="margin-top: 32px;">最近記錄</div>
     <div id="history"></div>
+    
+    <div class="stats-title" style="margin-top: 32px;">資料管理</div>
+    <div style="display: flex; gap: 12px;">
+      <button onclick="exportData()" style="flex:1; padding: 12px; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-size: 14px; cursor: pointer;">匯出</button>
+      <button onclick="document.getElementById('importFile').click()" style="flex:1; padding: 12px; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-size: 14px; cursor: pointer;">匯入</button>
+      <input type="file" id="importFile" accept=".json" onchange="importData(event)" style="display:none;">
+    </div>
   </div>
 
   <script>
@@ -1013,6 +1020,60 @@
         updateDisplay();
       }
     });
+
+    // Export data as JSON file
+    function exportData() {
+      const data = {
+        version: '1.4.8',
+        exportedAt: new Date().toISOString(),
+        sessions: JSON.parse(localStorage.getItem('focus_sessions') || '[]'),
+        subjects: JSON.parse(localStorage.getItem('focus_subjects') || '[]'),
+        timerState: JSON.parse(localStorage.getItem('focus_timer_state') || 'null')
+      };
+      
+      const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `mono-backup-${new Date().toISOString().slice(0,10)}.json`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+
+    // Import data from JSON file
+    function importData(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        try {
+          const data = JSON.parse(e.target.result);
+          
+          if (!data.sessions || !Array.isArray(data.sessions)) {
+            alert('無效的備份檔案');
+            return;
+          }
+          
+          const confirmMsg = `確定要匯入嗎？\n\n將匯入 ${data.sessions.length} 筆紀錄\n${data.subjects?.length || 0} 個科目\n\n⚠️ 這會覆蓋現有資料`;
+          
+          if (confirm(confirmMsg)) {
+            localStorage.setItem('focus_sessions', JSON.stringify(data.sessions));
+            if (data.subjects) {
+              localStorage.setItem('focus_subjects', JSON.stringify(data.subjects));
+            }
+            alert('匯入成功！');
+            location.reload();
+          }
+        } catch (err) {
+          alert('檔案格式錯誤：' + err.message);
+        }
+      };
+      reader.readAsText(file);
+      event.target.value = ''; // Reset input
+    }
 
     // Initialize on load
     init();
