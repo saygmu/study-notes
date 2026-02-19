@@ -146,10 +146,10 @@
     .bar-chart-container {
       display: flex;
       align-items: flex-end;
-      height: 140px;
+      height: 160px;
       gap: 16px;
       min-width: max-content;
-      padding: 0 4px 4px;
+      padding: 0 4px 24px;
     }
 
     .bar-wrapper {
@@ -157,13 +157,18 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      height: 100%;
-      justify-content: flex-end;
+      height: calc(100% - 24px);
+    }
+
+    .bar-area {
+      flex: 1;
+      width: 100%;
+      display: flex;
+      align-items: flex-end;
     }
 
     .bar {
       width: 100%;
-      max-width: 50px;
       background: var(--accent);
       border-radius: 6px 6px 0 0;
       transition: height 0.3s ease;
@@ -446,7 +451,17 @@
 <body>
   <nav>
     <a href="focus.html">← 返回計時器</a>
+    <a href="#" onclick="clearCache()" style="font-size: 12px;">v1.4.3 清除快取</a>
   </nav>
+  <script>
+    function clearCache() {
+      if(confirm('清除快取並重新載入？')) {
+        if('caches' in window) caches.keys().then(n=>n.forEach(k=>caches.delete(k)));
+        if('serviceWorker' in navigator) navigator.serviceWorker.getRegistrations().then(r=>r.forEach(x=>x.unregister()));
+        setTimeout(()=>location.reload(true),500);
+      }
+    }
+  </script>
 
   <div class="container">
     <!-- Tabs -->
@@ -693,8 +708,10 @@
         const barHeight = d.duration > 0 ? Math.max(height, 5) : 0;
         return `
           <div class="bar-wrapper">
-            <div class="bar" style="height: ${barHeight}%;">
-              <div class="bar-tooltip">${formatDuration(d.duration)}</div>
+            <div class="bar-area">
+              <div class="bar" style="height: ${barHeight}%;">
+                <div class="bar-tooltip">${formatDuration(d.duration)}</div>
+              </div>
             </div>
             <div class="bar-label ${d.isCurrent ? 'today' : ''}">${d.label}</div>
           </div>
