@@ -499,11 +499,13 @@
     // Persist timer state to localStorage
     function saveTimerState() {
       if (isRunning && sessionStart && currentSubject) {
-        localStorage.setItem('focus_timer_state', JSON.stringify({
+        const state = {
           sessionStart: sessionStart,
           subjectId: currentSubject.id,
           savedAt: Date.now()
-        }));
+        };
+        localStorage.setItem('focus_timer_state', JSON.stringify(state));
+        console.log('[MONO] Saved state:', state);
       }
     }
 
@@ -513,7 +515,11 @@
 
     function restoreTimerState() {
       const saved = localStorage.getItem('focus_timer_state');
-      if (!saved) return;
+      console.log('[MONO] Checking saved state:', saved);
+      if (!saved) {
+        console.log('[MONO] No saved state found');
+        return;
+      }
 
       try {
         const state = JSON.parse(saved);
@@ -561,8 +567,7 @@
         interval = setInterval(() => {
           seconds++;
           updateDisplay();
-          // Periodically save state (every 30 seconds)
-          if (seconds % 30 === 0) saveTimerState();
+          saveTimerState();
         }, 1000);
 
         // Prevent screen sleep
@@ -673,8 +678,8 @@
       interval = setInterval(() => {
         seconds++;
         updateDisplay();
-        // Periodically save state (every 30 seconds)
-        if (seconds % 30 === 0) saveTimerState();
+        // Save state every tick on mobile (iOS doesn't reliably fire beforeunload)
+        saveTimerState();
       }, 1000);
 
       // Prevent screen sleep
