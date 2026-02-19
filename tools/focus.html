@@ -133,12 +133,6 @@
       background: var(--accent-dim);
     }
 
-    .subject-btn.add-btn {
-      border-style: dashed;
-      font-size: 18px;
-      padding: 8px 14px;
-    }
-
     /* Timer display */
     .timer-display {
       font-family: 'Space Mono', monospace;
@@ -402,7 +396,7 @@
   <nav>
     <a href="#" onclick="handleBack(event)">← 返回</a>
     <div class="nav-right">
-      <button onclick="window.location.href='focus-stats.html?v=160'">📊</button>
+      <button onclick="window.location.href='focus-stats.html?v=161'">📊</button>
     </div>
   </nav>
 
@@ -423,12 +417,12 @@
     <div class="controls">
       <button class="btn-secondary" onclick="resetTimer()">重置</button>
       <button class="btn-main" id="mainBtn" onclick="toggleTimer()">開始</button>
-      <button class="btn-secondary" onclick="window.location.href='focus-stats.html?v=160'">記錄</button>
+      <button class="btn-secondary" onclick="window.location.href='focus-stats.html?v=161'">記錄</button>
     </div>
   </div>
 
   <div class="quote" id="quote"></div>
-  <div style="position:fixed;bottom:8px;left:12px;font-size:11px;color:var(--muted);opacity:0.5;z-index:50;">v1.6.0 · <a href="#" onclick="clearCache()" style="color:inherit;">清除快取</a></div>
+  <div style="position:fixed;bottom:8px;left:12px;font-size:11px;color:var(--muted);opacity:0.5;z-index:50;">v1.6.1 · <a href="#" onclick="clearCache()" style="color:inherit;">清除快取</a></div>
   <script>
     function clearCache() {
       if(confirm('清除快取並重新載入？')) {
@@ -624,40 +618,10 @@
     function renderSubjects() {
       const container = document.getElementById('subjects');
       container.innerHTML = subjects.map(s => `
-        <button class="subject-btn" data-id="${s.id}" onclick="selectSubject('${s.id}')" oncontextmenu="deleteSubject(event, '${s.id}')">
+        <button class="subject-btn" data-id="${s.id}" onclick="selectSubject('${s.id}')">
           ${s.name}
         </button>
-      `).join('') + `
-        <button class="subject-btn add-btn" onclick="addSubject()">+</button>
-      `;
-    }
-
-    function addSubject() {
-      const name = prompt('新增科目名稱：');
-      if (!name || !name.trim()) return;
-      
-      const id = 'custom_' + Date.now();
-      const color = colors[subjects.length % colors.length];
-      
-      subjects.push({ id, name: name.trim(), color });
-      localStorage.setItem('focus_subjects', JSON.stringify(subjects));
-      renderSubjects();
-    }
-
-    function deleteSubject(e, id) {
-      e.preventDefault();
-      // Don't delete if it's the current subject while running
-      if (isRunning && currentSubject?.id === id) return;
-      
-      if (confirm('刪除這個科目？')) {
-        subjects = subjects.filter(s => s.id !== id);
-        localStorage.setItem('focus_subjects', JSON.stringify(subjects));
-        if (currentSubject?.id === id) {
-          currentSubject = null;
-          document.getElementById('sessionInfo').textContent = '選擇科目開始專注';
-        }
-        renderSubjects();
-      }
+      `).join('');
     }
 
     function selectSubject(id) {
