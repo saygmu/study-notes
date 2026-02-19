@@ -982,5 +982,18 @@
   </script>
   <script src="../theme.js"></script>
   <script src="../theme-effects.js"></script>
+  <script>
+    // Force update: clear old service workers and caches
+    (async function() {
+      if ('serviceWorker' in navigator) {
+        const regs = await navigator.serviceWorker.getRegistrations();
+        for (const reg of regs) await reg.unregister();
+      }
+      if ('caches' in window) {
+        const keys = await caches.keys();
+        for (const key of keys) await caches.delete(key);
+      }
+    })();
+  </script>
 </body>
 </html>
