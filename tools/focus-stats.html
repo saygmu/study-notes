@@ -452,7 +452,7 @@
 </head>
 <body>
   <nav>
-    <a href="focus.html">← 返回計時器</a>
+    <a href="focus.html?v=150">← 返回計時器</a>
     <a href="#" onclick="clearCache()" style="font-size: 12px;">v1.5.0 清除快取</a>
   </nav>
   <script>
@@ -1046,6 +1046,18 @@
         });
       }
     });
+
+    // Force clear service workers and caches on load
+    (async function() {
+      if ('serviceWorker' in navigator) {
+        const regs = await navigator.serviceWorker.getRegistrations();
+        for (const reg of regs) await reg.unregister();
+      }
+      if ('caches' in window) {
+        const keys = await caches.keys();
+        for (const key of keys) await caches.delete(key);
+      }
+    })();
 
     // Init
     init();
