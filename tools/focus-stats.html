@@ -458,8 +458,8 @@
 </head>
 <body>
   <nav>
-    <a href="focus.html?v=155">← 返回計時器</a>
-    <a href="#" onclick="clearCache()" style="font-size: 12px;">v1.5.5 清除快取</a>
+    <a href="focus.html?v=156">← 返回計時器</a>
+    <a href="#" onclick="clearCache()" style="font-size: 12px;">v1.5.6 清除快取</a>
   </nav>
   <script>
     function clearCache() {
@@ -547,10 +547,11 @@
             <span style="color: var(--text); font-size: 14px;">✅ 已連接</span>
             <span id="lastSyncTime" style="color: var(--muted); font-size: 12px;"></span>
           </div>
-          <div style="display: flex; gap: 12px;">
-            <button onclick="syncFromCloud()" style="flex:1; padding: 14px; background: var(--card); border: 1px solid var(--border); border-radius: 12px; color: var(--text); font-size: 14px; cursor: pointer;">從雲端同步</button>
-            <button onclick="disconnectCloud()" style="flex:1; padding: 14px; background: var(--card); border: 1px solid var(--border); border-radius: 12px; color: #f87171; font-size: 14px; cursor: pointer;">斷開連接</button>
+          <div style="display: flex; gap: 12px; margin-bottom: 12px;">
+            <button onclick="syncFromCloud()" style="flex:1; padding: 14px; background: var(--card); border: 1px solid var(--border); border-radius: 12px; color: var(--text); font-size: 14px; cursor: pointer;">同步</button>
+            <button onclick="forceCloudSync()" style="flex:1; padding: 14px; background: var(--card); border: 1px solid var(--border); border-radius: 12px; color: var(--text); font-size: 14px; cursor: pointer;">強制覆蓋</button>
           </div>
+          <button onclick="disconnectCloud()" style="width: 100%; padding: 14px; background: var(--card); border: 1px solid var(--border); border-radius: 12px; color: #f87171; font-size: 14px; cursor: pointer;">斷開連接</button>
         </div>
       </div>
     </div>
@@ -1221,6 +1222,44 @@
         
         localStorage.setItem('focus_last_sync', Date.now().toString());
         updateCloudUI();
+      } catch (err) {
+        alert('同步失敗：' + err.message);
+      }
+    }
+
+    async function forceCloudSync() {
+      const pin = getCloudPin();
+      if (!pin) return;
+      
+      if (!confirm('確定要用雲端資料覆蓋本機？\n本機資料會被取代')) return;
+      
+      try {
+        const res = await fetch(`${CLOUD_API}/sessions`, {
+          headers: { 'X-Pin': pin }
+        });
+        
+        if (!res.ok) throw new Error('同步失敗');
+        
+        const data = await res.json();
+        const cloudSessions = data.sessions || [];
+        
+        // Replace local with cloud data
+        sessions = cloudSessions.map(s => ({
+          subject: s.subject,
+          subjectName: s.subjectName,
+          duration: s.duration,
+          date: s.date,
+          timestamp: s.timestamp
+        }));
+        
+        sessions.sort((a, b) => new Date(b.date) - new Date(a.date));
+        localStorage.setItem('focus_sessions', JSON.stringify(sessions));
+        renderAll();
+        
+        localStorage.setItem('focus_last_sync', Date.now().toString());
+        updateCloudUI();
+        
+        alert(`已覆蓋！共 ${sessions.length} 筆紀錄`);
       } catch (err) {
         alert('同步失敗：' + err.message);
       }
