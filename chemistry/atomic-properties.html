@@ -140,6 +140,7 @@
       align-items: center;
       justify-content: center;
       font-size: 14px;
+      font-weight: 300;
       flex-shrink: 0;
       margin-top: 4px;
     }
@@ -236,16 +237,16 @@
       font-size: 14px;
     }
     .step-num {
-      display: inline-flex;
+      display: flex;
       align-items: center;
       justify-content: center;
       width: 24px;
       height: 24px;
       border-radius: 50%;
       background: var(--border);
-      font-size: 12px;
-      font-weight: 500;
-      margin-right: 8px;
+      font-size: 13px;
+      font-weight: 300;
+      line-height: 1;
     }
     footer {
       text-align: center;
@@ -633,7 +634,7 @@
 
       <div class="card">
         <div class="rule">
-          <div class="rule-icon"><span class="step-num">1</span></div>
+          <div class="rule-icon">1</div>
           <div class="rule-content">
             <div class="rule-title">第一關：看「重量級」（電子總數／分子量）</div>
             <div class="rule-desc">
@@ -643,7 +644,7 @@
           </div>
         </div>
         <div class="rule">
-          <div class="rule-icon"><span class="step-num">2</span></div>
+          <div class="rule-icon">2</div>
           <div class="rule-content">
             <div class="rule-title">第二關：看「接觸面積」（分子大小／鏈長）</div>
             <div class="rule-desc">
@@ -653,7 +654,7 @@
           </div>
         </div>
         <div class="rule">
-          <div class="rule-icon"><span class="step-num">3</span></div>
+          <div class="rule-icon">3</div>
           <div class="rule-content">
             <div class="rule-title">第三關：看「形狀」（支鏈多寡）</div>
             <div class="rule-desc">
