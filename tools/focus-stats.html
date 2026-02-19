@@ -308,6 +308,12 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      transform: translateX(100%);
+      transition: transform 0.2s ease;
+    }
+
+    .history-item-wrapper.show-delete .history-delete {
+      transform: translateX(0);
     }
 
     .history-item-wrapper.show-delete .history-item {
@@ -452,8 +458,8 @@
 </head>
 <body>
   <nav>
-    <a href="focus.html?v=150">← 返回計時器</a>
-    <a href="#" onclick="clearCache()" style="font-size: 12px;">v1.5.0 清除快取</a>
+    <a href="focus.html?v=151">← 返回計時器</a>
+    <a href="#" onclick="clearCache()" style="font-size: 12px;">v1.5.1 清除快取</a>
   </nav>
   <script>
     function clearCache() {
