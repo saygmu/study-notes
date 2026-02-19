@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>原子性質比較規則</title>
+  <title>化學比較規則</title>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500&family=Noto+Serif+TC:wght@600&display=swap" rel="stylesheet">
   <style>
     :root {
@@ -14,6 +14,8 @@
       --border: #e8e8e8;
       --card: #fff;
       --mark: #fff3cd;
+      --tab-bg: #f0f0f0;
+      --tab-active: #fff;
     }
     [data-theme="dark"] {
       --bg: #1a1a1a;
@@ -23,6 +25,8 @@
       --border: #333;
       --card: #242424;
       --mark: #4a4000;
+      --tab-bg: #2a2a2a;
+      --tab-active: #3a3a3a;
     }
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
@@ -64,8 +68,47 @@
     .subtitle {
       color: var(--muted);
       font-size: 14px;
-      margin-bottom: 48px;
+      margin-bottom: 32px;
     }
+    
+    /* Tabs */
+    .tabs {
+      display: flex;
+      background: var(--tab-bg);
+      border-radius: 12px;
+      padding: 4px;
+      margin-bottom: 32px;
+      gap: 4px;
+    }
+    .tab {
+      flex: 1;
+      padding: 12px 16px;
+      border: none;
+      background: transparent;
+      color: var(--muted);
+      font-family: 'Noto Sans TC', sans-serif;
+      font-size: 14px;
+      font-weight: 400;
+      cursor: pointer;
+      border-radius: 10px;
+      transition: all 0.2s;
+    }
+    .tab:hover {
+      color: var(--text);
+    }
+    .tab.active {
+      background: var(--tab-active);
+      color: var(--text);
+      font-weight: 500;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    .tab-panel {
+      display: none;
+    }
+    .tab-panel.active {
+      display: block;
+    }
+    
     h2 {
       font-family: 'Noto Serif TC', serif;
       font-weight: 600;
@@ -73,6 +116,9 @@
       margin: 48px 0 24px;
       padding-bottom: 8px;
       border-bottom: 1px solid var(--border);
+    }
+    h2:first-child {
+      margin-top: 0;
     }
     .card {
       background: var(--card);
@@ -87,6 +133,8 @@
       gap: 16px;
       margin: 16px 0;
     }
+    .rule:first-child { margin-top: 0; }
+    .rule:last-child { margin-bottom: 0; }
     .rule-icon {
       width: 32px;
       height: 32px;
@@ -108,10 +156,6 @@
       color: var(--muted);
       font-size: 14px;
     }
-    .arrow { 
-      font-family: 'Noto Sans TC', sans-serif;
-      color: var(--accent);
-    }
     mark {
       background: var(--mark);
       color: var(--text);
@@ -128,6 +172,19 @@
     .exception-title {
       font-weight: 500;
       color: #f87171;
+      font-size: 14px;
+      margin-bottom: 8px;
+    }
+    .tip {
+      background: var(--card);
+      border-left: 3px solid #4ade80;
+      padding: 16px 20px;
+      margin: 16px 0;
+      border-radius: 0 8px 8px 0;
+    }
+    .tip-title {
+      font-weight: 500;
+      color: #4ade80;
       font-size: 14px;
       margin-bottom: 8px;
     }
@@ -182,6 +239,18 @@
       font-weight: 500;
       font-size: 14px;
     }
+    .step-num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: var(--border);
+      font-size: 12px;
+      font-weight: 500;
+      margin-right: 8px;
+    }
     footer {
       text-align: center;
       padding: 48px 0;
@@ -191,10 +260,23 @@
     @media print {
       nav { display: none; }
       .container { padding-top: 24px; }
+      .tabs { display: none; }
+      .tab-panel { display: block !important; }
+      .tab-panel::before {
+        content: attr(data-title);
+        display: block;
+        font-size: 1.5rem;
+        font-weight: 600;
+        margin: 32px 0 16px;
+        padding-bottom: 8px;
+        border-bottom: 2px solid var(--border);
+      }
     }
     @media (max-width: 600px) {
       h1 { font-size: 1.75rem; }
       .summary-grid { grid-template-columns: 1fr; }
+      .tabs { flex-direction: column; }
+      .tab { text-align: center; }
     }
   </style>
 </head>
@@ -207,329 +289,492 @@
   </nav>
 
   <div class="container">
-    <h1>原子性質比較</h1>
-    <div class="subtitle">半徑・游離能・電子親和力・電負度・化學鍵</div>
+    <h1>化學比較規則</h1>
+    <div class="subtitle">原子性質・化學鍵・分子間作用力</div>
 
-    <div class="summary">
-      <div class="summary-title">⚡ 速記口訣</div>
-      <div class="summary-grid">
-        <div class="summary-item">
-          <div class="summary-label">同週期（→）</div>
-          <div class="summary-value">半徑<span class="trend-down">↓</span> 其他<span class="trend-up">↑</span></div>
-        </div>
-        <div class="summary-item">
-          <div class="summary-label">同族（↓）</div>
-          <div class="summary-value">半徑<span class="trend-up">↑</span> 其他<span class="trend-down">↓</span></div>
-        </div>
-      </div>
+    <div class="tabs">
+      <button class="tab active" data-tab="atomic">原子性質</button>
+      <button class="tab" data-tab="bond">化學鍵</button>
+      <button class="tab" data-tab="imf">分子間作用力</button>
     </div>
 
-    <h2>一、原子半徑</h2>
-    
-    <div class="card">
-      <div class="rule">
-        <div class="rule-icon">→</div>
-        <div class="rule-content">
-          <div class="rule-title">同週期：越右越小</div>
-          <div class="rule-desc">質子數↑，拉力↑，電子被拉近</div>
+    <!-- ==================== 原子性質 ==================== -->
+    <div class="tab-panel active" id="atomic" data-title="原子性質">
+      
+      <div class="summary">
+        <div class="summary-title">⚡ 速記口訣</div>
+        <div class="summary-grid">
+          <div class="summary-item">
+            <div class="summary-label">同週期（→）</div>
+            <div class="summary-value">半徑<span class="trend-down">↓</span> 其他<span class="trend-up">↑</span></div>
+          </div>
+          <div class="summary-item">
+            <div class="summary-label">同族（↓）</div>
+            <div class="summary-value">半徑<span class="trend-up">↑</span> 其他<span class="trend-down">↓</span></div>
+          </div>
         </div>
       </div>
-      <div class="rule">
-        <div class="rule-icon">↓</div>
-        <div class="rule-content">
-          <div class="rule-title">同族：越下越大</div>
-          <div class="rule-desc">電子層數↑</div>
+
+      <h2>一、原子半徑</h2>
+      
+      <div class="card">
+        <div class="rule">
+          <div class="rule-icon">→</div>
+          <div class="rule-content">
+            <div class="rule-title">同週期：越右越小</div>
+            <div class="rule-desc">質子數↑，拉力↑，電子被拉近</div>
+          </div>
+        </div>
+        <div class="rule">
+          <div class="rule-icon">↓</div>
+          <div class="rule-content">
+            <div class="rule-title">同族：越下越大</div>
+            <div class="rule-desc">電子層數↑</div>
+          </div>
         </div>
       </div>
-    </div>
 
-    <h2>二、離子半徑</h2>
-    
-    <div class="card">
-      <div class="rule">
-        <div class="rule-icon">+</div>
-        <div class="rule-content">
-          <div class="rule-title">陽離子 < 原子</div>
-          <div class="rule-desc">失去電子，電子層可能減少</div>
+      <h2>二、離子半徑</h2>
+      
+      <div class="card">
+        <div class="rule">
+          <div class="rule-icon">+</div>
+          <div class="rule-content">
+            <div class="rule-title">陽離子 < 原子</div>
+            <div class="rule-desc">失去電子，電子層可能減少</div>
+          </div>
+        </div>
+        <div class="rule">
+          <div class="rule-icon">−</div>
+          <div class="rule-content">
+            <div class="rule-title">陰離子 > 原子</div>
+            <div class="rule-desc">得到電子，電子互斥↑</div>
+          </div>
+        </div>
+        <div class="rule">
+          <div class="rule-icon">＝</div>
+          <div class="rule-content">
+            <div class="rule-title">等電子數：質子多的較小</div>
+            <div class="rule-desc">例：O²⁻ > F⁻ > Na⁺ > Mg²⁺ > Al³⁺</div>
+          </div>
         </div>
       </div>
-      <div class="rule">
-        <div class="rule-icon">−</div>
-        <div class="rule-content">
-          <div class="rule-title">陰離子 > 原子</div>
-          <div class="rule-desc">得到電子，電子互斥↑</div>
+
+      <h2>三、游離能（IE）</h2>
+      
+      <div class="card">
+        <div class="rule">
+          <div class="rule-icon">→</div>
+          <div class="rule-content">
+            <div class="rule-title">同週期：越右越大</div>
+            <div class="rule-desc">有效核電荷↑，電子難拔</div>
+          </div>
+        </div>
+        <div class="rule">
+          <div class="rule-icon">↓</div>
+          <div class="rule-content">
+            <div class="rule-title">同族：越下越小</div>
+            <div class="rule-desc">距離遠，電子好拔</div>
+          </div>
+        </div>
+        <div class="rule">
+          <div class="rule-icon">＝</div>
+          <div class="rule-content">
+            <div class="rule-title">等電子數：原子序越大，IE 越大</div>
+            <div class="rule-desc">例：F⁻ < Ne < Na⁺ < Mg²⁺ < Al³⁺（都是 10 e⁻）</div>
+          </div>
+        </div>
+        <div class="rule">
+          <div class="rule-icon">−</div>
+          <div class="rule-content">
+            <div class="rule-title">陰離子的 IE 最小</div>
+            <div class="rule-desc">F⁺ > F > F⁻（陰離子電子多，容易拔）</div>
+          </div>
         </div>
       </div>
-      <div class="rule">
-        <div class="rule-icon">＝</div>
-        <div class="rule-content">
-          <div class="rule-title">等電子數：質子多的較小</div>
-          <div class="rule-desc">例：O²⁻ > F⁻ > Na⁺ > Mg²⁺ > Al³⁺</div>
+
+      <div class="exception">
+        <div class="exception-title">⚠️ 特例（同週期）</div>
+        <p><mark>Be > B</mark>：B 是 2p¹，容易失去單獨電子</p>
+        <p><mark>N > O</mark>：N 是 2p³ 半滿穩定，O 要打破配對</p>
+        <p><mark>Mg > Al</mark>、<mark>P > S</mark>：同理</p>
+      </div>
+
+      <div class="exception">
+        <div class="exception-title">⚠️ 鹵素陰離子 IE（超重要）</div>
+        <p>IE 順序：<mark>Cl⁻ > F⁻ > Br⁻ > I⁻</mark></p>
+        <p>F⁻ 太小，電子互斥強，反而比 Cl⁻ 容易失去電子</p>
+      </div>
+
+      <h2>四、電子親和力（EA）</h2>
+      
+      <div class="card">
+        <div class="rule">
+          <div class="rule-icon">→</div>
+          <div class="rule-content">
+            <div class="rule-title">同週期：越右越大（鹵素最大）</div>
+            <div class="rule-desc">接近八隅體，想要電子</div>
+          </div>
+        </div>
+        <div class="rule">
+          <div class="rule-icon">↓</div>
+          <div class="rule-content">
+            <div class="rule-title">同族：越下越小</div>
+            <div class="rule-desc">距離遠，吸引力弱</div>
+          </div>
         </div>
       </div>
-    </div>
 
-    <h2>三、游離能（IE）</h2>
-    
-    <div class="card">
-      <div class="rule">
-        <div class="rule-icon">→</div>
-        <div class="rule-content">
-          <div class="rule-title">同週期：越右越大</div>
-          <div class="rule-desc">有效核電荷↑，電子難拔</div>
+      <div class="exception">
+        <div class="exception-title">⚠️ 鹵素特例（超重要）</div>
+        <p>電子親和力：<mark>Cl > F > Br > I</mark></p>
+        <p>F 原子太小，電子互斥強，反而不如 Cl 穩定</p>
+      </div>
+
+      <h2>五、電負度（EN）</h2>
+      
+      <div class="card">
+        <div class="rule">
+          <div class="rule-icon">→</div>
+          <div class="rule-content">
+            <div class="rule-title">同週期：越右越大</div>
+            <div class="rule-desc">F = 4.0（最大）</div>
+          </div>
+        </div>
+        <div class="rule">
+          <div class="rule-icon">↓</div>
+          <div class="rule-content">
+            <div class="rule-title">同族：越下越小</div>
+            <div class="rule-desc">距離遠，吸引力弱</div>
+          </div>
         </div>
       </div>
-      <div class="rule">
-        <div class="rule-icon">↓</div>
-        <div class="rule-content">
-          <div class="rule-title">同族：越下越小</div>
-          <div class="rule-desc">距離遠，電子好拔</div>
-        </div>
-      </div>
-      <div class="rule">
-        <div class="rule-icon">＝</div>
-        <div class="rule-content">
-          <div class="rule-title">等電子數：原子序越大，IE 越大</div>
-          <div class="rule-desc">例：F⁻ < Ne < Na⁺ < Mg²⁺ < Al³⁺（都是 10 e⁻）</div>
-        </div>
-      </div>
-      <div class="rule">
-        <div class="rule-icon">−</div>
-        <div class="rule-content">
-          <div class="rule-title">陰離子的 IE 最小</div>
-          <div class="rule-desc">F⁺ > F > F⁻（陰離子電子多，容易拔）</div>
-        </div>
-      </div>
-    </div>
 
-    <div class="exception">
-      <div class="exception-title">⚠️ 特例（同週期）</div>
-      <p><mark>Be > B</mark>：B 是 2p¹，容易失去單獨電子</p>
-      <p><mark>N > O</mark>：N 是 2p³ 半滿穩定，O 要打破配對</p>
-      <p><mark>Mg > Al</mark>、<mark>P > S</mark>：同理</p>
-    </div>
-
-    <div class="exception">
-      <div class="exception-title">⚠️ 鹵素陰離子 IE（超重要）</div>
-      <p>IE 順序：<mark>Cl⁻ > F⁻ > Br⁻ > I⁻</mark></p>
-      <p>F⁻ 太小，電子互斥強，反而比 Cl⁻ 容易失去電子</p>
-    </div>
-
-    <h2>四、電子親和力（EA）</h2>
-    
-    <div class="card">
-      <div class="rule">
-        <div class="rule-icon">→</div>
-        <div class="rule-content">
-          <div class="rule-title">同週期：越右越大（鹵素最大）</div>
-          <div class="rule-desc">接近八隅體，想要電子</div>
-        </div>
-      </div>
-      <div class="rule">
-        <div class="rule-icon">↓</div>
-        <div class="rule-content">
-          <div class="rule-title">同族：越下越小</div>
-          <div class="rule-desc">距離遠，吸引力弱</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="exception">
-      <div class="exception-title">⚠️ 鹵素特例（超重要）</div>
-      <p>電子親和力：<mark>Cl > F > Br > I</mark></p>
-      <p>F 原子太小，電子互斥強，反而不如 Cl 穩定</p>
-    </div>
-
-    <h2>五、電負度（EN）</h2>
-    
-    <div class="card">
-      <div class="rule">
-        <div class="rule-icon">→</div>
-        <div class="rule-content">
-          <div class="rule-title">同週期：越右越大</div>
-          <div class="rule-desc">F = 4.0（最大）</div>
-        </div>
-      </div>
-      <div class="rule">
-        <div class="rule-icon">↓</div>
-        <div class="rule-content">
-          <div class="rule-title">同族：越下越小</div>
-          <div class="rule-desc">距離遠，吸引力弱</div>
-        </div>
-      </div>
-    </div>
-
-    <p style="margin-top: 16px; color: var(--muted); font-size: 14px;">
-      電負度 = 游離能 + 電子親和力的綜合表現
-    </p>
-
-    <h2>六、離子鍵強度比較（晶格能）</h2>
-
-    <div class="card">
-      <div class="rule">
-        <div class="rule-icon">q</div>
-        <div class="rule-content">
-          <div class="rule-title">電荷越大，晶格能越大</div>
-          <div class="rule-desc">MgO（2+ 2−）> NaCl（1+ 1−）</div>
-        </div>
-      </div>
-      <div class="rule">
-        <div class="rule-icon">r</div>
-        <div class="rule-content">
-          <div class="rule-title">半徑越小，晶格能越大</div>
-          <div class="rule-desc">LiF > LiCl > LiBr > LiI</div>
-        </div>
-      </div>
-      <div class="rule">
-        <div class="rule-icon">∝</div>
-        <div class="rule-content">
-          <div class="rule-title">晶格能 ∝ (q₁ × q₂) / (r₁ + r₂)</div>
-          <div class="rule-desc">電荷乘積÷距離</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="exception">
-      <div class="exception-title">⚠️ 比較訣竅</div>
-      <p>先比電荷（影響大）→ 再比半徑</p>
-      <p>例：<mark>MgO > CaO > NaCl</mark>（MgO 電荷大且 Mg²⁺ 小）</p>
-    </div>
-
-    <h2>七、金屬鍵強度比較</h2>
-
-    <div class="card">
-      <div class="rule">
-        <div class="rule-icon">e⁻</div>
-        <div class="rule-content">
-          <div class="rule-title">價電子越多，金屬鍵越強</div>
-          <div class="rule-desc">電子海越密，吸引力越強</div>
-        </div>
-      </div>
-      <div class="rule">
-        <div class="rule-icon">r</div>
-        <div class="rule-content">
-          <div class="rule-title">原子半徑越小，金屬鍵越強</div>
-          <div class="rule-desc">距離近，作用力強</div>
-        </div>
-      </div>
-    </div>
-
-    <p style="margin-top: 16px; color: var(--muted); font-size: 14px;">
-      熔點順序：<mark>過渡金屬 > 鹼土金屬 > 鹼金屬</mark>
-    </p>
-    <p style="color: var(--muted); font-size: 14px;">
-      例：Fe > Ca > Na（價電子：d 軌域多 > 2 > 1）
-    </p>
-
-    <h2>八、共價鍵強度比較（鍵能）</h2>
-
-    <div class="card">
-      <div class="rule">
-        <div class="rule-icon">n</div>
-        <div class="rule-content">
-          <div class="rule-title">鍵級越高，鍵能越大</div>
-          <div class="rule-desc">三鍵 > 雙鍵 > 單鍵（軌域重疊多）</div>
-        </div>
-      </div>
-      <div class="rule">
-        <div class="rule-icon">r</div>
-        <div class="rule-content">
-          <div class="rule-title">原子半徑越小，鍵能越大</div>
-          <div class="rule-desc">軌域重疊越好</div>
-        </div>
-      </div>
-      <div class="rule">
-        <div class="rule-icon">⇌</div>
-        <div class="rule-content">
-          <div class="rule-title">鍵能↑ ⟺ 鍵長↓</div>
-          <div class="rule-desc">鍵越強，原子拉越近</div>
-        </div>
-      </div>
-    </div>
-
-    <table>
-      <tr>
-        <th>比較</th>
-        <th>鍵能順序</th>
-        <th>原因</th>
-      </tr>
-      <tr>
-        <td>C≡C vs C=C vs C-C</td>
-        <td>三鍵 > 雙鍵 > 單鍵</td>
-        <td>鍵級</td>
-      </tr>
-      <tr>
-        <td>H-F vs H-Cl vs H-Br vs H-I</td>
-        <td>H-F > H-Cl > H-Br > H-I</td>
-        <td>半徑小</td>
-      </tr>
-      <tr>
-        <td>F-F vs Cl-Cl</td>
-        <td><mark>Cl-Cl > F-F</mark></td>
-        <td>F 太小互斥</td>
-      </tr>
-    </table>
-
-    <div class="exception">
-      <div class="exception-title">⚠️ F-F 特例</div>
-      <p>F 原子太小，孤電子對互斥強</p>
-      <p>鍵能：<mark>Cl-Cl > F-F > Br-Br > I-I</mark></p>
-    </div>
-
-    <h2>九、總整理</h2>
-
-    <table>
-      <tr>
-        <th>性質</th>
-        <th>同週期 →</th>
-        <th>同族 ↓</th>
-        <th>最大值</th>
-      </tr>
-      <tr>
-        <td>原子半徑</td>
-        <td class="trend-down">減小</td>
-        <td class="trend-up">增大</td>
-        <td>Fr</td>
-      </tr>
-      <tr>
-        <td>游離能</td>
-        <td class="trend-up">增大</td>
-        <td class="trend-down">減小</td>
-        <td>He</td>
-      </tr>
-      <tr>
-        <td>電子親和力</td>
-        <td class="trend-up">增大</td>
-        <td class="trend-down">減小</td>
-        <td>Cl</td>
-      </tr>
-      <tr>
-        <td>電負度</td>
-        <td class="trend-up">增大</td>
-        <td class="trend-down">減小</td>
-        <td>F</td>
-      </tr>
-    </table>
-
-    <div class="summary">
-      <div class="summary-title">🎯 背這個就夠</div>
-      <p style="font-size: 15px; line-height: 1.8;">
-        <strong>原子性質</strong><br>
-        　半徑：右小下大，陽小陰大<br>
-        　IE、EA、EN：右大下小（跟半徑相反）<br>
-        　IE 特例：2A > 3A、5A > 6A<br>
-        　鹵素：Cl > F（F 太擠）<br><br>
-        <strong>化學鍵強度</strong><br>
-        　離子鍵：電荷大、半徑小 → 晶格能大<br>
-        　金屬鍵：價電子多、半徑小 → 熔點高<br>
-        　共價鍵：鍵級高、半徑小 → 鍵能大<br>
-        　特例：F-F 比 Cl-Cl 弱
+      <p style="margin-top: 16px; color: var(--muted); font-size: 14px;">
+        電負度 = 游離能 + 電子親和力的綜合表現
       </p>
+
+      <h2>六、總整理</h2>
+
+      <table>
+        <tr>
+          <th>性質</th>
+          <th>同週期 →</th>
+          <th>同族 ↓</th>
+          <th>最大值</th>
+        </tr>
+        <tr>
+          <td>原子半徑</td>
+          <td class="trend-down">減小</td>
+          <td class="trend-up">增大</td>
+          <td>Fr</td>
+        </tr>
+        <tr>
+          <td>游離能</td>
+          <td class="trend-up">增大</td>
+          <td class="trend-down">減小</td>
+          <td>He</td>
+        </tr>
+        <tr>
+          <td>電子親和力</td>
+          <td class="trend-up">增大</td>
+          <td class="trend-down">減小</td>
+          <td>Cl</td>
+        </tr>
+        <tr>
+          <td>電負度</td>
+          <td class="trend-up">增大</td>
+          <td class="trend-down">減小</td>
+          <td>F</td>
+        </tr>
+      </table>
+
+      <div class="summary">
+        <div class="summary-title">🎯 背這個就夠</div>
+        <p style="font-size: 15px; line-height: 1.8;">
+          <strong>半徑</strong>：右小下大，陽小陰大<br>
+          <strong>IE、EA、EN</strong>：右大下小（跟半徑相反）<br>
+          <strong>IE 特例</strong>：2A > 3A、5A > 6A<br>
+          <strong>鹵素</strong>：Cl > F（F 太擠）
+        </p>
+      </div>
+
+    </div>
+
+    <!-- ==================== 化學鍵 ==================== -->
+    <div class="tab-panel" id="bond" data-title="化學鍵">
+
+      <h2>一、離子鍵強度（晶格能）</h2>
+
+      <div class="card">
+        <div class="rule">
+          <div class="rule-icon">q</div>
+          <div class="rule-content">
+            <div class="rule-title">電荷越大，晶格能越大</div>
+            <div class="rule-desc">MgO（2+ 2−）> NaCl（1+ 1−）</div>
+          </div>
+        </div>
+        <div class="rule">
+          <div class="rule-icon">r</div>
+          <div class="rule-content">
+            <div class="rule-title">半徑越小，晶格能越大</div>
+            <div class="rule-desc">LiF > LiCl > LiBr > LiI</div>
+          </div>
+        </div>
+        <div class="rule">
+          <div class="rule-icon">∝</div>
+          <div class="rule-content">
+            <div class="rule-title">晶格能 ∝ (q₁ × q₂) / (r₁ + r₂)</div>
+            <div class="rule-desc">電荷乘積 ÷ 距離</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tip">
+        <div class="tip-title">💡 比較訣竅</div>
+        <p>先比電荷（影響大）→ 再比半徑</p>
+        <p>例：<mark>MgO > CaO > NaCl</mark>（MgO 電荷大且 Mg²⁺ 小）</p>
+      </div>
+
+      <h2>二、金屬鍵強度</h2>
+
+      <div class="card">
+        <div class="rule">
+          <div class="rule-icon">e⁻</div>
+          <div class="rule-content">
+            <div class="rule-title">價電子越多，金屬鍵越強</div>
+            <div class="rule-desc">電子海越密，吸引力越強</div>
+          </div>
+        </div>
+        <div class="rule">
+          <div class="rule-icon">r</div>
+          <div class="rule-content">
+            <div class="rule-title">原子半徑越小，金屬鍵越強</div>
+            <div class="rule-desc">距離近，作用力強</div>
+          </div>
+        </div>
+      </div>
+
+      <p style="margin-top: 16px; color: var(--muted); font-size: 14px;">
+        熔點順序：<mark>過渡金屬 > 鹼土金屬 > 鹼金屬</mark><br>
+        例：Fe > Ca > Na（價電子：d 軌域多 > 2 > 1）
+      </p>
+
+      <h2>三、共價鍵強度（鍵能）</h2>
+
+      <div class="card">
+        <div class="rule">
+          <div class="rule-icon">n</div>
+          <div class="rule-content">
+            <div class="rule-title">鍵級越高，鍵能越大</div>
+            <div class="rule-desc">三鍵 > 雙鍵 > 單鍵（軌域重疊多）</div>
+          </div>
+        </div>
+        <div class="rule">
+          <div class="rule-icon">r</div>
+          <div class="rule-content">
+            <div class="rule-title">原子半徑越小，鍵能越大</div>
+            <div class="rule-desc">軌域重疊越好</div>
+          </div>
+        </div>
+        <div class="rule">
+          <div class="rule-icon">⇌</div>
+          <div class="rule-content">
+            <div class="rule-title">鍵能↑ ⟺ 鍵長↓</div>
+            <div class="rule-desc">鍵越強，原子拉越近</div>
+          </div>
+        </div>
+      </div>
+
+      <table>
+        <tr>
+          <th>比較</th>
+          <th>鍵能順序</th>
+          <th>原因</th>
+        </tr>
+        <tr>
+          <td>C≡C vs C=C vs C-C</td>
+          <td>三鍵 > 雙鍵 > 單鍵</td>
+          <td>鍵級</td>
+        </tr>
+        <tr>
+          <td>H-F vs H-Cl vs H-Br vs H-I</td>
+          <td>H-F > H-Cl > H-Br > H-I</td>
+          <td>半徑小</td>
+        </tr>
+        <tr>
+          <td>F-F vs Cl-Cl</td>
+          <td><mark>Cl-Cl > F-F</mark></td>
+          <td>F 太小互斥</td>
+        </tr>
+      </table>
+
+      <div class="exception">
+        <div class="exception-title">⚠️ F-F 特例</div>
+        <p>F 原子太小，孤電子對互斥強</p>
+        <p>鍵能：<mark>Cl-Cl > F-F > Br-Br > I-I</mark></p>
+      </div>
+
+      <div class="summary">
+        <div class="summary-title">🎯 背這個就夠</div>
+        <p style="font-size: 15px; line-height: 1.8;">
+          <strong>離子鍵</strong>：電荷大、半徑小 → 晶格能大<br>
+          <strong>金屬鍵</strong>：價電子多、半徑小 → 熔點高<br>
+          <strong>共價鍵</strong>：鍵級高、半徑小 → 鍵能大<br>
+          <strong>特例</strong>：F-F 比 Cl-Cl 弱（F 太擠）
+        </p>
+      </div>
+
+    </div>
+
+    <!-- ==================== 分子間作用力 ==================== -->
+    <div class="tab-panel" id="imf" data-title="分子間作用力">
+
+      <h2>分散力比較演算法</h2>
+      
+      <p style="color: var(--muted); font-size: 14px; margin-bottom: 24px;">
+        像大逃殺一樣，有明確的「優先級」。第一關比不出勝負就看下一關！
+      </p>
+
+      <div class="card">
+        <div class="rule">
+          <div class="rule-icon"><span class="step-num">1</span></div>
+          <div class="rule-content">
+            <div class="rule-title">第一關：看「重量級」（電子總數／分子量）</div>
+            <div class="rule-desc">
+              最有決定性！電子越多，電子雲越容易變形（極化性高）<br>
+              例：F₂ < Cl₂ < Br₂ < I₂
+            </div>
+          </div>
+        </div>
+        <div class="rule">
+          <div class="rule-icon"><span class="step-num">2</span></div>
+          <div class="rule-content">
+            <div class="rule-title">第二關：看「接觸面積」（分子大小／鏈長）</div>
+            <div class="rule-desc">
+              分子量相近時，看誰比較「大隻」<br>
+              鏈越長，接觸面積越大，分散力越強
+            </div>
+          </div>
+        </div>
+        <div class="rule">
+          <div class="rule-icon"><span class="step-num">3</span></div>
+          <div class="rule-content">
+            <div class="rule-title">第三關：看「形狀」（支鏈多寡）</div>
+            <div class="rule-desc">
+              同分異構物時，長條形接觸面積 > 球形<br>
+              <mark>正 > 異 > 新</mark>（沸點）
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <h2>沸點 vs 熔點</h2>
+
+      <table>
+        <tr>
+          <th>比較</th>
+          <th>沸點 (Bp)</th>
+          <th>熔點 (Mp)</th>
+        </tr>
+        <tr>
+          <td>決定因素</td>
+          <td>分散力（接觸面積）</td>
+          <td>晶格堆積（對稱性）</td>
+        </tr>
+        <tr>
+          <td>戊烷排序</td>
+          <td>正 > 異 > 新</td>
+          <td><mark>新 > 正 > 異</mark></td>
+        </tr>
+        <tr>
+          <td>原因</td>
+          <td>長條形接觸多</td>
+          <td>對稱→堆積緊密</td>
+        </tr>
+      </table>
+
+      <div class="exception">
+        <div class="exception-title">⚠️ 熔點魔王：對稱性</div>
+        <p>對稱性越高 → 固體堆積越緊密 → 晶格越穩定 → 熔點越高</p>
+        <p>所以<mark>新戊烷</mark>（球形、對稱）熔點最高！</p>
+      </div>
+
+      <h2>極性 vs 非極性</h2>
+
+      <div class="card">
+        <div class="rule">
+          <div class="rule-icon">⊕⊖</div>
+          <div class="rule-content">
+            <div class="rule-title">分子量相近時，極性分子沸點較高</div>
+            <div class="rule-desc">
+              極性分子 = 分散力 + 偶極-偶極力<br>
+              例：CO（−192°C）> N₂（−196°C）
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <h2>順反異構物</h2>
+
+      <div class="card">
+        <div class="rule">
+          <div class="rule-icon">Bp</div>
+          <div class="rule-content">
+            <div class="rule-title">沸點：順式 > 反式</div>
+            <div class="rule-desc">順式有極性（偶極矩不抵消），多了偶極-偶極力</div>
+          </div>
+        </div>
+        <div class="rule">
+          <div class="rule-icon">Mp</div>
+          <div class="rule-content">
+            <div class="rule-title">熔點：反式 > 順式</div>
+            <div class="rule-desc">反式對稱性高，堆積緊密</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tip">
+        <div class="tip-title">💡 順反二氯乙烯</div>
+        <p><strong>順式</strong>：兩個 Cl 同側，有淨偶極 → 沸點高</p>
+        <p><strong>反式</strong>：兩個 Cl 對側，偶極抵消，但對稱 → 熔點高</p>
+      </div>
+
+      <div class="summary">
+        <div class="summary-title">🎯 背這個就夠</div>
+        <p style="font-size: 15px; line-height: 1.8;">
+          <strong>分散力比較</strong><br>
+          　① 分子量（電子數）→ 大的贏<br>
+          　② 接觸面積（鏈長）→ 長的贏<br>
+          　③ 形狀（支鏈）→ 直鏈贏<br><br>
+          <strong>沸點 vs 熔點</strong><br>
+          　沸點看分散力：正 > 異 > 新<br>
+          　熔點看對稱性：新 > 正 > 異<br><br>
+          <strong>順反異構</strong><br>
+          　沸點：順 > 反（順有極性）<br>
+          　熔點：反 > 順（反較對稱）
+        </p>
+      </div>
+
     </div>
 
     <footer>2026.02.19</footer>
   </div>
 
   <script src="../theme.js"></script>
+  <script>
+    // Tab switching
+    document.querySelectorAll('.tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        // Remove active from all tabs and panels
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+        
+        // Add active to clicked tab and corresponding panel
+        tab.classList.add('active');
+        document.getElementById(tab.dataset.tab).classList.add('active');
+      });
+    });
+  </script>
 </body>
 </html>
