@@ -458,8 +458,8 @@
 </head>
 <body>
   <nav>
-    <a href="focus.html?v=154">← 返回計時器</a>
-    <a href="#" onclick="clearCache()" style="font-size: 12px;">v1.5.4 清除快取</a>
+    <a href="focus.html?v=155">← 返回計時器</a>
+    <a href="#" onclick="clearCache()" style="font-size: 12px;">v1.5.5 清除快取</a>
   </nav>
   <script>
     function clearCache() {
@@ -533,9 +533,42 @@
         <!-- Filled by JS -->
       </div>
     </div>
+
+    <!-- Cloud Sync -->
+    <div class="section">
+      <div class="section-title">雲端同步</div>
+      <div id="cloudSyncSection">
+        <div id="cloudNotConnected" style="display: none;">
+          <input type="password" id="cloudPin" placeholder="輸入 PIN 碼" style="width: 100%; padding: 14px 16px; background: var(--card); border: 1px solid var(--border); border-radius: 12px; color: var(--text); font-size: 14px; margin-bottom: 12px; box-sizing: border-box;">
+          <button onclick="connectCloud()" style="width: 100%; padding: 14px; background: var(--accent); border: none; border-radius: 12px; color: var(--bg); font-size: 14px; cursor: pointer; font-weight: 500;">連接雲端</button>
+        </div>
+        <div id="cloudConnected" style="display: none;">
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; padding: 14px 16px; background: var(--card); border: 1px solid var(--border); border-radius: 12px;">
+            <span style="color: var(--text); font-size: 14px;">✅ 已連接</span>
+            <span id="lastSyncTime" style="color: var(--muted); font-size: 12px;"></span>
+          </div>
+          <div style="display: flex; gap: 12px;">
+            <button onclick="syncFromCloud()" style="flex:1; padding: 14px; background: var(--card); border: 1px solid var(--border); border-radius: 12px; color: var(--text); font-size: 14px; cursor: pointer;">從雲端同步</button>
+            <button onclick="disconnectCloud()" style="flex:1; padding: 14px; background: var(--card); border: 1px solid var(--border); border-radius: 12px; color: #f87171; font-size: 14px; cursor: pointer;">斷開連接</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Data Management -->
+    <div class="section">
+      <div class="section-title">資料管理</div>
+      <div style="display: flex; gap: 12px;">
+        <button onclick="exportData()" style="flex:1; padding: 14px; background: var(--card); border: 1px solid var(--border); border-radius: 12px; color: var(--text); font-size: 14px; cursor: pointer;">匯出</button>
+        <button onclick="document.getElementById('importFile').click()" style="flex:1; padding: 14px; background: var(--card); border: 1px solid var(--border); border-radius: 12px; color: var(--text); font-size: 14px; cursor: pointer;">匯入</button>
+        <input type="file" id="importFile" accept=".json" onchange="importData(event)" style="display:none;">
+      </div>
+    </div>
   </div>
 
   <script>
+    // Cloud sync config
+    const CLOUD_API = 'https://mono-sync.saygmulovesgreen.workers.dev';
     // State
     let currentPeriod = 'day';
     let currentFilter = 'all';
@@ -1065,8 +1098,187 @@
       }
     })();
 
+    // Cloud sync functions
+    function getCloudPin() {
+      return localStorage.getItem('focus_cloud_pin');
+    }
+    
+    function updateCloudUI() {
+      const pin = getCloudPin();
+      const connected = document.getElementById('cloudConnected');
+      const notConnected = document.getElementById('cloudNotConnected');
+      const lastSync = localStorage.getItem('focus_last_sync');
+      
+      if (pin) {
+        connected.style.display = 'block';
+        notConnected.style.display = 'none';
+        if (lastSync) {
+          const date = new Date(parseInt(lastSync));
+          document.getElementById('lastSyncTime').textContent = 
+            `上次同步: ${date.toLocaleDateString()} ${date.toLocaleTimeString()}`;
+        }
+      } else {
+        connected.style.display = 'none';
+        notConnected.style.display = 'block';
+      }
+    }
+    
+    async function connectCloud() {
+      const pin = document.getElementById('cloudPin').value.trim();
+      if (!pin) {
+        alert('請輸入 PIN 碼');
+        return;
+      }
+      
+      try {
+        const res = await fetch(`${CLOUD_API}/sessions`, {
+          headers: { 'X-Pin': pin }
+        });
+        
+        if (res.status === 401) {
+          alert('PIN 碼錯誤');
+          return;
+        }
+        
+        if (!res.ok) throw new Error('連接失敗');
+        
+        localStorage.setItem('focus_cloud_pin', pin);
+        updateCloudUI();
+        await syncToCloud(true);
+        alert('連接成功！已上傳現有紀錄');
+      } catch (err) {
+        alert('連接失敗：' + err.message);
+      }
+    }
+    
+    function disconnectCloud() {
+      if (confirm('確定要斷開雲端連接？\n本機資料不會被刪除')) {
+        localStorage.removeItem('focus_cloud_pin');
+        localStorage.removeItem('focus_last_sync');
+        updateCloudUI();
+      }
+    }
+    
+    async function syncToCloud(all = false) {
+      const pin = getCloudPin();
+      if (!pin) return;
+      
+      try {
+        if (all) {
+          const sessionsWithTimestamp = sessions.map(s => ({
+            ...s,
+            timestamp: s.timestamp || new Date(s.date).getTime()
+          }));
+          
+          await fetch(`${CLOUD_API}/sessions/sync`, {
+            method: 'POST',
+            headers: { 'X-Pin': pin, 'Content-Type': 'application/json' },
+            body: JSON.stringify({ sessions: sessionsWithTimestamp })
+          });
+        }
+        
+        localStorage.setItem('focus_last_sync', Date.now().toString());
+        updateCloudUI();
+      } catch (err) {
+        console.error('Cloud sync failed:', err);
+      }
+    }
+    
+    async function syncFromCloud() {
+      const pin = getCloudPin();
+      if (!pin) return;
+      
+      try {
+        const res = await fetch(`${CLOUD_API}/sessions`, {
+          headers: { 'X-Pin': pin }
+        });
+        
+        if (!res.ok) throw new Error('同步失敗');
+        
+        const data = await res.json();
+        const cloudSessions = data.sessions || [];
+        const localTimestamps = new Set(sessions.map(s => s.timestamp || new Date(s.date).getTime()));
+        const newSessions = cloudSessions.filter(s => !localTimestamps.has(s.timestamp));
+        
+        if (newSessions.length > 0) {
+          newSessions.forEach(s => {
+            sessions.push({
+              subject: s.subject,
+              subjectName: s.subjectName,
+              duration: s.duration,
+              date: s.date,
+              timestamp: s.timestamp
+            });
+          });
+          
+          sessions.sort((a, b) => new Date(b.date) - new Date(a.date));
+          localStorage.setItem('focus_sessions', JSON.stringify(sessions));
+          renderAll();
+          alert(`已從雲端同步 ${newSessions.length} 筆新紀錄`);
+        } else {
+          alert('已是最新狀態');
+        }
+        
+        localStorage.setItem('focus_last_sync', Date.now().toString());
+        updateCloudUI();
+      } catch (err) {
+        alert('同步失敗：' + err.message);
+      }
+    }
+
+    // Export/Import functions
+    function exportData() {
+      const data = {
+        version: '1.5.5',
+        exportedAt: new Date().toISOString(),
+        sessions: sessions,
+        subjects: subjects
+      };
+      
+      const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `mono-backup-${new Date().toISOString().slice(0,10)}.json`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+
+    function importData(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        try {
+          const data = JSON.parse(e.target.result);
+          
+          if (!data.sessions || !Array.isArray(data.sessions)) {
+            alert('無效的備份檔案');
+            return;
+          }
+          
+          if (confirm(`確定要匯入嗎？\n\n將匯入 ${data.sessions.length} 筆紀錄\n\n⚠️ 這會覆蓋現有資料`)) {
+            localStorage.setItem('focus_sessions', JSON.stringify(data.sessions));
+            if (data.subjects) {
+              localStorage.setItem('focus_subjects', JSON.stringify(data.subjects));
+            }
+            alert('匯入成功！');
+            location.reload();
+          }
+        } catch (err) {
+          alert('檔案格式錯誤：' + err.message);
+        }
+      };
+      reader.readAsText(file);
+      event.target.value = '';
+    }
+
     // Init
     init();
+    updateCloudUI();
   </script>
   <script src="../theme-effects.js"></script>
 </body>
