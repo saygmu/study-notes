@@ -203,7 +203,6 @@
     <a href="../">← 返回</a>
     <div class="nav-right">
       <a href="#" onclick="window.print()">列印</a>
-      <a href="#" onclick="toggleTheme()">◐</a>
     </div>
   </nav>
 
@@ -393,13 +392,5 @@
   </div>
 
   <script src="../theme.js"></script>
-  <script>
-    function toggleTheme() {
-      const current = document.documentElement.getAttribute('data-theme');
-      const next = current === 'dark' ? 'light' : 'dark';
-      document.documentElement.setAttribute('data-theme', next);
-      localStorage.setItem('theme', next);
-    }
-  </script>
 </body>
 </html>
