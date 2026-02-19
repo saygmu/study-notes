@@ -296,19 +296,20 @@
 
     .history-delete {
       position: absolute;
-      right: 0;
-      top: 0;
-      bottom: 0;
-      width: 70px;
+      right: 8px;
+      top: 4px;
+      bottom: 4px;
+      width: 66px;
       background: #f87171;
       color: white;
       border: none;
+      border-radius: 10px;
       font-size: 13px;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      transform: translateX(100%);
+      transform: translateX(calc(100% + 8px));
       transition: transform 0.2s ease;
     }
 
@@ -317,7 +318,7 @@
     }
 
     .history-item-wrapper.show-delete .history-item {
-      transform: translateX(-70px);
+      transform: translateX(-78px);
     }
 
     .history-subject {
@@ -458,8 +459,8 @@
 </head>
 <body>
   <nav>
-    <a href="focus.html?v=157">← 返回計時器</a>
-    <a href="#" onclick="clearCache()" style="font-size: 12px;">v1.5.7 清除快取</a>
+    <a href="focus.html?v=158">← 返回計時器</a>
+    <a href="#" onclick="clearCache()" style="font-size: 12px;">v1.5.8 清除快取</a>
   </nav>
   <script>
     function clearCache() {
