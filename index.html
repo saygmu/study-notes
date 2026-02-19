@@ -124,6 +124,15 @@
     </style>
 </head>
 <body>
+    <script>
+      (function() {
+        const themes = {light:'#fefefe',dark:'#0a0a0a',cute:'#fff5f5',space:'#0a0a1a',forest:'#0d1f0d',ocean:'#0a1a2a'};
+        const t = localStorage.getItem('mono_theme') || 'light';
+        const bg = themes[t] || themes.light;
+        const fg = (t==='light'||t==='cute') ? '#2d2d2d' : '#e8e8e8';
+        document.write('<div id="loadingScreen" style="position:fixed;top:0;left:0;right:0;bottom:0;background:'+bg+';display:flex;align-items:center;justify-content:center;z-index:9999;"><svg style="width:80px;height:auto;animation:pulse 1.5s ease-in-out infinite;color:'+fg+'" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 534 608"><style>@keyframes pulse{0%,100%{opacity:.4;transform:scale(.95)}50%{opacity:1;transform:scale(1)}}</style><defs><clipPath id="c"><path d="M20 0h493v493H20z"/></clipPath></defs><g clip-path="url(#c)"><path stroke-linecap="butt" transform="matrix(10.27 0 0 10.27 20.45 0)" fill="none" stroke-linejoin="miter" d="M44 24a20 20 0 11-40 0 20 20 0 0140 0z" stroke="currentColor" stroke-width="1.5"/></g><circle cx="267" cy="246" r="41" fill="currentColor"/></svg></div>');
+      })();
+    </script>
     <div id="theme-glow" style="position:fixed;inset:0;pointer-events:none;z-index:0;"></div>
     <div class="container" style="position:relative;z-index:1;">
         <!-- Logo -->
@@ -195,11 +204,13 @@
     <script src="theme.js"></script>
     <script src="theme-effects.js"></script>
     <script>
+        // Hide loading screen
+        setTimeout(() => {
+            const l = document.getElementById('loadingScreen');
+            if (l) { l.style.transition = 'opacity 0.4s'; l.style.opacity = '0'; setTimeout(() => l.remove(), 400); }
+        }, 300);
+        
         // Disabled SW for now - was causing cache issues
-        // if ('serviceWorker' in navigator) {
-        //     navigator.serviceWorker.register('sw.js');
-        // }
-        // Instead, clear any existing SW
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.getRegistrations().then(r => r.forEach(x => x.unregister()));
         }
