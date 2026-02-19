@@ -453,7 +453,7 @@
 <body>
   <nav>
     <a href="focus.html">← 返回計時器</a>
-    <a href="#" onclick="clearCache()" style="font-size: 12px;">v1.4.4 清除快取</a>
+    <a href="#" onclick="clearCache()" style="font-size: 12px;">v1.4.5 清除快取</a>
   </nav>
   <script>
     function clearCache() {
@@ -1004,6 +1004,8 @@
       currentWrapper = null;
     }
 
+    let deleteTimeout = null;
+    
     function toggleDelete(idx) {
       const wrapper = document.querySelector(`.history-item-wrapper[data-idx="${idx}"]`);
       if (!wrapper) return;
@@ -1013,7 +1015,18 @@
         if (el !== wrapper) el.classList.remove('show-delete');
       });
       
-      wrapper.classList.toggle('show-delete');
+      const isOpen = wrapper.classList.contains('show-delete');
+      
+      if (isOpen) {
+        wrapper.classList.remove('show-delete');
+      } else {
+        wrapper.classList.add('show-delete');
+        // Auto close after 3 seconds
+        clearTimeout(deleteTimeout);
+        deleteTimeout = setTimeout(() => {
+          wrapper.classList.remove('show-delete');
+        }, 3000);
+      }
     }
 
     function deleteSession(idx) {
@@ -1024,6 +1037,15 @@
       localStorage.setItem('focus_sessions', JSON.stringify(sessions));
       renderAll();
     }
+
+    // Close delete on click outside
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('.history-item-wrapper')) {
+        document.querySelectorAll('.history-item-wrapper.show-delete').forEach(el => {
+          el.classList.remove('show-delete');
+        });
+      }
+    });
 
     // Init
     init();
