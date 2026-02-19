@@ -25,8 +25,8 @@
       --border: #333;
       --card: #242424;
       --mark: #4a4000;
-      --tab-bg: #2a2a2a;
-      --tab-active: #3a3a3a;
+      --tab-bg: #252525;
+      --tab-active: #333;
     }
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
@@ -100,7 +100,6 @@
       background: var(--tab-active);
       color: var(--text);
       font-weight: 500;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
     }
     .tab-panel {
       display: none;
@@ -275,8 +274,7 @@
     @media (max-width: 600px) {
       h1 { font-size: 1.75rem; }
       .summary-grid { grid-template-columns: 1fr; }
-      .tabs { flex-direction: column; }
-      .tab { text-align: center; }
+      .tab { padding: 10px 8px; font-size: 13px; }
     }
   </style>
 </head>
