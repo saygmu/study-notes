@@ -424,7 +424,7 @@
   </div>
 
   <div class="quote" id="quote"></div>
-  <div style="position:fixed;bottom:8px;left:12px;font-size:11px;color:var(--muted);opacity:0.5;z-index:1000;">v1.1.2</div>
+  <div style="position:fixed;bottom:8px;left:12px;font-size:11px;color:var(--muted);opacity:0.5;z-index:1000;">v1.2.0</div>
 
   <div class="overlay" id="overlay" onclick="toggleStats()"></div>
   
@@ -490,9 +490,88 @@
       loadStats();
       showRandomQuote();
       updateStreak();
+      restoreTimerState(); // Restore timer if it was running
       
       // Change quote every 5 minutes
       setInterval(showRandomQuote, 300000);
+    }
+
+    // Persist timer state to localStorage
+    function saveTimerState() {
+      if (isRunning && sessionStart && currentSubject) {
+        localStorage.setItem('focus_timer_state', JSON.stringify({
+          sessionStart: sessionStart,
+          subjectId: currentSubject.id,
+          savedAt: Date.now()
+        }));
+      }
+    }
+
+    function clearTimerState() {
+      localStorage.removeItem('focus_timer_state');
+    }
+
+    function restoreTimerState() {
+      const saved = localStorage.getItem('focus_timer_state');
+      if (!saved) return;
+
+      try {
+        const state = JSON.parse(saved);
+        const subject = subjects.find(s => s.id === state.subjectId);
+        
+        if (!subject) {
+          clearTimerState();
+          return;
+        }
+
+        // Calculate elapsed time since start
+        const elapsed = Math.floor((Date.now() - state.sessionStart) / 1000);
+        
+        // Safety check: if more than 24 hours, probably stale
+        if (elapsed > 86400) {
+          clearTimerState();
+          return;
+        }
+
+        // Restore state
+        currentSubject = subject;
+        sessionStart = state.sessionStart;
+        seconds = elapsed;
+
+        // Update UI to show selected subject
+        document.querySelectorAll('.subject-btn').forEach(btn => {
+          btn.classList.toggle('active', btn.dataset.id === subject.id);
+        });
+        document.documentElement.style.setProperty('--accent', subject.color);
+        document.documentElement.style.setProperty('--accent-dim', subject.color + '22');
+
+        // Resume timer
+        isRunning = true;
+        const btn = document.getElementById('mainBtn');
+        btn.textContent = '停止';
+        btn.classList.add('running');
+        
+        document.getElementById('glow').classList.add('active');
+        document.getElementById('sessionInfo').innerHTML = `
+          正在專注 <span>${currentSubject.name}</span>
+        `;
+
+        updateDisplay();
+
+        interval = setInterval(() => {
+          seconds++;
+          updateDisplay();
+          // Periodically save state (every 30 seconds)
+          if (seconds % 30 === 0) saveTimerState();
+        }, 1000);
+
+        // Prevent screen sleep
+        if ('wakeLock' in navigator) {
+          navigator.wakeLock.request('screen').catch(() => {});
+        }
+      } catch (e) {
+        clearTimerState();
+      }
     }
 
     function renderSubjects() {
@@ -588,9 +667,14 @@
         正在專注 <span>${currentSubject.name}</span>
       `;
 
+      // Save timer state immediately
+      saveTimerState();
+
       interval = setInterval(() => {
         seconds++;
         updateDisplay();
+        // Periodically save state (every 30 seconds)
+        if (seconds % 30 === 0) saveTimerState();
       }, 1000);
 
       // Prevent screen sleep
@@ -602,6 +686,9 @@
     function stopTimer() {
       isRunning = false;
       clearInterval(interval);
+      
+      // Clear persisted timer state
+      clearTimerState();
       
       const btn = document.getElementById('mainBtn');
       btn.textContent = '開始';
@@ -623,6 +710,8 @@
       if (isRunning) {
         stopTimer();
       }
+      // Clear persisted state on reset
+      clearTimerState();
       seconds = 0;
       updateDisplay();
       
@@ -875,6 +964,18 @@
       }
     `;
     document.head.appendChild(style);
+
+    // Save state when page is being closed
+    window.addEventListener('beforeunload', () => {
+      if (isRunning) saveTimerState();
+    });
+
+    // Also save on visibility change (when switching apps on mobile)
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden && isRunning) {
+        saveTimerState();
+      }
+    });
 
     // Initialize on load
     init();
