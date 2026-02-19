@@ -1,4 +1,4 @@
-const CACHE_NAME = 'mono-v3';
+const CACHE_NAME = 'mono-v4';
 
 // Minimal caching - only for offline fallback
 self.addEventListener('install', event => {
