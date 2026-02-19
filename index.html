@@ -192,8 +192,16 @@
     <script src="theme.js"></script>
     <script src="theme-effects.js"></script>
     <script>
+        // Disabled SW for now - was causing cache issues
+        // if ('serviceWorker' in navigator) {
+        //     navigator.serviceWorker.register('sw.js');
+        // }
+        // Instead, clear any existing SW
         if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('sw.js');
+            navigator.serviceWorker.getRegistrations().then(r => r.forEach(x => x.unregister()));
+        }
+        if ('caches' in window) {
+            caches.keys().then(n => n.forEach(k => caches.delete(k)));
         }
     </script>
 </body>
