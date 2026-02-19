@@ -235,7 +235,7 @@ function openThemeModal() {
         font-size: 14px;
         cursor: pointer;
         font-family: inherit;
-      ">🔄 強制更新</button>
+      ">強制更新</button>
     </div>
   `;
   
