@@ -424,7 +424,7 @@
   </div>
 
   <div class="quote" id="quote"></div>
-  <div style="position:fixed;bottom:8px;left:12px;font-size:11px;color:var(--muted);opacity:0.5;z-index:1000;">v1.4.5 · <a href="#" onclick="clearCache()" style="color:inherit;">清除快取</a></div>
+  <div style="position:fixed;bottom:8px;left:12px;font-size:11px;color:var(--muted);opacity:0.5;z-index:1000;">v1.4.6 · <a href="#" onclick="clearCache()" style="color:inherit;">清除快取</a></div>
   <script>
     function clearCache() {
       if(confirm('清除快取並重新載入？')) {
@@ -934,7 +934,9 @@
 
     // Swipe to delete
     let touchStartX = 0;
+    let touchStartY = 0;
     let currentWrapper = null;
+    let isHorizontalSwipe = null;
 
     function handleTouchStart(e) {
       // Close any other open delete buttons
@@ -943,22 +945,35 @@
       });
       
       touchStartX = e.touches[0].clientX;
+      touchStartY = e.touches[0].clientY;
       currentWrapper = e.currentTarget.parentElement;
+      isHorizontalSwipe = null;
     }
 
     function handleTouchMove(e) {
       if (!currentWrapper) return;
-      const diff = touchStartX - e.touches[0].clientX;
       
-      if (diff > 50) {
+      const diffX = touchStartX - e.touches[0].clientX;
+      const diffY = Math.abs(touchStartY - e.touches[0].clientY);
+      
+      // Determine swipe direction on first significant move
+      if (isHorizontalSwipe === null && (Math.abs(diffX) > 10 || diffY > 10)) {
+        isHorizontalSwipe = Math.abs(diffX) > diffY * 1.5;
+      }
+      
+      // Only handle horizontal swipes
+      if (!isHorizontalSwipe) return;
+      
+      if (diffX > 80) {
         currentWrapper.classList.add('show-delete');
-      } else if (diff < -30) {
+      } else if (diffX < -30) {
         currentWrapper.classList.remove('show-delete');
       }
     }
 
     function handleTouchEnd(e) {
       currentWrapper = null;
+      isHorizontalSwipe = null;
     }
 
     function deleteSession(index) {
