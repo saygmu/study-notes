@@ -1,4 +1,26 @@
 // MONO Theme System
+// Apply saved theme immediately (before DOMContentLoaded) to prevent flash
+(function() {
+  const saved = localStorage.getItem('mono_theme') || 'light';
+  const themes = {
+    light: { bg: '#fefefe', card: '#ffffff', text: '#2d2d2d', muted: '#888', accent: '#2d2d2d', border: '#e8e8e8', highlight: '#fff3cd' },
+    dark: { bg: '#0a0a0a', card: '#141414', text: '#e8e8e8', muted: '#666', accent: '#e8e8e8', border: '#222', highlight: '#3d3d00' },
+    cute: { bg: '#fff5f5', card: '#ffffff', text: '#5c4d4d', muted: '#b8a0a0', accent: '#f472b6', border: '#fecdd3', highlight: '#fce7f3' },
+    space: { bg: '#0f0f23', card: '#1a1a35', text: '#e0e0ff', muted: '#7777aa', accent: '#a78bfa', border: '#2a2a4a', highlight: '#2e1a47' },
+    forest: { bg: '#0d1f0d', card: '#142814', text: '#d4e8d4', muted: '#6a8a6a', accent: '#4ade80', border: '#1f3d1f', highlight: '#1a3d1a' },
+    ocean: { bg: '#0c1929', card: '#0f2238', text: '#d4e8f4', muted: '#6a9ab8', accent: '#38bdf8', border: '#1a3a5a', highlight: '#0a2a4a' }
+  };
+  const t = themes[saved] || themes.light;
+  const r = document.documentElement;
+  r.style.setProperty('--bg', t.bg);
+  r.style.setProperty('--card', t.card);
+  r.style.setProperty('--text', t.text);
+  r.style.setProperty('--muted', t.muted);
+  r.style.setProperty('--accent', t.accent);
+  r.style.setProperty('--border', t.border);
+  r.style.setProperty('--highlight', t.highlight);
+})();
+
 const THEMES = {
   light: {
     name: '極簡白',
