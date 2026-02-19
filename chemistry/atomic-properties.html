@@ -22,10 +22,10 @@
       --text: #e8e8e8;
       --muted: #888;
       --accent: #ccc;
-      --border: #2a2a2a;
-      --card: #1f1f1f;
+      --border: #333;
+      --card: #242424;
       --mark: #4a4000;
-      --tab-bg: #1f1f1f;
+      --tab-bg: transparent;
       --tab-active: #2a2a2a;
     }
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -75,6 +75,7 @@
     .tabs {
       display: flex;
       background: var(--tab-bg);
+      border: 1px solid var(--border);
       border-radius: 12px;
       padding: 4px;
       margin-bottom: 32px;
