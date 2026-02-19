@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <script src="./theme.js"></script>
+  <!-- 如果在子資料夾，改成 src="../theme.js" -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>【標題】</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500&family=Noto+Serif+TC:wght@600&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body {
+      font-family: 'Noto Sans TC', sans-serif;
+      font-weight: 300;
+      font-size: 16px;
+      line-height: 2;
+      color: var(--text);
+      background: var(--bg);
+    }
+
+    /* === 導航列 === */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+      padding: 12px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 100;
+    }
+    nav a { color: var(--muted); text-decoration: none; font-size: 14px; }
+    nav a:hover { color: var(--text); }
+    .nav-actions { display: flex; gap: 16px; }
+    .nav-actions button {
+      background: none;
+      border: none;
+      color: var(--muted);
+      cursor: pointer;
+      font-size: 14px;
+    }
+    .nav-actions button:hover { color: var(--text); }
+
+    /* === 主容器 === */
+    .container {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 80px 24px 60px;
+    }
+
+    /* === 標題 === */
+    h1 {
+      font-family: 'Noto Serif TC', serif;
+      font-weight: 600;
+      font-size: 2rem;
+      margin-bottom: 8px;
+      letter-spacing: 1px;
+    }
+    .subtitle {
+      color: var(--muted);
+      font-size: 14px;
+      margin-bottom: 48px;
+    }
+    h2 {
+      font-family: 'Noto Serif TC', serif;
+      font-weight: 600;
+      font-size: 1.25rem;
+      margin: 48px 0 24px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    /* === 卡片/區塊 === */
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+      margin: 24px 0;
+    }
+
+    /* === 公式框 === */
+    .formula {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 24px;
+      margin: 24px 0;
+      text-align: center;
+      font-family: 'Times New Roman', serif;
+      font-size: 1.3rem;
+    }
+    .formula-note {
+      font-size: 0.85rem;
+      color: var(--muted);
+      margin-top: 12px;
+      font-family: 'Noto Sans TC', sans-serif;
+    }
+
+    /* === 筆記/提示框 === */
+    .note {
+      border-left: 3px solid var(--accent);
+      padding: 16px 20px;
+      margin: 24px 0;
+      background: var(--card);
+    }
+    .note strong {
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    /* === 螢光筆 (用 <mark>) === */
+    /* 已由 theme.js 自動注入樣式 */
+
+    /* === 表格 === */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 24px 0;
+    }
+    th, td {
+      padding: 12px 16px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+    th {
+      color: var(--muted);
+      font-size: 0.85rem;
+      font-weight: 400;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    /* === 列表 === */
+    ul, ol {
+      margin: 16px 0;
+      padding-left: 24px;
+    }
+    li { margin: 8px 0; }
+
+    /* === 頁尾 === */
+    footer {
+      margin-top: 64px;
+      padding-top: 24px;
+      border-top: 1px solid var(--border);
+      text-align: center;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    /* === 列印 === */
+    @media print {
+      nav { display: none; }
+      .container { padding-top: 0; }
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="../">← 返回</a>
+    <div class="nav-actions">
+      <button onclick="window.print()">列印</button>
+    </div>
+  </nav>
+
+  <div class="container">
+    <h1>標題</h1>
+    <div class="subtitle">副標題 · 日期</div>
+
+    <h2>第一節</h2>
+    <p>內文段落。可以用 <mark>螢光筆標記重點</mark>。</p>
+
+    <div class="formula">
+      公式放這裡
+      <div class="formula-note">公式說明</div>
+    </div>
+
+    <div class="note">
+      <strong>💡 提示</strong>
+      這是提示框，左邊會有主題色的線。
+    </div>
+
+    <div class="card">
+      這是卡片區塊，適合放例題或重點整理。
+    </div>
+
+    <h2>第二節</h2>
+    <p>更多內容...</p>
+
+    <table>
+      <tr>
+        <th>欄位A</th>
+        <th>欄位B</th>
+      </tr>
+      <tr>
+        <td>資料1</td>
+        <td>資料2</td>
+      </tr>
+    </table>
+
+    <footer>2026.02.19</footer>
+  </div>
+
+  <script src="./theme.js"></script>
+  <!-- 如果在子資料夾，改成 src="../theme.js" -->
+  <script src="./theme-effects.js"></script>
+</body>
+</html>
