@@ -425,7 +425,7 @@
   </div>
 
   <div class="quote" id="quote"></div>
-  <div style="position:fixed;bottom:8px;left:12px;font-size:11px;color:var(--muted);opacity:0.5;z-index:1000;">v1.4.8 · <a href="#" onclick="clearCache()" style="color:inherit;">清除快取</a></div>
+  <div style="position:fixed;bottom:8px;left:12px;font-size:11px;color:var(--muted);opacity:0.5;z-index:1000;">v1.5.0 · <a href="#" onclick="clearCache()" style="color:inherit;">清除快取</a></div>
   <script>
     function clearCache() {
       if(confirm('清除快取並重新載入？')) {
@@ -457,6 +457,24 @@
     <div class="stats-title" style="margin-top: 32px;">最近記錄</div>
     <div id="history"></div>
     
+    <div class="stats-title" style="margin-top: 32px;">雲端同步</div>
+    <div id="cloudSyncSection">
+      <div id="cloudNotConnected" style="display: none;">
+        <input type="password" id="cloudPin" placeholder="輸入 PIN 碼" style="width: 100%; padding: 12px; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-size: 14px; margin-bottom: 12px; box-sizing: border-box;">
+        <button onclick="connectCloud()" style="width: 100%; padding: 12px; background: var(--accent); border: none; border-radius: 8px; color: var(--bg); font-size: 14px; cursor: pointer;">連接雲端</button>
+      </div>
+      <div id="cloudConnected" style="display: none;">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
+          <span style="color: var(--text); font-size: 14px;">✅ 已連接</span>
+          <span id="lastSyncTime" style="color: var(--muted); font-size: 12px;"></span>
+        </div>
+        <div style="display: flex; gap: 12px;">
+          <button onclick="syncFromCloud()" style="flex:1; padding: 12px; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-size: 14px; cursor: pointer;">從雲端同步</button>
+          <button onclick="disconnectCloud()" style="flex:1; padding: 12px; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; color: #f87171; font-size: 14px; cursor: pointer;">斷開連接</button>
+        </div>
+      </div>
+    </div>
+    
     <div class="stats-title" style="margin-top: 32px;">資料管理</div>
     <div style="display: flex; gap: 12px;">
       <button onclick="exportData()" style="flex:1; padding: 12px; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-size: 14px; cursor: pointer;">匯出</button>
@@ -466,6 +484,9 @@
   </div>
 
   <script>
+    // Cloud sync config
+    const CLOUD_API = 'https://mono-sync.saygmulovesgreen.workers.dev';
+    
     // State
     let currentSubject = null;
     let isRunning = false;
@@ -507,6 +528,7 @@
       loadStats();
       showRandomQuote();
       updateStreak();
+      updateCloudUI();
       restoreTimerState(); // Restore timer if it was running
       
       // Change quote every 5 minutes
@@ -777,11 +799,13 @@
 
     function saveSession() {
       const sessions = JSON.parse(localStorage.getItem('focus_sessions') || '[]');
+      const now = new Date();
       sessions.unshift({
         subject: currentSubject.id,
         subjectName: currentSubject.name,
         duration: seconds,
-        date: new Date().toISOString()
+        date: now.toISOString(),
+        timestamp: now.getTime()
       });
       
       // Keep last 100 sessions
@@ -790,6 +814,9 @@
       localStorage.setItem('focus_sessions', JSON.stringify(sessions));
       loadStats();
       updateStreak();
+      
+      // Sync to cloud if connected
+      syncToCloud(false);
     }
 
     function loadStats() {
@@ -1021,10 +1048,165 @@
       }
     });
 
+    // Cloud sync functions
+    function getCloudPin() {
+      return localStorage.getItem('focus_cloud_pin');
+    }
+    
+    function updateCloudUI() {
+      const pin = getCloudPin();
+      const connected = document.getElementById('cloudConnected');
+      const notConnected = document.getElementById('cloudNotConnected');
+      const lastSync = localStorage.getItem('focus_last_sync');
+      
+      if (pin) {
+        connected.style.display = 'block';
+        notConnected.style.display = 'none';
+        if (lastSync) {
+          const date = new Date(parseInt(lastSync));
+          document.getElementById('lastSyncTime').textContent = 
+            `上次同步: ${date.toLocaleDateString()} ${date.toLocaleTimeString()}`;
+        }
+      } else {
+        connected.style.display = 'none';
+        notConnected.style.display = 'block';
+      }
+    }
+    
+    async function connectCloud() {
+      const pin = document.getElementById('cloudPin').value.trim();
+      if (!pin) {
+        alert('請輸入 PIN 碼');
+        return;
+      }
+      
+      try {
+        // Test connection
+        const res = await fetch(`${CLOUD_API}/sessions`, {
+          headers: { 'X-Pin': pin }
+        });
+        
+        if (res.status === 401) {
+          alert('PIN 碼錯誤');
+          return;
+        }
+        
+        if (!res.ok) throw new Error('連接失敗');
+        
+        // Save PIN and sync existing data
+        localStorage.setItem('focus_cloud_pin', pin);
+        updateCloudUI();
+        
+        // Upload existing sessions
+        await syncToCloud(true);
+        
+        alert('連接成功！已上傳現有紀錄');
+      } catch (err) {
+        alert('連接失敗：' + err.message);
+      }
+    }
+    
+    function disconnectCloud() {
+      if (confirm('確定要斷開雲端連接？\n本機資料不會被刪除')) {
+        localStorage.removeItem('focus_cloud_pin');
+        localStorage.removeItem('focus_last_sync');
+        updateCloudUI();
+      }
+    }
+    
+    async function syncToCloud(all = false) {
+      const pin = getCloudPin();
+      if (!pin) return;
+      
+      try {
+        const sessions = JSON.parse(localStorage.getItem('focus_sessions') || '[]');
+        
+        if (all) {
+          // Sync all sessions (for initial upload)
+          const sessionsWithTimestamp = sessions.map(s => ({
+            ...s,
+            timestamp: s.timestamp || new Date(s.date).getTime()
+          }));
+          
+          await fetch(`${CLOUD_API}/sessions/sync`, {
+            method: 'POST',
+            headers: { 'X-Pin': pin, 'Content-Type': 'application/json' },
+            body: JSON.stringify({ sessions: sessionsWithTimestamp })
+          });
+        } else {
+          // Sync just the latest session
+          const latest = sessions[0];
+          if (latest) {
+            await fetch(`${CLOUD_API}/sessions`, {
+              method: 'POST',
+              headers: { 'X-Pin': pin, 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                ...latest,
+                timestamp: latest.timestamp || new Date(latest.date).getTime()
+              })
+            });
+          }
+        }
+        
+        localStorage.setItem('focus_last_sync', Date.now().toString());
+        updateCloudUI();
+      } catch (err) {
+        console.error('Cloud sync failed:', err);
+      }
+    }
+    
+    async function syncFromCloud() {
+      const pin = getCloudPin();
+      if (!pin) return;
+      
+      try {
+        const res = await fetch(`${CLOUD_API}/sessions`, {
+          headers: { 'X-Pin': pin }
+        });
+        
+        if (!res.ok) throw new Error('同步失敗');
+        
+        const data = await res.json();
+        const cloudSessions = data.sessions || [];
+        const localSessions = JSON.parse(localStorage.getItem('focus_sessions') || '[]');
+        
+        // Merge: use timestamp to avoid duplicates
+        const localTimestamps = new Set(localSessions.map(s => s.timestamp || new Date(s.date).getTime()));
+        const newSessions = cloudSessions.filter(s => !localTimestamps.has(s.timestamp));
+        
+        if (newSessions.length > 0) {
+          const merged = [...localSessions];
+          newSessions.forEach(s => {
+            merged.push({
+              subject: s.subject,
+              subjectName: s.subjectName,
+              duration: s.duration,
+              date: s.date,
+              timestamp: s.timestamp
+            });
+          });
+          
+          // Sort by date descending
+          merged.sort((a, b) => new Date(b.date) - new Date(a.date));
+          
+          localStorage.setItem('focus_sessions', JSON.stringify(merged));
+          loadStats();
+          alert(`已從雲端同步 ${newSessions.length} 筆新紀錄`);
+        } else {
+          alert('已是最新狀態');
+        }
+        
+        localStorage.setItem('focus_last_sync', Date.now().toString());
+        updateCloudUI();
+      } catch (err) {
+        alert('同步失敗：' + err.message);
+      }
+    }
+
     // Export data as JSON file
     function exportData() {
       const data = {
-        version: '1.4.8',
+        version: '1.5.0',
         exportedAt: new Date().toISOString(),
         sessions: JSON.parse(localStorage.getItem('focus_sessions') || '[]'),
         subjects: JSON.parse(localStorage.getItem('focus_subjects') || '[]'),
