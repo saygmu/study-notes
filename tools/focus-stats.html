@@ -1,0 +1,927 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <script src="../theme.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>統計 - MONO</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body {
+      font-family: 'Noto Sans TC', sans-serif;
+      font-weight: 300;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      line-height: 1.6;
+    }
+
+    /* Navigation */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      padding: 16px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 100;
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+    }
+
+    nav a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 14px;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 70px 20px 40px;
+    }
+
+    /* Tabs */
+    .tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 24px;
+      background: var(--card);
+      padding: 4px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+    }
+
+    .tab {
+      flex: 1;
+      padding: 10px 16px;
+      border: none;
+      background: transparent;
+      color: var(--muted);
+      font-size: 14px;
+      font-family: inherit;
+      cursor: pointer;
+      border-radius: 8px;
+      transition: all 0.2s;
+    }
+
+    .tab.active {
+      background: var(--bg);
+      color: var(--text);
+      font-weight: 400;
+    }
+
+    /* Stats Grid */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .stat-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+    }
+
+    .stat-card.wide {
+      grid-column: span 2;
+    }
+
+    .stat-value {
+      font-family: 'Space Mono', monospace;
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .stat-value.small {
+      font-size: 1.25rem;
+    }
+
+    .stat-label {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+
+    .stat-change {
+      font-size: 12px;
+      margin-top: 4px;
+    }
+
+    .stat-change.up { color: #4ade80; }
+    .stat-change.down { color: #f87171; }
+
+    /* Section */
+    .section {
+      margin-bottom: 32px;
+    }
+
+    .section-title {
+      font-size: 12px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 16px;
+    }
+
+    /* Bar Chart */
+    .bar-chart {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+    }
+
+    .bar-chart-container {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      height: 150px;
+      gap: 8px;
+    }
+
+    .bar-wrapper {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      height: 100%;
+    }
+
+    .bar {
+      width: 100%;
+      max-width: 40px;
+      background: var(--accent);
+      border-radius: 4px 4px 0 0;
+      transition: height 0.3s ease;
+      position: relative;
+      cursor: pointer;
+    }
+
+    .bar:hover {
+      opacity: 0.8;
+    }
+
+    .bar-tooltip {
+      position: absolute;
+      bottom: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--text);
+      color: var(--bg);
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 11px;
+      white-space: nowrap;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s;
+    }
+
+    .bar:hover .bar-tooltip {
+      opacity: 1;
+    }
+
+    .bar-label {
+      margin-top: 8px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .bar-label.today {
+      color: var(--text);
+      font-weight: 500;
+    }
+
+    /* Donut Chart */
+    .donut-container {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+    }
+
+    .donut-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .donut-chart {
+      width: 120px;
+      height: 120px;
+      flex-shrink: 0;
+    }
+
+    .donut-legend {
+      flex: 1;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 6px 0;
+      font-size: 13px;
+    }
+
+    .legend-color {
+      width: 10px;
+      height: 10px;
+      border-radius: 2px;
+      margin-right: 8px;
+    }
+
+    .legend-name {
+      flex: 1;
+      display: flex;
+      align-items: center;
+    }
+
+    .legend-value {
+      color: var(--muted);
+      font-family: 'Space Mono', monospace;
+      font-size: 12px;
+    }
+
+    /* History */
+    .history-list {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .history-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--border);
+      font-size: 14px;
+    }
+
+    .history-item:last-child {
+      border-bottom: none;
+    }
+
+    .history-subject {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .history-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+    }
+
+    .history-meta {
+      text-align: right;
+    }
+
+    .history-duration {
+      font-family: 'Space Mono', monospace;
+    }
+
+    .history-date {
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    /* Heat Map */
+    .heatmap-container {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      overflow-x: auto;
+    }
+
+    .heatmap {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 4px;
+      min-width: 280px;
+    }
+
+    .heatmap-day {
+      aspect-ratio: 1;
+      border-radius: 3px;
+      background: var(--border);
+      cursor: pointer;
+      position: relative;
+    }
+
+    .heatmap-day.level-1 { background: rgba(74, 222, 128, 0.25); }
+    .heatmap-day.level-2 { background: rgba(74, 222, 128, 0.5); }
+    .heatmap-day.level-3 { background: rgba(74, 222, 128, 0.75); }
+    .heatmap-day.level-4 { background: rgba(74, 222, 128, 1); }
+
+    .heatmap-header {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 4px;
+      margin-bottom: 8px;
+      text-align: center;
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .heatmap-tooltip {
+      position: absolute;
+      bottom: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--text);
+      color: var(--bg);
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 11px;
+      white-space: nowrap;
+      opacity: 0;
+      pointer-events: none;
+      z-index: 10;
+    }
+
+    .heatmap-day:hover .heatmap-tooltip {
+      opacity: 1;
+    }
+
+    /* Empty State */
+    .empty {
+      text-align: center;
+      padding: 40px 20px;
+      color: var(--muted);
+    }
+
+    .empty-icon {
+      font-size: 48px;
+      margin-bottom: 16px;
+      opacity: 0.5;
+    }
+
+    /* Filter */
+    .filter-bar {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+
+    .filter-btn {
+      padding: 6px 12px;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      background: transparent;
+      color: var(--muted);
+      font-size: 12px;
+      font-family: inherit;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .filter-btn.active {
+      border-color: currentColor;
+      background: var(--accent);
+      color: var(--bg);
+    }
+
+    @media (max-width: 400px) {
+      .donut-wrapper {
+        flex-direction: column;
+      }
+      .stats-grid {
+        grid-template-columns: 1fr;
+      }
+      .stat-card.wide {
+        grid-column: span 1;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="focus.html">← 返回計時器</a>
+  </nav>
+
+  <div class="container">
+    <!-- Tabs -->
+    <div class="tabs">
+      <button class="tab active" data-period="day" onclick="switchPeriod('day')">今日</button>
+      <button class="tab" data-period="week" onclick="switchPeriod('week')">本週</button>
+      <button class="tab" data-period="month" onclick="switchPeriod('month')">本月</button>
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="stats-grid" id="statsGrid">
+      <!-- Filled by JS -->
+    </div>
+
+    <!-- Bar Chart -->
+    <div class="section">
+      <div class="section-title">每日專注時數</div>
+      <div class="bar-chart">
+        <div class="bar-chart-container" id="barChart">
+          <!-- Filled by JS -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Subject Distribution -->
+    <div class="section">
+      <div class="section-title">科目分布</div>
+      <div class="donut-container">
+        <div class="donut-wrapper">
+          <svg class="donut-chart" viewBox="0 0 100 100" id="donutChart">
+            <!-- Filled by JS -->
+          </svg>
+          <div class="donut-legend" id="donutLegend">
+            <!-- Filled by JS -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Heat Map (Month view) -->
+    <div class="section" id="heatmapSection" style="display: none;">
+      <div class="section-title">活動熱力圖</div>
+      <div class="heatmap-container">
+        <div class="heatmap-header">
+          <span>日</span><span>一</span><span>二</span><span>三</span><span>四</span><span>五</span><span>六</span>
+        </div>
+        <div class="heatmap" id="heatmap">
+          <!-- Filled by JS -->
+        </div>
+      </div>
+    </div>
+
+    <!-- History -->
+    <div class="section">
+      <div class="section-title">最近記錄</div>
+      <div class="filter-bar" id="filterBar">
+        <button class="filter-btn active" data-subject="all" onclick="filterSubject('all')">全部</button>
+        <!-- Subject filters filled by JS -->
+      </div>
+      <div class="history-list" id="historyList">
+        <!-- Filled by JS -->
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // State
+    let currentPeriod = 'day';
+    let currentFilter = 'all';
+    let sessions = [];
+    let subjects = [];
+
+    // Default subjects
+    const defaultSubjects = [
+      { id: 'physics', name: '物理', color: '#60a5fa' },
+      { id: 'math', name: '數學', color: '#f472b6' },
+      { id: 'chemistry', name: '化學', color: '#4ade80' },
+      { id: 'yinhang', name: '引航化學', color: '#facc15' }
+    ];
+
+    // Initialize
+    function init() {
+      sessions = JSON.parse(localStorage.getItem('focus_sessions') || '[]');
+      subjects = JSON.parse(localStorage.getItem('focus_subjects')) || defaultSubjects;
+      renderAll();
+    }
+
+    function switchPeriod(period) {
+      currentPeriod = period;
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      document.querySelector(`.tab[data-period="${period}"]`).classList.add('active');
+      
+      // Show/hide heatmap for month view
+      document.getElementById('heatmapSection').style.display = period === 'month' ? 'block' : 'none';
+      
+      renderAll();
+    }
+
+    function filterSubject(subjectId) {
+      currentFilter = subjectId;
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      document.querySelector(`.filter-btn[data-subject="${subjectId}"]`).classList.add('active');
+      renderHistory();
+    }
+
+    function renderAll() {
+      renderStats();
+      renderBarChart();
+      renderDonutChart();
+      renderFilters();
+      renderHistory();
+      if (currentPeriod === 'month') {
+        renderHeatmap();
+      }
+    }
+
+    function getDateRange() {
+      const now = new Date();
+      const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+      
+      if (currentPeriod === 'day') {
+        return { start: todayStart, end: now, prevStart: new Date(todayStart - 86400000), prevEnd: todayStart };
+      } else if (currentPeriod === 'week') {
+        const weekStart = new Date(todayStart - (now.getDay() * 86400000));
+        const prevWeekStart = new Date(weekStart - 7 * 86400000);
+        return { start: weekStart, end: now, prevStart: prevWeekStart, prevEnd: weekStart };
+      } else {
+        const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
+        const prevMonthStart = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+        return { start: monthStart, end: now, prevStart: prevMonthStart, prevEnd: monthStart };
+      }
+    }
+
+    function getSessionsInRange(start, end) {
+      return sessions.filter(s => {
+        const d = new Date(s.date);
+        return d >= start && d < end;
+      });
+    }
+
+    function renderStats() {
+      const range = getDateRange();
+      const current = getSessionsInRange(range.start, range.end);
+      const previous = getSessionsInRange(range.prevStart, range.prevEnd);
+
+      const totalCurrent = current.reduce((sum, s) => sum + s.duration, 0);
+      const totalPrevious = previous.reduce((sum, s) => sum + s.duration, 0);
+      
+      const avgSession = current.length > 0 ? Math.round(totalCurrent / current.length) : 0;
+      const streak = calculateStreak();
+      const peakHour = calculatePeakHour(current);
+      const topSubject = getTopSubject(current);
+
+      const change = totalPrevious > 0 ? Math.round((totalCurrent - totalPrevious) / totalPrevious * 100) : 0;
+      const changeClass = change >= 0 ? 'up' : 'down';
+      const changeText = change >= 0 ? `+${change}%` : `${change}%`;
+
+      const periodLabel = { day: '今日', week: '本週', month: '本月' }[currentPeriod];
+      const prevLabel = { day: '昨日', week: '上週', month: '上月' }[currentPeriod];
+
+      document.getElementById('statsGrid').innerHTML = `
+        <div class="stat-card wide">
+          <div class="stat-value">${formatDuration(totalCurrent)}</div>
+          <div class="stat-label">${periodLabel}專注時數</div>
+          ${totalPrevious > 0 ? `<div class="stat-change ${changeClass}">相較${prevLabel} ${changeText}</div>` : ''}
+        </div>
+        <div class="stat-card">
+          <div class="stat-value small">${formatDuration(avgSession)}</div>
+          <div class="stat-label">平均每次</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value small">${current.length}</div>
+          <div class="stat-label">專注次數</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value small">🔥 ${streak}</div>
+          <div class="stat-label">連續天數</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value small">${peakHour}</div>
+          <div class="stat-label">最常專注時段</div>
+        </div>
+        ${topSubject ? `
+        <div class="stat-card wide">
+          <div class="stat-value small" style="color: ${topSubject.color};">${topSubject.name}</div>
+          <div class="stat-label">最常讀的科目（${formatDuration(topSubject.duration)}）</div>
+        </div>
+        ` : ''}
+      `;
+    }
+
+    function renderBarChart() {
+      const container = document.getElementById('barChart');
+      const now = new Date();
+      let days = [];
+      let maxDuration = 0;
+
+      if (currentPeriod === 'day') {
+        // Show hourly breakdown for today
+        const hours = [];
+        for (let h = 6; h <= 23; h++) {
+          const hourStart = new Date(now.getFullYear(), now.getMonth(), now.getDate(), h);
+          const hourEnd = new Date(hourStart.getTime() + 3600000);
+          const duration = sessions.filter(s => {
+            const d = new Date(s.date);
+            return d >= hourStart && d < hourEnd;
+          }).reduce((sum, s) => sum + s.duration, 0);
+          hours.push({ label: `${h}`, duration, isCurrent: now.getHours() === h });
+          maxDuration = Math.max(maxDuration, duration);
+        }
+        days = hours;
+      } else if (currentPeriod === 'week') {
+        const dayNames = ['日', '一', '二', '三', '四', '五', '六'];
+        for (let i = 0; i < 7; i++) {
+          const dayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate() - now.getDay() + i);
+          const dayEnd = new Date(dayStart.getTime() + 86400000);
+          const duration = getSessionsInRange(dayStart, dayEnd).reduce((sum, s) => sum + s.duration, 0);
+          days.push({ 
+            label: dayNames[i], 
+            duration, 
+            isCurrent: dayStart.toDateString() === now.toDateString() 
+          });
+          maxDuration = Math.max(maxDuration, duration);
+        }
+      } else {
+        // Month view - show last 4 weeks
+        for (let w = 3; w >= 0; w--) {
+          const weekEnd = new Date(now.getTime() - w * 7 * 86400000);
+          const weekStart = new Date(weekEnd.getTime() - 7 * 86400000);
+          const duration = getSessionsInRange(weekStart, weekEnd).reduce((sum, s) => sum + s.duration, 0);
+          days.push({ 
+            label: `W${4-w}`, 
+            duration, 
+            isCurrent: w === 0 
+          });
+          maxDuration = Math.max(maxDuration, duration);
+        }
+      }
+
+      if (maxDuration === 0) maxDuration = 3600; // Default 1h max if no data
+
+      container.innerHTML = days.map(d => {
+        const height = (d.duration / maxDuration * 100) || 0;
+        return `
+          <div class="bar-wrapper">
+            <div class="bar" style="height: ${Math.max(height, 2)}%; flex-grow: 0; margin-top: auto;">
+              <div class="bar-tooltip">${formatDuration(d.duration)}</div>
+            </div>
+            <div class="bar-label ${d.isCurrent ? 'today' : ''}">${d.label}</div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function renderDonutChart() {
+      const range = getDateRange();
+      const periodSessions = getSessionsInRange(range.start, range.end);
+      
+      const subjectTotals = {};
+      periodSessions.forEach(s => {
+        if (!subjectTotals[s.subject]) {
+          const sub = subjects.find(x => x.id === s.subject);
+          subjectTotals[s.subject] = { 
+            name: s.subjectName, 
+            duration: 0, 
+            color: sub?.color || '#888' 
+          };
+        }
+        subjectTotals[s.subject].duration += s.duration;
+      });
+
+      const entries = Object.entries(subjectTotals).sort((a, b) => b[1].duration - a[1].duration);
+      const total = entries.reduce((sum, [_, v]) => sum + v.duration, 0);
+
+      if (entries.length === 0) {
+        document.getElementById('donutChart').innerHTML = `
+          <circle cx="50" cy="50" r="40" fill="none" stroke="var(--border)" stroke-width="12"/>
+        `;
+        document.getElementById('donutLegend').innerHTML = '<div style="color: var(--muted); font-size: 13px;">還沒有記錄</div>';
+        return;
+      }
+
+      // Create donut segments
+      let cumulativePercent = 0;
+      const segments = entries.map(([id, data]) => {
+        const percent = data.duration / total;
+        const startAngle = cumulativePercent * 360;
+        cumulativePercent += percent;
+        const endAngle = cumulativePercent * 360;
+        return { ...data, id, percent, startAngle, endAngle };
+      });
+
+      // SVG donut
+      const radius = 40;
+      const circumference = 2 * Math.PI * radius;
+      let offset = 0;
+
+      document.getElementById('donutChart').innerHTML = segments.map(seg => {
+        const dashLength = seg.percent * circumference;
+        const dashOffset = -offset;
+        offset += dashLength;
+        return `
+          <circle 
+            cx="50" cy="50" r="${radius}" 
+            fill="none" 
+            stroke="${seg.color}" 
+            stroke-width="12"
+            stroke-dasharray="${dashLength} ${circumference - dashLength}"
+            stroke-dashoffset="${dashOffset}"
+            transform="rotate(-90 50 50)"
+          />
+        `;
+      }).join('');
+
+      // Legend
+      document.getElementById('donutLegend').innerHTML = segments.map(seg => `
+        <div class="legend-item">
+          <span class="legend-name">
+            <span class="legend-color" style="background: ${seg.color};"></span>
+            ${seg.name}
+          </span>
+          <span class="legend-value">${formatDuration(seg.duration)}</span>
+        </div>
+      `).join('');
+    }
+
+    function renderFilters() {
+      const uniqueSubjects = [...new Set(sessions.map(s => s.subject))];
+      const filterBar = document.getElementById('filterBar');
+      filterBar.innerHTML = `
+        <button class="filter-btn ${currentFilter === 'all' ? 'active' : ''}" data-subject="all" onclick="filterSubject('all')">全部</button>
+        ${uniqueSubjects.map(id => {
+          const sub = subjects.find(s => s.id === id) || { name: id, color: '#888' };
+          return `<button class="filter-btn ${currentFilter === id ? 'active' : ''}" data-subject="${id}" onclick="filterSubject('${id}')" style="border-color: ${sub.color};">${sub.name}</button>`;
+        }).join('')}
+      `;
+    }
+
+    function renderHistory() {
+      const range = getDateRange();
+      let filtered = getSessionsInRange(range.start, range.end);
+      
+      if (currentFilter !== 'all') {
+        filtered = filtered.filter(s => s.subject === currentFilter);
+      }
+
+      const list = document.getElementById('historyList');
+      
+      if (filtered.length === 0) {
+        list.innerHTML = '<div class="empty"><div class="empty-icon">📊</div>這段時間沒有記錄</div>';
+        return;
+      }
+
+      list.innerHTML = filtered.slice(0, 20).map(s => {
+        const sub = subjects.find(x => x.id === s.subject);
+        const color = sub?.color || '#888';
+        const date = new Date(s.date);
+        const dateStr = formatDate(date);
+        return `
+          <div class="history-item">
+            <div class="history-subject">
+              <span class="history-dot" style="background: ${color};"></span>
+              <span>${s.subjectName}</span>
+            </div>
+            <div class="history-meta">
+              <div class="history-duration">${formatDuration(s.duration)}</div>
+              <div class="history-date">${dateStr}</div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function renderHeatmap() {
+      const container = document.getElementById('heatmap');
+      const now = new Date();
+      const cells = [];
+
+      // Get first day of current month
+      const firstDay = new Date(now.getFullYear(), now.getMonth(), 1);
+      const startPadding = firstDay.getDay();
+
+      // Add padding for days before month starts
+      for (let i = 0; i < startPadding; i++) {
+        cells.push('<div class="heatmap-day" style="visibility: hidden;"></div>');
+      }
+
+      // Add days of month
+      const daysInMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
+      for (let d = 1; d <= daysInMonth; d++) {
+        const dayStart = new Date(now.getFullYear(), now.getMonth(), d);
+        const dayEnd = new Date(dayStart.getTime() + 86400000);
+        const duration = getSessionsInRange(dayStart, dayEnd).reduce((sum, s) => sum + s.duration, 0);
+        
+        let level = 0;
+        if (duration > 0) level = 1;
+        if (duration >= 1800) level = 2; // 30min
+        if (duration >= 3600) level = 3; // 1h
+        if (duration >= 7200) level = 4; // 2h
+
+        const isToday = dayStart.toDateString() === now.toDateString();
+        cells.push(`
+          <div class="heatmap-day level-${level}" ${isToday ? 'style="border: 2px solid var(--text);"' : ''}>
+            <div class="heatmap-tooltip">${d}日: ${formatDuration(duration)}</div>
+          </div>
+        `);
+      }
+
+      container.innerHTML = cells.join('');
+    }
+
+    function calculateStreak() {
+      if (sessions.length === 0) return 0;
+
+      let streak = 0;
+      let checkDate = new Date();
+      checkDate.setHours(0, 0, 0, 0);
+
+      const todaySession = sessions.find(s => {
+        const d = new Date(s.date);
+        d.setHours(0, 0, 0, 0);
+        return d.getTime() === checkDate.getTime();
+      });
+
+      if (!todaySession) {
+        checkDate.setDate(checkDate.getDate() - 1);
+      }
+
+      while (true) {
+        const hasSession = sessions.some(s => {
+          const d = new Date(s.date);
+          d.setHours(0, 0, 0, 0);
+          return d.getTime() === checkDate.getTime();
+        });
+
+        if (hasSession) {
+          streak++;
+          checkDate.setDate(checkDate.getDate() - 1);
+        } else {
+          break;
+        }
+      }
+
+      return streak;
+    }
+
+    function calculatePeakHour(sessionList) {
+      if (sessionList.length === 0) return '—';
+
+      const hourCounts = {};
+      sessionList.forEach(s => {
+        const h = new Date(s.date).getHours();
+        hourCounts[h] = (hourCounts[h] || 0) + s.duration;
+      });
+
+      const peakHour = Object.entries(hourCounts).sort((a, b) => b[1] - a[1])[0];
+      if (!peakHour) return '—';
+
+      const h = parseInt(peakHour[0]);
+      if (h < 12) return '早上';
+      if (h < 18) return '下午';
+      return '晚上';
+    }
+
+    function getTopSubject(sessionList) {
+      if (sessionList.length === 0) return null;
+
+      const subjectTotals = {};
+      sessionList.forEach(s => {
+        if (!subjectTotals[s.subject]) {
+          const sub = subjects.find(x => x.id === s.subject);
+          subjectTotals[s.subject] = { name: s.subjectName, duration: 0, color: sub?.color || '#888' };
+        }
+        subjectTotals[s.subject].duration += s.duration;
+      });
+
+      const entries = Object.entries(subjectTotals).sort((a, b) => b[1].duration - a[1].duration);
+      return entries.length > 0 ? entries[0][1] : null;
+    }
+
+    function formatDuration(secs) {
+      if (secs === 0) return '0m';
+      const h = Math.floor(secs / 3600);
+      const m = Math.floor((secs % 3600) / 60);
+      if (h > 0) return `${h}h ${m}m`;
+      return `${m}m`;
+    }
+
+    function formatDate(date) {
+      const now = new Date();
+      const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+      const dateDay = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+      
+      if (dateDay.getTime() === today.getTime()) {
+        return `今天 ${pad(date.getHours())}:${pad(date.getMinutes())}`;
+      }
+      if (dateDay.getTime() === today.getTime() - 86400000) {
+        return `昨天 ${pad(date.getHours())}:${pad(date.getMinutes())}`;
+      }
+      return `${date.getMonth()+1}/${date.getDate()} ${pad(date.getHours())}:${pad(date.getMinutes())}`;
+    }
+
+    function pad(n) {
+      return n.toString().padStart(2, '0');
+    }
+
+    // Init
+    init();
+  </script>
+  <script src="../theme-effects.js"></script>
+</body>
+</html>
