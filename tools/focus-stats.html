@@ -458,8 +458,8 @@
 </head>
 <body>
   <nav>
-    <a href="focus.html?v=156">← 返回計時器</a>
-    <a href="#" onclick="clearCache()" style="font-size: 12px;">v1.5.6 清除快取</a>
+    <a href="focus.html?v=157">← 返回計時器</a>
+    <a href="#" onclick="clearCache()" style="font-size: 12px;">v1.5.7 清除快取</a>
   </nav>
   <script>
     function clearCache() {
@@ -1020,33 +1020,65 @@
 
     // Swipe to delete
     let touchStartX = 0;
+    let touchStartY = 0;
     let currentWrapper = null;
+    let isSwiping = false;
 
     function handleTouchStart(e) {
-      document.querySelectorAll('.history-item-wrapper.show-delete').forEach(el => {
-        el.classList.remove('show-delete');
-      });
       touchStartX = e.touches[0].clientX;
+      touchStartY = e.touches[0].clientY;
       currentWrapper = e.currentTarget.parentElement;
+      isSwiping = false;
+      
+      // Close other open items
+      document.querySelectorAll('.history-item-wrapper.show-delete').forEach(el => {
+        if (el !== currentWrapper) el.classList.remove('show-delete');
+      });
     }
 
     function handleTouchMove(e) {
       if (!currentWrapper) return;
-      const diff = touchStartX - e.touches[0].clientX;
-      if (diff > 50) {
-        currentWrapper.classList.add('show-delete');
-      } else if (diff < -30) {
-        currentWrapper.classList.remove('show-delete');
+      const diffX = touchStartX - e.touches[0].clientX;
+      const diffY = Math.abs(touchStartY - e.touches[0].clientY);
+      
+      // Only handle horizontal swipes
+      if (Math.abs(diffX) > 10 || diffY > 10) {
+        isSwiping = true;
+      }
+      
+      if (Math.abs(diffX) > diffY) {
+        if (diffX > 50) {
+          currentWrapper.classList.add('show-delete');
+        } else if (diffX < -30) {
+          currentWrapper.classList.remove('show-delete');
+        }
       }
     }
 
     function handleTouchEnd(e) {
+      // If it was a tap (not swipe), toggle delete
+      if (!isSwiping && currentWrapper) {
+        const isOpen = currentWrapper.classList.contains('show-delete');
+        if (isOpen) {
+          currentWrapper.classList.remove('show-delete');
+        } else {
+          currentWrapper.classList.add('show-delete');
+          clearTimeout(deleteTimeout);
+          deleteTimeout = setTimeout(() => {
+            currentWrapper.classList.remove('show-delete');
+          }, 3000);
+        }
+      }
       currentWrapper = null;
+      isSwiping = false;
     }
 
     let deleteTimeout = null;
     
     function toggleDelete(idx) {
+      // Only used for non-touch (mouse) clicks
+      if ('ontouchstart' in window) return; // Skip on touch devices
+      
       const wrapper = document.querySelector(`.history-item-wrapper[data-idx="${idx}"]`);
       if (!wrapper) return;
       
