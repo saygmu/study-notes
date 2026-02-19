@@ -139,34 +139,37 @@
       border-radius: 12px;
       padding: 20px;
       overflow-x: auto;
+      overflow-y: hidden;
       -webkit-overflow-scrolling: touch;
     }
 
     .bar-chart-container {
       display: flex;
       align-items: flex-end;
-      height: 150px;
-      gap: 12px;
+      height: 140px;
+      gap: 16px;
       min-width: max-content;
-      padding-bottom: 4px;
+      padding: 0 4px 4px;
     }
 
     .bar-wrapper {
-      flex: 0 0 40px;
+      flex: 0 0 50px;
       display: flex;
       flex-direction: column;
       align-items: center;
       height: 100%;
+      justify-content: flex-end;
     }
 
     .bar {
       width: 100%;
-      max-width: 40px;
+      max-width: 50px;
       background: var(--accent);
-      border-radius: 4px 4px 0 0;
+      border-radius: 6px 6px 0 0;
       transition: height 0.3s ease;
       position: relative;
       cursor: pointer;
+      min-height: 4px;
     }
 
     .bar:hover {
@@ -266,6 +269,7 @@
     .history-item-wrapper {
       position: relative;
       overflow: hidden;
+      touch-action: pan-y;
     }
 
     .history-item {
@@ -685,10 +689,11 @@
       if (maxDuration === 0) maxDuration = 3600; // Default 1h max if no data
 
       container.innerHTML = days.map(d => {
-        const height = (d.duration / maxDuration * 100) || 0;
+        const height = Math.min((d.duration / maxDuration * 100) || 0, 100);
+        const barHeight = d.duration > 0 ? Math.max(height, 5) : 0;
         return `
           <div class="bar-wrapper">
-            <div class="bar" style="height: ${Math.max(height, 2)}%; flex-grow: 0; margin-top: auto;">
+            <div class="bar" style="height: ${barHeight}%;">
               <div class="bar-tooltip">${formatDuration(d.duration)}</div>
             </div>
             <div class="bar-label ${d.isCurrent ? 'today' : ''}">${d.label}</div>
@@ -805,7 +810,7 @@
         const originalIdx = sessions.findIndex(sess => sess.date === s.date && sess.subject === s.subject && sess.duration === s.duration);
         return `
           <div class="history-item-wrapper" data-idx="${originalIdx}">
-            <div class="history-item" ontouchstart="handleTouchStart(event)" ontouchmove="handleTouchMove(event)" ontouchend="handleTouchEnd(event)">
+            <div class="history-item" onclick="toggleDelete(${originalIdx})" ontouchstart="handleTouchStart(event)" ontouchmove="handleTouchMove(event)" ontouchend="handleTouchEnd(event)">
               <div class="history-subject">
                 <span class="history-dot" style="background: ${color};"></span>
                 <span>${s.subjectName}</span>
@@ -978,6 +983,18 @@
 
     function handleTouchEnd(e) {
       currentWrapper = null;
+    }
+
+    function toggleDelete(idx) {
+      const wrapper = document.querySelector(`.history-item-wrapper[data-idx="${idx}"]`);
+      if (!wrapper) return;
+      
+      // Close others
+      document.querySelectorAll('.history-item-wrapper.show-delete').forEach(el => {
+        if (el !== wrapper) el.classList.remove('show-delete');
+      });
+      
+      wrapper.classList.toggle('show-delete');
     }
 
     function deleteSession(idx) {
