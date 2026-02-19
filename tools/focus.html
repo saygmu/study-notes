@@ -424,13 +424,12 @@
   </div>
 
   <div class="quote" id="quote"></div>
-  <div style="position:fixed;bottom:8px;left:12px;font-size:11px;color:var(--muted);opacity:0.5;z-index:1000;">v1.2.4 · <a href="#" onclick="clearCache()" style="color:inherit;">清除快取</a></div>
+  <div style="position:fixed;bottom:8px;left:12px;font-size:11px;color:var(--muted);opacity:0.5;z-index:1000;">v1.2.5 · <a href="#" onclick="clearCache()" style="color:inherit;">清除快取</a></div>
   <script>
     function clearCache() {
       if(confirm('清除快取並重新載入？')) {
         if('caches' in window) caches.keys().then(n=>n.forEach(k=>caches.delete(k)));
         if('serviceWorker' in navigator) navigator.serviceWorker.getRegistrations().then(r=>r.forEach(x=>x.unregister()));
-        localStorage.removeItem('focus_timer_state'); // Also clear timer state for fresh start
         setTimeout(()=>location.reload(true),500);
       }
     }
