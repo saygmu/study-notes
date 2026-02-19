@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>原子性質比較規則</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500&family=Noto+Serif+TC:wght@600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #fefefe;
+      --text: #2d2d2d;
+      --muted: #888;
+      --accent: #4a4a4a;
+      --border: #e8e8e8;
+      --card: #fff;
+      --mark: #fff3cd;
+    }
+    [data-theme="dark"] {
+      --bg: #1a1a1a;
+      --text: #e8e8e8;
+      --muted: #888;
+      --accent: #ccc;
+      --border: #333;
+      --card: #242424;
+      --mark: #4a4000;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Noto Sans TC', sans-serif;
+      font-weight: 300;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 2;
+      font-size: 16px;
+    }
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+      padding: 12px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 100;
+    }
+    nav a { color: var(--muted); text-decoration: none; font-size: 14px; }
+    nav a:hover { color: var(--text); }
+    .nav-right { display: flex; gap: 16px; }
+    .container {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 80px 24px 60px;
+    }
+    h1 {
+      font-family: 'Noto Serif TC', serif;
+      font-weight: 600;
+      font-size: 2rem;
+      letter-spacing: 2px;
+      margin-bottom: 8px;
+    }
+    .subtitle {
+      color: var(--muted);
+      font-size: 14px;
+      margin-bottom: 48px;
+    }
+    h2 {
+      font-family: 'Noto Serif TC', serif;
+      font-weight: 600;
+      font-size: 1.25rem;
+      margin: 48px 0 24px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--border);
+    }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+      margin: 24px 0;
+    }
+    .rule {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      margin: 16px 0;
+    }
+    .rule-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      flex-shrink: 0;
+      margin-top: 4px;
+    }
+    .rule-content { flex: 1; }
+    .rule-title {
+      font-weight: 500;
+      margin-bottom: 4px;
+    }
+    .rule-desc {
+      color: var(--muted);
+      font-size: 14px;
+    }
+    .arrow { 
+      font-family: 'Noto Sans TC', sans-serif;
+      color: var(--accent);
+    }
+    mark {
+      background: var(--mark);
+      color: var(--text);
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+    .exception {
+      background: var(--card);
+      border-left: 3px solid #f87171;
+      padding: 16px 20px;
+      margin: 16px 0;
+      border-radius: 0 8px 8px 0;
+    }
+    .exception-title {
+      font-weight: 500;
+      color: #f87171;
+      font-size: 14px;
+      margin-bottom: 8px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 24px 0;
+      font-size: 14px;
+    }
+    th {
+      text-align: left;
+      padding: 12px;
+      border-bottom: 2px solid var(--border);
+      font-weight: 500;
+      color: var(--muted);
+      font-size: 13px;
+    }
+    td {
+      padding: 12px;
+      border-bottom: 1px solid var(--border);
+    }
+    .trend-up { color: #4ade80; }
+    .trend-down { color: #f87171; }
+    .summary {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+      margin: 32px 0;
+    }
+    .summary-title {
+      font-weight: 500;
+      margin-bottom: 16px;
+    }
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
+    .summary-item {
+      padding: 12px;
+      background: var(--bg);
+      border-radius: 8px;
+      text-align: center;
+    }
+    .summary-label {
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+    .summary-value {
+      font-weight: 500;
+      font-size: 14px;
+    }
+    footer {
+      text-align: center;
+      padding: 48px 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+    @media print {
+      nav { display: none; }
+      .container { padding-top: 24px; }
+    }
+    @media (max-width: 600px) {
+      h1 { font-size: 1.75rem; }
+      .summary-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="../">← 返回</a>
+    <div class="nav-right">
+      <a href="#" onclick="window.print()">列印</a>
+      <a href="#" onclick="toggleTheme()">◐</a>
+    </div>
+  </nav>
+
+  <div class="container">
+    <h1>原子性質比較</h1>
+    <div class="subtitle">半徑・游離能・電子親和力・電負度</div>
+
+    <div class="summary">
+      <div class="summary-title">⚡ 速記口訣</div>
+      <div class="summary-grid">
+        <div class="summary-item">
+          <div class="summary-label">同週期（→）</div>
+          <div class="summary-value">半徑<span class="trend-down">↓</span> 其他<span class="trend-up">↑</span></div>
+        </div>
+        <div class="summary-item">
+          <div class="summary-label">同族（↓）</div>
+          <div class="summary-value">半徑<span class="trend-up">↑</span> 其他<span class="trend-down">↓</span></div>
+        </div>
+      </div>
+    </div>
+
+    <h2>一、原子半徑</h2>
+    
+    <div class="card">
+      <div class="rule">
+        <div class="rule-icon">→</div>
+        <div class="rule-content">
+          <div class="rule-title">同週期：越右越小</div>
+          <div class="rule-desc">質子數↑，拉力↑，電子被拉近</div>
+        </div>
+      </div>
+      <div class="rule">
+        <div class="rule-icon">↓</div>
+        <div class="rule-content">
+          <div class="rule-title">同族：越下越大</div>
+          <div class="rule-desc">電子層數↑</div>
+        </div>
+      </div>
+    </div>
+
+    <h2>二、離子半徑</h2>
+    
+    <div class="card">
+      <div class="rule">
+        <div class="rule-icon">+</div>
+        <div class="rule-content">
+          <div class="rule-title">陽離子 < 原子</div>
+          <div class="rule-desc">失去電子，電子層可能減少</div>
+        </div>
+      </div>
+      <div class="rule">
+        <div class="rule-icon">−</div>
+        <div class="rule-content">
+          <div class="rule-title">陰離子 > 原子</div>
+          <div class="rule-desc">得到電子，電子互斥↑</div>
+        </div>
+      </div>
+      <div class="rule">
+        <div class="rule-icon">＝</div>
+        <div class="rule-content">
+          <div class="rule-title">等電子數：質子多的較小</div>
+          <div class="rule-desc">例：O²⁻ > F⁻ > Na⁺ > Mg²⁺ > Al³⁺</div>
+        </div>
+      </div>
+    </div>
+
+    <h2>三、游離能（IE）</h2>
+    
+    <div class="card">
+      <div class="rule">
+        <div class="rule-icon">→</div>
+        <div class="rule-content">
+          <div class="rule-title">同週期：越右越大</div>
+          <div class="rule-desc">有效核電荷↑，電子難拔</div>
+        </div>
+      </div>
+      <div class="rule">
+        <div class="rule-icon">↓</div>
+        <div class="rule-content">
+          <div class="rule-title">同族：越下越小</div>
+          <div class="rule-desc">距離遠，電子好拔</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="exception">
+      <div class="exception-title">⚠️ 特例</div>
+      <p><mark>Be > B</mark>：B 是 2p¹，容易失去單獨電子</p>
+      <p><mark>N > O</mark>：N 是 2p³ 半滿穩定，O 要打破配對</p>
+      <p><mark>Mg > Al</mark>、<mark>P > S</mark>：同理</p>
+    </div>
+
+    <h2>四、電子親和力（EA）</h2>
+    
+    <div class="card">
+      <div class="rule">
+        <div class="rule-icon">→</div>
+        <div class="rule-content">
+          <div class="rule-title">同週期：越右越大（鹵素最大）</div>
+          <div class="rule-desc">接近八隅體，想要電子</div>
+        </div>
+      </div>
+      <div class="rule">
+        <div class="rule-icon">↓</div>
+        <div class="rule-content">
+          <div class="rule-title">同族：越下越小</div>
+          <div class="rule-desc">距離遠，吸引力弱</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="exception">
+      <div class="exception-title">⚠️ 鹵素特例（超重要）</div>
+      <p>電子親和力：<mark>Cl > F > Br > I</mark></p>
+      <p>F 原子太小，電子互斥強，反而不如 Cl 穩定</p>
+    </div>
+
+    <h2>五、電負度（EN）</h2>
+    
+    <div class="card">
+      <div class="rule">
+        <div class="rule-icon">→</div>
+        <div class="rule-content">
+          <div class="rule-title">同週期：越右越大</div>
+          <div class="rule-desc">F = 4.0（最大）</div>
+        </div>
+      </div>
+      <div class="rule">
+        <div class="rule-icon">↓</div>
+        <div class="rule-content">
+          <div class="rule-title">同族：越下越小</div>
+          <div class="rule-desc">距離遠，吸引力弱</div>
+        </div>
+      </div>
+    </div>
+
+    <p style="margin-top: 16px; color: var(--muted); font-size: 14px;">
+      電負度 = 游離能 + 電子親和力的綜合表現
+    </p>
+
+    <h2>六、比較總整理</h2>
+
+    <table>
+      <tr>
+        <th>性質</th>
+        <th>同週期 →</th>
+        <th>同族 ↓</th>
+        <th>最大值</th>
+      </tr>
+      <tr>
+        <td>原子半徑</td>
+        <td class="trend-down">減小</td>
+        <td class="trend-up">增大</td>
+        <td>Fr</td>
+      </tr>
+      <tr>
+        <td>游離能</td>
+        <td class="trend-up">增大</td>
+        <td class="trend-down">減小</td>
+        <td>He</td>
+      </tr>
+      <tr>
+        <td>電子親和力</td>
+        <td class="trend-up">增大</td>
+        <td class="trend-down">減小</td>
+        <td>Cl</td>
+      </tr>
+      <tr>
+        <td>電負度</td>
+        <td class="trend-up">增大</td>
+        <td class="trend-down">減小</td>
+        <td>F</td>
+      </tr>
+    </table>
+
+    <div class="summary">
+      <div class="summary-title">🎯 背這個就夠</div>
+      <p style="font-size: 15px; line-height: 1.8;">
+        <strong>半徑</strong>：右小下大，陽小陰大<br>
+        <strong>IE、EA、EN</strong>：右大下小（跟半徑相反）<br>
+        <strong>特例</strong>：2/3 族 > 13/16 族（半滿穩定）<br>
+        <strong>鹵素 EA</strong>：Cl > F（F 太擠）
+      </p>
+    </div>
+
+    <footer>2026.02.19</footer>
+  </div>
+
+  <script src="../theme.js"></script>
+  <script>
+    function toggleTheme() {
+      const current = document.documentElement.getAttribute('data-theme');
+      const next = current === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', next);
+      localStorage.setItem('theme', next);
+    }
+  </script>
+</body>
+</html>
