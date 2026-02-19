@@ -138,18 +138,21 @@
       border: 1px solid var(--border);
       border-radius: 12px;
       padding: 20px;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
     }
 
     .bar-chart-container {
       display: flex;
       align-items: flex-end;
-      justify-content: space-between;
       height: 150px;
-      gap: 8px;
+      gap: 12px;
+      min-width: max-content;
+      padding-bottom: 4px;
     }
 
     .bar-wrapper {
-      flex: 1;
+      flex: 0 0 40px;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -260,6 +263,11 @@
       overflow: hidden;
     }
 
+    .history-item-wrapper {
+      position: relative;
+      overflow: hidden;
+    }
+
     .history-item {
       display: flex;
       justify-content: space-between;
@@ -267,10 +275,32 @@
       padding: 14px 16px;
       border-bottom: 1px solid var(--border);
       font-size: 14px;
+      background: var(--card);
+      transition: transform 0.2s ease;
     }
 
-    .history-item:last-child {
+    .history-item-wrapper:last-child .history-item {
       border-bottom: none;
+    }
+
+    .history-delete {
+      position: absolute;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      width: 70px;
+      background: #f87171;
+      color: white;
+      border: none;
+      font-size: 13px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .history-item-wrapper.show-delete .history-item {
+      transform: translateX(-70px);
     }
 
     .history-subject {
@@ -766,21 +796,26 @@
         return;
       }
 
-      list.innerHTML = filtered.slice(0, 20).map(s => {
+      list.innerHTML = filtered.slice(0, 20).map((s, idx) => {
         const sub = subjects.find(x => x.id === s.subject);
         const color = sub?.color || '#888';
         const date = new Date(s.date);
         const dateStr = formatDate(date);
+        // Find original index in sessions array
+        const originalIdx = sessions.findIndex(sess => sess.date === s.date && sess.subject === s.subject && sess.duration === s.duration);
         return `
-          <div class="history-item">
-            <div class="history-subject">
-              <span class="history-dot" style="background: ${color};"></span>
-              <span>${s.subjectName}</span>
+          <div class="history-item-wrapper" data-idx="${originalIdx}">
+            <div class="history-item" ontouchstart="handleTouchStart(event)" ontouchmove="handleTouchMove(event)" ontouchend="handleTouchEnd(event)">
+              <div class="history-subject">
+                <span class="history-dot" style="background: ${color};"></span>
+                <span>${s.subjectName}</span>
+              </div>
+              <div class="history-meta">
+                <div class="history-duration">${formatDuration(s.duration)}</div>
+                <div class="history-date">${dateStr}</div>
+              </div>
             </div>
-            <div class="history-meta">
-              <div class="history-duration">${formatDuration(s.duration)}</div>
-              <div class="history-date">${dateStr}</div>
-            </div>
+            <button class="history-delete" onclick="deleteSession(${originalIdx})">刪除</button>
           </div>
         `;
       }).join('');
@@ -917,6 +952,41 @@
 
     function pad(n) {
       return n.toString().padStart(2, '0');
+    }
+
+    // Swipe to delete
+    let touchStartX = 0;
+    let currentWrapper = null;
+
+    function handleTouchStart(e) {
+      document.querySelectorAll('.history-item-wrapper.show-delete').forEach(el => {
+        el.classList.remove('show-delete');
+      });
+      touchStartX = e.touches[0].clientX;
+      currentWrapper = e.currentTarget.parentElement;
+    }
+
+    function handleTouchMove(e) {
+      if (!currentWrapper) return;
+      const diff = touchStartX - e.touches[0].clientX;
+      if (diff > 50) {
+        currentWrapper.classList.add('show-delete');
+      } else if (diff < -30) {
+        currentWrapper.classList.remove('show-delete');
+      }
+    }
+
+    function handleTouchEnd(e) {
+      currentWrapper = null;
+    }
+
+    function deleteSession(idx) {
+      if (idx < 0 || idx >= sessions.length) return;
+      if (!confirm('確定要刪除這筆記錄嗎？')) return;
+      
+      sessions.splice(idx, 1);
+      localStorage.setItem('focus_sessions', JSON.stringify(sessions));
+      renderAll();
     }
 
     // Init
