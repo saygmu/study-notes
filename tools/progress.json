@@ -1,5 +1,5 @@
 {
-  "lastUpdate": "2026/02/20 16:22",
+  "lastUpdate": "2026/02/20 22:22",
   "subjects": [
     {
       "name": "物理",
@@ -32,7 +32,7 @@
         {
           "name": "單元7: 功與能量",
           "date": "2026-02-11",
-          "done": false
+          "done": true
         },
         {
           "name": "單元8: 熱學",
@@ -389,6 +389,16 @@
     {
       "name": "focus_sessions",
       "tasks": [
+        {
+          "name": "",
+          "date": "2026-02-20",
+          "done": false
+        },
+        {
+          "name": "",
+          "date": "2026-02-20",
+          "done": false
+        },
         {
           "name": "",
           "date": "2026-02-20",
