@@ -138,10 +138,23 @@
       font-family: 'Quicksand', sans-serif;
       font-size: clamp(4rem, 20vw, 8rem);
       font-weight: 300;
-      letter-spacing: 0.1em;
-      font-variant-numeric: tabular-nums;
       margin-bottom: 12px;
       transition: transform 0.3s ease;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    
+    .timer-display .digit {
+      display: inline-block;
+      width: 0.6em;
+      text-align: center;
+    }
+    
+    .timer-display .colon {
+      display: inline-block;
+      width: 0.3em;
+      text-align: center;
     }
 
     .timer-display.pulse {
@@ -449,7 +462,7 @@
   <div class="container">
     <div class="subjects" id="subjects"></div>
     
-    <div class="timer-display" id="timer">00:00</div>
+    <div class="timer-display" id="timer"><span class="digit">0</span><span class="digit">0</span><span class="colon">:</span><span class="digit">0</span><span class="digit">0</span></div>
     
     <div class="session-info" id="sessionInfo">
       選擇科目開始專注
@@ -790,7 +803,18 @@
 
     function updateDisplay() {
       const display = document.getElementById('timer');
-      display.textContent = formatTime(seconds);
+      const timeStr = formatTime(seconds);
+      
+      // Build HTML with fixed-width spans
+      let html = '';
+      for (const char of timeStr) {
+        if (char === ':') {
+          html += `<span class="colon">:</span>`;
+        } else {
+          html += `<span class="digit">${char}</span>`;
+        }
+      }
+      display.innerHTML = html;
       
       // Pulse animation every minute
       if (seconds > 0 && seconds % 60 === 0) {
