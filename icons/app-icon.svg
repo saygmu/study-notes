@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <!-- White rounded square background -->
+  <rect width="1024" height="1024" rx="192" fill="#ffffff"/>
+  
+  <!-- MONO logo - outer ring -->
+  <circle cx="512" cy="512" r="280" fill="none" stroke="#2d2d2d" stroke-width="48"/>
+  
+  <!-- MONO logo - center dot -->
+  <circle cx="512" cy="512" r="56" fill="#2d2d2d"/>
+</svg>
