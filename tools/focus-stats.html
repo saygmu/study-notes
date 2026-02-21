@@ -1126,13 +1126,31 @@
       }
     }
 
-    function deleteSession(idx) {
+    async function deleteSession(idx) {
       if (idx < 0 || idx >= sessions.length) return;
       if (!confirm('確定要刪除這筆記錄嗎？')) return;
       
+      const session = sessions[idx];
+      const timestamp = session.timestamp;
+      
+      // Delete locally
       sessions.splice(idx, 1);
       localStorage.setItem('focus_sessions', JSON.stringify(sessions));
       renderAll();
+      
+      // Delete from cloud if connected
+      const pin = getCloudPin();
+      if (pin && timestamp) {
+        try {
+          await fetch(`${CLOUD_API}/sessions/delete`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'X-Pin': pin },
+            body: JSON.stringify({ timestamp })
+          });
+        } catch (err) {
+          console.error('Cloud delete failed:', err);
+        }
+      }
     }
 
     // Close delete on click outside
