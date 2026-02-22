@@ -1,5 +1,5 @@
 {
-  "lastUpdate": "2026/02/22 10:23",
+  "lastUpdate": "2026/02/22 16:23",
   "subjects": [
     {
       "name": "物理",
@@ -92,12 +92,12 @@
         {
           "name": "2-1: 導數與導函數",
           "date": "2026-02-18",
-          "done": false
+          "done": true
         },
         {
           "name": "2-2: 函數的增減與凹向",
           "date": "2026-02-20",
-          "done": false
+          "done": true
         },
         {
           "name": "3-1: 積分的意義",
@@ -389,6 +389,11 @@
     {
       "name": "focus_sessions",
       "tasks": [
+        {
+          "name": "",
+          "date": "2026-02-22",
+          "done": false
+        },
         {
           "name": "",
           "date": "2026-02-22",
