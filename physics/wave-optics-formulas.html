@@ -1,295 +1,285 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>波動光學公式整理</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400&family=Noto+Serif+TC:wght@600&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --bg: #fefefe;
-            --text: #2d2d2d;
-            --muted: #888;
-            --accent: #4a4a4a;
-            --border: #e8e8e8;
-            --card: #fff;
-        }
-        [data-theme="dark"] {
-            --bg: #1a1a1a;
-            --text: #e8e8e8;
-            --muted: #888;
-            --accent: #ccc;
-            --border: #333;
-            --card: #242424;
-        }
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: 'Noto Sans TC', sans-serif;
-            font-weight: 300;
-            background: var(--bg);
-            color: var(--text);
-            line-height: 2;
-            font-size: 16px;
-        }
-        .container {
-            max-width: 720px;
-            margin: 0 auto;
-            padding: 60px 24px;
-        }
-        nav {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            background: var(--bg);
-            border-bottom: 1px solid var(--border);
-            padding: 12px 24px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            z-index: 100;
-        }
-        nav a { color: var(--muted); text-decoration: none; font-size: 14px; }
-        nav a:hover { color: var(--text); }
-        .nav-right { display: flex; gap: 16px; align-items: center; }
-        .nav-right button {
-            background: none;
-            border: none;
-            color: var(--muted);
-            cursor: pointer;
-            font-size: 14px;
-        }
-        .nav-right button:hover { color: var(--text); }
-        h1 {
-            font-family: 'Noto Serif TC', serif;
-            font-weight: 600;
-            font-size: 2.5rem;
-            letter-spacing: 2px;
-            margin-bottom: 8px;
-        }
-        .subtitle {
-            color: var(--muted);
-            font-size: 14px;
-            margin-bottom: 48px;
-        }
-        h2 {
-            font-family: 'Noto Serif TC', serif;
-            font-weight: 600;
-            font-size: 1.25rem;
-            border-bottom: 1px solid var(--border);
-            padding-bottom: 8px;
-            margin: 48px 0 24px;
-        }
-        .formula {
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            padding: 24px;
-            text-align: center;
-            margin: 16px 0;
-            background: var(--card);
-        }
-        .formula-main {
-            font-family: 'Times New Roman', serif;
-            font-size: 1.4rem;
-            margin-bottom: 8px;
-        }
-        .formula-note {
-            font-size: 0.85rem;
-            color: var(--muted);
-        }
-        .formula-group {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-            margin: 16px 0;
-        }
-        .formula-group .formula {
-            margin: 0;
-        }
-        .note {
-            border-left: 2px solid var(--border);
-            padding: 16px 20px;
-            margin: 24px 0;
-            color: var(--muted);
-            font-size: 0.95rem;
-        }
-        .note strong { color: var(--text); }
-        .summary {
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 32px;
-            margin: 32px 0;
-        }
-        .summary h3 {
-            font-family: 'Noto Serif TC', serif;
-            font-weight: 600;
-            font-size: 1.1rem;
-            margin-bottom: 16px;
-        }
-        .summary ul {
-            list-style: none;
-            padding-left: 0;
-        }
-        .summary li {
-            margin: 8px 0;
-            padding-left: 20px;
-            position: relative;
-        }
-        .summary li::before {
-            content: "•";
-            position: absolute;
-            left: 0;
-            color: var(--muted);
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 16px 0;
-        }
-        th, td {
-            padding: 12px;
-            text-align: left;
-            border-bottom: 1px solid var(--border);
-        }
-        th {
-            color: var(--muted);
-            font-size: 0.85rem;
-            text-transform: uppercase;
-            font-weight: 400;
-        }
-        footer {
-            margin-top: 64px;
-            padding-top: 24px;
-            border-top: 1px solid var(--border);
-            color: var(--muted);
-            font-size: 13px;
-        }
-        mark {
-            background: #fff3cd;
-            padding: 2px 4px;
-            border-radius: 2px;
-        }
-        [data-theme="dark"] mark {
-            background: #4a4000;
-        }
-        @media (max-width: 600px) {
-            h1 { font-size: 2rem; }
-            .formula-group { grid-template-columns: 1fr; }
-            .container { padding: 60px 16px; }
-        }
-        @media print {
-            nav { display: none; }
-            .container { padding: 20px; }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <script src="../theme.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>波動光學公式</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600&family=Noto+Sans+TC:wght@300;400;500&display=swap');
+    
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    body {
+      font-family: 'Noto Sans TC', sans-serif;
+      font-weight: 300;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 2;
+      font-size: 16px;
+      transition: all 0.3s ease;
+    }
+
+    .container {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 60px 24px;
+    }
+
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+      padding: 16px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 100;
+      font-size: 14px;
+    }
+
+    nav a {
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    nav a:hover { color: var(--text); }
+
+    .nav-actions {
+      display: flex;
+      gap: 20px;
+    }
+
+    .nav-actions button {
+      background: none;
+      border: none;
+      color: var(--muted);
+      cursor: pointer;
+      font-size: 14px;
+      font-family: inherit;
+    }
+
+    .nav-actions button:hover { color: var(--text); }
+
+    h1 {
+      font-family: 'Noto Serif TC', serif;
+      font-weight: 600;
+      font-size: 2.5rem;
+      margin: 40px 0 16px;
+      letter-spacing: 2px;
+    }
+
+    .subtitle {
+      color: var(--muted);
+      margin-bottom: 60px;
+      font-size: 14px;
+    }
+    
+    h2 {
+      font-family: 'Noto Serif TC', serif;
+      font-weight: 600;
+      font-size: 1.25rem;
+      margin: 60px 0 24px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    p {
+      margin-bottom: 16px;
+    }
+
+    .formula {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 24px;
+      text-align: center;
+      margin: 16px 0;
+      background: var(--card);
+    }
+
+    .formula-main {
+      font-family: 'Times New Roman', serif;
+      font-size: 1.4rem;
+      margin-bottom: 8px;
+    }
+
+    .formula-note {
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+
+    .formula-group {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin: 16px 0;
+    }
+
+    .formula-group .formula {
+      margin: 0;
+    }
+
+    .note {
+      border-left: 2px solid var(--accent);
+      padding: 16px 20px;
+      margin: 24px 0;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .note strong {
+      color: var(--text);
+    }
+
+    .summary {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 32px;
+      margin: 32px 0;
+      background: var(--card);
+    }
+
+    .summary h3 {
+      font-family: 'Noto Serif TC', serif;
+      font-weight: 600;
+      font-size: 1.1rem;
+      margin-bottom: 16px;
+    }
+
+    .summary ul {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    .summary li {
+      margin: 8px 0;
+      padding-left: 20px;
+      position: relative;
+    }
+
+    .summary li::before {
+      content: "•";
+      position: absolute;
+      left: 0;
+      color: var(--muted);
+    }
+
+    footer {
+      margin-top: 64px;
+      padding-top: 24px;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    @media (max-width: 600px) {
+      h1 { font-size: 2rem; }
+      .formula-group { grid-template-columns: 1fr; }
+      .container { padding: 60px 16px; }
+    }
+
+    @media print {
+      nav { display: none; }
+      .container { padding: 20px; }
+      .theme-toggle-btn { display: none !important; }
+    }
+  </style>
 </head>
 <body>
-    <nav>
-        <a href="../">← 返回</a>
-        <div class="nav-right">
-            <button onclick="window.print()">列印</button>
-            <button onclick="toggleTheme()">◐</button>
-        </div>
-    </nav>
+  <nav>
+    <a href="../">← 返回</a>
+    <div class="nav-actions">
+      <button onclick="window.print()">列印</button>
+    </div>
+  </nav>
 
-    <div class="container">
-        <h1>波動光學公式</h1>
-        <p class="subtitle">駐波、折射、干涉</p>
+  <div class="container">
+    <h1>波動光學公式</h1>
+    <p class="subtitle">駐波、折射、干涉</p>
 
-        <h2>波動基本式</h2>
-        <div class="formula">
-            <div class="formula-main">v = fλ</div>
-            <div class="formula-note">波速 = 頻率 × 波長</div>
-        </div>
-
-        <h2>駐波</h2>
-        <p>弦或管中形成駐波時，長度與波長的關係：</p>
-
-        <div class="formula-group">
-            <div class="formula">
-                <div class="formula-main">L = n · λ/2</div>
-                <div class="formula-note">兩端固定（或兩端開放）</div>
-            </div>
-            <div class="formula">
-                <div class="formula-main">L = (2n−1) · λ/4</div>
-                <div class="formula-note">一端固定、一端開放</div>
-            </div>
-        </div>
-
-        <div class="note">
-            <strong>n = 1, 2, 3...</strong> 為正整數，代表諧波數
-        </div>
-
-        <h2>折射</h2>
-
-        <div class="formula">
-            <div class="formula-main">n = c / v</div>
-            <div class="formula-note">折射率 = 真空光速 / 介質中光速</div>
-        </div>
-
-        <div class="formula">
-            <div class="formula-main">n₁ sin θ₁ = n₂ sin θ₂</div>
-            <div class="formula-note">司乃耳定律（Snell's Law）</div>
-        </div>
-
-        <div class="formula">
-            <div class="formula-main">n₁ / n₂ = v₂ / v₁ = λ₂ / λ₁</div>
-            <div class="formula-note">折射率與速度、波長成反比</div>
-        </div>
-
-        <h2>雙狹縫干涉</h2>
-
-        <div class="formula">
-            <div class="formula-main">δ = d sin θ ≈ dy / L</div>
-            <div class="formula-note">光程差（d：狹縫間距，L：屏幕距離，y：離中央距離）</div>
-        </div>
-
-        <div class="formula-group">
-            <div class="formula">
-                <div class="formula-main">亮紋：δ = nλ</div>
-                <div class="formula-note">n = 0, 1, 2, 3...</div>
-            </div>
-            <div class="formula">
-                <div class="formula-main">暗紋：δ = (2n+1) · λ/2</div>
-                <div class="formula-note">n = 0, 1, 2, 3...</div>
-            </div>
-        </div>
-
-        <div class="formula">
-            <div class="formula-main">Δy = Lλ / d</div>
-            <div class="formula-note">相鄰亮紋（或暗紋）間距</div>
-        </div>
-
-        <div class="formula">
-            <div class="formula-main">y<sub>n</sub> = n · Lλ / d</div>
-            <div class="formula-note">第 n 條亮紋位置（中央為 n=0）</div>
-        </div>
-
-        <div class="summary">
-            <h3>📝 快速記憶</h3>
-            <ul>
-                <li><strong>駐波</strong>：兩端同 → λ/2；一開一閉 → λ/4（乘奇數）</li>
-                <li><strong>干涉亮暗</strong>：亮 = 整數λ，暗 = 半整數λ</li>
-                <li><strong>條紋間距</strong>：Δy = Lλ/d（L↑或λ↑則變寬，d↑則變窄）</li>
-            </ul>
-        </div>
-
-        <footer>2026.02.23</footer>
+    <h2>波動基本式</h2>
+    <div class="formula">
+      <div class="formula-main">v = fλ</div>
+      <div class="formula-note">波速 = 頻率 × 波長</div>
     </div>
 
-    <script>
-        function toggleTheme() {
-            const html = document.documentElement;
-            const current = html.getAttribute('data-theme');
-            const next = current === 'dark' ? 'light' : 'dark';
-            html.setAttribute('data-theme', next);
-            localStorage.setItem('theme', next);
-        }
-        (function() {
-            const saved = localStorage.getItem('theme');
-            if (saved) document.documentElement.setAttribute('data-theme', saved);
-        })();
-    </script>
+    <h2>駐波</h2>
+    <p>弦或管中形成駐波時，長度與波長的關係：</p>
+
+    <div class="formula-group">
+      <div class="formula">
+        <div class="formula-main">L = n · λ/2</div>
+        <div class="formula-note">兩端固定（或兩端開放）</div>
+      </div>
+      <div class="formula">
+        <div class="formula-main">L = (2n−1) · λ/4</div>
+        <div class="formula-note">一端固定、一端開放</div>
+      </div>
+    </div>
+
+    <div class="note">
+      <strong>n = 1, 2, 3...</strong> 為正整數，代表諧波數
+    </div>
+
+    <h2>折射</h2>
+
+    <div class="formula">
+      <div class="formula-main">n = c / v</div>
+      <div class="formula-note">折射率 = 真空光速 / 介質中光速</div>
+    </div>
+
+    <div class="formula">
+      <div class="formula-main">n₁ sin θ₁ = n₂ sin θ₂</div>
+      <div class="formula-note">司乃耳定律（Snell's Law）</div>
+    </div>
+
+    <div class="formula">
+      <div class="formula-main">n₁ / n₂ = v₂ / v₁ = λ₂ / λ₁</div>
+      <div class="formula-note">折射率與速度、波長成反比</div>
+    </div>
+
+    <h2>雙狹縫干涉</h2>
+
+    <div class="formula">
+      <div class="formula-main">δ = d sin θ ≈ dy / L</div>
+      <div class="formula-note">光程差（d：狹縫間距，L：屏幕距離，y：離中央距離）</div>
+    </div>
+
+    <div class="formula-group">
+      <div class="formula">
+        <div class="formula-main">亮紋：δ = nλ</div>
+        <div class="formula-note">n = 0, 1, 2, 3...</div>
+      </div>
+      <div class="formula">
+        <div class="formula-main">暗紋：δ = (2n+1) · λ/2</div>
+        <div class="formula-note">n = 0, 1, 2, 3...</div>
+      </div>
+    </div>
+
+    <div class="formula">
+      <div class="formula-main">Δy = Lλ / d</div>
+      <div class="formula-note">相鄰亮紋（或暗紋）間距</div>
+    </div>
+
+    <div class="formula">
+      <div class="formula-main">y<sub>n</sub> = n · Lλ / d</div>
+      <div class="formula-note">第 n 條亮紋位置（中央為 n=0）</div>
+    </div>
+
+    <div class="summary">
+      <h3>📝 快速記憶</h3>
+      <ul>
+        <li><strong>駐波</strong>：兩端同 → λ/2；一開一閉 → λ/4（乘奇數）</li>
+        <li><strong>干涉亮暗</strong>：亮 = 整數λ，暗 = 半整數λ</li>
+        <li><strong>條紋間距</strong>：Δy = Lλ/d（L↑或λ↑則變寬，d↑則變窄）</li>
+      </ul>
+    </div>
+
+    <footer>2026.02.23</footer>
+  </div>
 </body>
 </html>
