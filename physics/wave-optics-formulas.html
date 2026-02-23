@@ -5,6 +5,10 @@
   <script src="../theme.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>波動光學公式</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600&family=Noto+Sans+TC:wght@300;400;500&display=swap');
     
@@ -102,8 +106,7 @@
     }
 
     .formula-main {
-      font-family: 'Times New Roman', serif;
-      font-size: 1.4rem;
+      font-size: 1.3rem;
       margin-bottom: 8px;
     }
 
@@ -156,7 +159,7 @@
     }
 
     .summary li {
-      margin: 8px 0;
+      margin: 12px 0;
       padding-left: 20px;
       position: relative;
     }
@@ -203,7 +206,7 @@
 
     <h2>波動基本式</h2>
     <div class="formula">
-      <div class="formula-main">v = fλ</div>
+      <div class="formula-main">$v = f\lambda$</div>
       <div class="formula-note">波速 = 頻率 × 波長</div>
     </div>
 
@@ -212,70 +215,70 @@
 
     <div class="formula-group">
       <div class="formula">
-        <div class="formula-main">L = n · λ/2</div>
+        <div class="formula-main">$L = n \cdot \dfrac{\lambda}{2}$</div>
         <div class="formula-note">兩端固定（或兩端開放）</div>
       </div>
       <div class="formula">
-        <div class="formula-main">L = (2n−1) · λ/4</div>
+        <div class="formula-main">$L = (2n-1) \cdot \dfrac{\lambda}{4}$</div>
         <div class="formula-note">一端固定、一端開放</div>
       </div>
     </div>
 
     <div class="note">
-      <strong>n = 1, 2, 3...</strong> 為正整數，代表諧波數
+      <strong>$n = 1, 2, 3...$</strong> 為正整數，代表諧波數
     </div>
 
     <h2>折射</h2>
 
     <div class="formula">
-      <div class="formula-main">n = c / v</div>
+      <div class="formula-main">$n = \dfrac{c}{v}$</div>
       <div class="formula-note">折射率 = 真空光速 / 介質中光速</div>
     </div>
 
     <div class="formula">
-      <div class="formula-main">n₁ sin θ₁ = n₂ sin θ₂</div>
+      <div class="formula-main">$n_1 \sin\theta_1 = n_2 \sin\theta_2$</div>
       <div class="formula-note">司乃耳定律（Snell's Law）</div>
     </div>
 
     <div class="formula">
-      <div class="formula-main">n₁ / n₂ = v₂ / v₁ = λ₂ / λ₁</div>
+      <div class="formula-main">$\dfrac{n_1}{n_2} = \dfrac{v_2}{v_1} = \dfrac{\lambda_2}{\lambda_1}$</div>
       <div class="formula-note">折射率與速度、波長成反比</div>
     </div>
 
     <h2>雙狹縫干涉</h2>
 
     <div class="formula">
-      <div class="formula-main">δ = d sin θ ≈ dy / L</div>
-      <div class="formula-note">光程差（d：狹縫間距，L：屏幕距離，y：離中央距離）</div>
+      <div class="formula-main">$\delta = d\sin\theta \approx \dfrac{dy}{L}$</div>
+      <div class="formula-note">光程差（$d$：狹縫間距，$L$：屏幕距離，$y$：離中央距離）</div>
     </div>
 
     <div class="formula-group">
       <div class="formula">
-        <div class="formula-main">亮紋：δ = nλ</div>
-        <div class="formula-note">n = 0, 1, 2, 3...</div>
+        <div class="formula-main">亮紋：$\delta = n\lambda$</div>
+        <div class="formula-note">$n = 0, 1, 2, 3...$</div>
       </div>
       <div class="formula">
-        <div class="formula-main">暗紋：δ = (2n+1) · λ/2</div>
-        <div class="formula-note">n = 0, 1, 2, 3...</div>
+        <div class="formula-main">暗紋：$\delta = (2n+1) \cdot \dfrac{\lambda}{2}$</div>
+        <div class="formula-note">$n = 0, 1, 2, 3...$</div>
       </div>
     </div>
 
     <div class="formula">
-      <div class="formula-main">Δy = Lλ / d</div>
+      <div class="formula-main">$\Delta y = \dfrac{L\lambda}{d}$</div>
       <div class="formula-note">相鄰亮紋（或暗紋）間距</div>
     </div>
 
     <div class="formula">
-      <div class="formula-main">y<sub>n</sub> = n · Lλ / d</div>
-      <div class="formula-note">第 n 條亮紋位置（中央為 n=0）</div>
+      <div class="formula-main">$y_n = n \cdot \dfrac{L\lambda}{d}$</div>
+      <div class="formula-note">第 $n$ 條亮紋位置（中央為 $n=0$）</div>
     </div>
 
     <div class="summary">
       <h3>📝 快速記憶</h3>
       <ul>
-        <li><strong>駐波</strong>：兩端同 → λ/2；一開一閉 → λ/4（乘奇數）</li>
-        <li><strong>干涉亮暗</strong>：亮 = 整數λ，暗 = 半整數λ</li>
-        <li><strong>條紋間距</strong>：Δy = Lλ/d（L↑或λ↑則變寬，d↑則變窄）</li>
+        <li><strong>駐波</strong>：兩端同 → $\dfrac{\lambda}{2}$；一開一閉 → $\dfrac{\lambda}{4}$（乘奇數）</li>
+        <li><strong>干涉亮暗</strong>：亮 = 整數 $\lambda$，暗 = 半整數 $\lambda$</li>
+        <li><strong>條紋間距</strong>：$\Delta y = \dfrac{L\lambda}{d}$（$L$↑ 或 $\lambda$↑ 則變寬，$d$↑ 則變窄）</li>
       </ul>
     </div>
 
