@@ -221,14 +221,17 @@
     const PASS_HASH = hash('0828');
     const STORAGE_KEY = 'memory_auth';
     
-    // Check if already authenticated
-    if (localStorage.getItem(STORAGE_KEY) === PASS_HASH) {
-      showContent();
-    }
-    
-    // Enter key to unlock
-    document.getElementById('password-input').addEventListener('keypress', (e) => {
-      if (e.key === 'Enter') unlock();
+    // Wait for DOM to be ready
+    document.addEventListener('DOMContentLoaded', function() {
+      // Check if already authenticated
+      if (localStorage.getItem(STORAGE_KEY) === PASS_HASH) {
+        showContent();
+      }
+      
+      // Enter key to unlock
+      document.getElementById('password-input').addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') unlock();
+      });
     });
     
     function unlock() {
