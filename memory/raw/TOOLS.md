@@ -43,6 +43,7 @@ node ~/.openclaw/scripts/gcal.mjs move <eventId> <fromCalendarId> <toCalendarId>
 - Token: `~/.openclaw/google/calendar-token.json`
 - Scope: full access (`calendar`)
 - Timezone: Asia/Taipei
+- ⚠️ 提醒時跳過「喻喻放學」（那是給媽媽看的）
 
 ### ⚠️ Token 過期追蹤
 
