@@ -25,14 +25,8 @@
       min-height: 100vh;
       padding: 24px;
     }
-    #lock-screen h1 {
-      font-size: 3rem;
-      margin-bottom: 8px;
-    }
-    #lock-screen p {
-      color: var(--muted);
-      margin-bottom: 24px;
-    }
+    #lock-screen h1 { font-size: 3rem; margin-bottom: 8px; }
+    #lock-screen p { color: var(--muted); margin-bottom: 24px; }
     #lock-screen input {
       width: 200px;
       padding: 12px 16px;
@@ -45,10 +39,7 @@
       letter-spacing: 8px;
       margin-bottom: 16px;
     }
-    #lock-screen input:focus {
-      outline: none;
-      border-color: var(--accent);
-    }
+    #lock-screen input:focus { outline: none; border-color: var(--accent); }
     #lock-screen button {
       padding: 12px 32px;
       font-size: 1rem;
@@ -58,15 +49,12 @@
       border-radius: 8px;
       cursor: pointer;
     }
-    #lock-screen .error {
-      color: #ef4444;
-      margin-top: 16px;
-    }
+    #lock-screen .error { color: #ef4444; margin-top: 16px; }
     
     /* Main Content */
     #main-content {
       display: none;
-      max-width: 700px;
+      max-width: 800px;
       margin: 0 auto;
       padding: 40px 24px 80px;
     }
@@ -74,7 +62,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 32px;
+      margin-bottom: 24px;
       padding-bottom: 16px;
       border-bottom: 1px solid var(--border);
     }
@@ -83,12 +71,8 @@
       font-weight: 600;
       font-size: 1.5rem;
     }
-    .header-buttons {
-      display: flex;
-      gap: 8px;
-    }
-    .header-buttons a,
-    .header-buttons button {
+    .header-buttons { display: flex; gap: 8px; }
+    .header-buttons a, .header-buttons button {
       padding: 8px 16px;
       font-size: 0.875rem;
       background: transparent;
@@ -99,81 +83,55 @@
       text-decoration: none;
     }
     
-    .search-box {
-      width: 100%;
-      padding: 12px 16px;
-      font-size: 1rem;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      background: var(--card);
-      color: var(--text);
+    .file-list {
+      display: grid;
+      gap: 8px;
       margin-bottom: 24px;
     }
-    .search-box:focus {
-      outline: none;
-      border-color: var(--accent);
+    .file-item {
+      padding: 12px 16px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
+    .file-item:hover { border-color: var(--accent); }
+    .file-item.active { border-color: var(--accent); background: var(--bg); }
+    .file-name { font-weight: 400; }
+    .file-size { font-size: 0.8rem; color: var(--muted); }
     
-    .memory-section {
-      margin-bottom: 32px;
-    }
-    .memory-section h2 {
+    .section-title {
       font-size: 12px;
       text-transform: uppercase;
       letter-spacing: 2px;
       color: var(--muted);
-      margin-bottom: 12px;
+      margin: 24px 0 12px;
     }
-    .memory-card {
+    
+    #file-content {
       background: var(--card);
       border: 1px solid var(--border);
       border-radius: 12px;
       padding: 20px;
-      margin-bottom: 12px;
-    }
-    .memory-card h3 {
-      font-size: 1.1rem;
-      margin-bottom: 12px;
-      color: var(--accent);
-    }
-    .memory-card .content {
-      font-size: 0.95rem;
-    }
-    .memory-card .content h1,
-    .memory-card .content h2,
-    .memory-card .content h3 {
-      font-size: 1rem;
-      margin-top: 16px;
-      margin-bottom: 8px;
-      color: var(--text);
-    }
-    .memory-card .content ul {
-      padding-left: 20px;
-      margin: 8px 0;
-    }
-    .memory-card .content li {
-      margin-bottom: 4px;
+      white-space: pre-wrap;
+      font-family: 'SF Mono', Consolas, monospace;
+      font-size: 13px;
+      line-height: 1.6;
+      overflow-x: auto;
+      display: none;
     }
     
-    .empty-state {
-      text-align: center;
-      padding: 48px;
-      color: var(--muted);
-    }
-    
-    .last-updated {
+    .loading { color: var(--muted); text-align: center; padding: 40px; }
+    .last-sync {
       text-align: center;
       color: var(--muted);
       font-size: 12px;
       margin-top: 32px;
       padding-top: 16px;
       border-top: 1px solid var(--border);
-    }
-
-    @media print {
-      #lock-screen { display: none !important; }
-      #main-content { display: block !important; }
-      .header-buttons, .search-box { display: none; }
     }
   </style>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400&family=Noto+Serif+TC:wght@600&display=swap" rel="stylesheet">
@@ -198,17 +156,18 @@
       </div>
     </header>
     
-    <input type="text" class="search-box" placeholder="搜尋記憶..." id="search-input" oninput="filterMemories()">
+    <div class="section-title">📁 核心檔案</div>
+    <div class="file-list" id="core-files"></div>
     
-    <div id="memories-container">
-      <!-- Memory cards will be inserted here -->
-    </div>
+    <div class="section-title">📅 每日筆記</div>
+    <div class="file-list" id="daily-files"></div>
     
-    <p class="last-updated">最後更新：<span id="last-updated"></span></p>
+    <div id="file-content"></div>
+    
+    <p class="last-sync">最後同步：<span id="last-sync">-</span></p>
   </div>
   
   <script>
-    // Simple hash function
     function hash(str) {
       let h = 0;
       for (let i = 0; i < str.length; i++) {
@@ -220,15 +179,19 @@
     
     const PASS_HASH = hash('0828');
     const STORAGE_KEY = 'memory_auth';
+    const BASE_URL = 'https://raw.githubusercontent.com/saygmu/study-notes/main/memory/raw/';
     
-    // Initialize when ready
+    const CORE_FILES = ['AGENTS.md', 'TOOLS.md', 'MEMORY.md', 'troubleshooting-log.md'];
+    const DAILY_FILES = [
+      '2026-03-03.md', '2026-02-28.md', '2026-02-27.md', '2026-02-24.md',
+      '2026-02-23.md', '2026-02-21.md', '2026-02-19.md', '2026-02-14.md',
+      '2026-02-12.md', '2026-02-08.md', '2026-01-31.md'
+    ];
+    
     function init() {
-      // Check if already authenticated
       if (localStorage.getItem(STORAGE_KEY) === PASS_HASH) {
         showContent();
       }
-      
-      // Enter key to unlock
       const pwInput = document.getElementById('password-input');
       if (pwInput) {
         pwInput.addEventListener('keypress', (e) => {
@@ -237,7 +200,6 @@
       }
     }
     
-    // Run init when DOM is ready
     if (document.readyState === 'loading') {
       document.addEventListener('DOMContentLoaded', init);
     } else {
@@ -263,116 +225,44 @@
     function showContent() {
       document.getElementById('lock-screen').style.display = 'none';
       document.getElementById('main-content').style.display = 'block';
-      loadMemories();
+      renderFileList();
+      document.getElementById('last-sync').textContent = new Date().toLocaleString('zh-TW');
     }
     
-    // Memory data (will be updated by the secretary)
-    const MEMORIES = {
-      lastUpdated: '2026-03-03 14:57',
-      longTerm: `## 例行提醒
-
-### 行事曆提醒（早7晚6）
-- **早 7:00** - 提醒今天的行程（含天氣）
-- **晚 18:00** - 提醒明天的行程
-
-### 複習進度提醒
-- 目前暫停 - Abigail 走個申不分科
-
-## 喻喻資訊
-- 放學地點：雄女
-- 地址：801高雄市前金區五福三路122號`,
-      daily: [
-        {
-          date: '2026-03-03',
-          content: `## 🔔 今晚要提醒
-- 📋 帶板夾
-- 📏 工程捲尺
-- 📚 找數習
-
-## Google Calendar Token 更新
-- Token 過期了，重新授權成功
-- 下次過期約 3/10
-
-## Morning Brief 改良
-- 加了 **天氣** 到每日提醒 ✅
-
-## Second Brain 改進
-- 新增「主動記憶守則」到 AGENTS.md
-- 聽到重要資訊要立刻寫下來
-- 提醒事項、任何細節都要記
-
-## 已完成
-- ✅ 加入 Family 和 Too chiu 日曆
-- ✅ 更新 HEARTBEAT.md 加入天氣
-- ✅ 建立這個記憶網頁
-- ✅ 記憶網頁主題相容 + 數字鍵盤`
-        }
-      ]
-    };
-    
-    function loadMemories() {
-      document.getElementById('last-updated').textContent = MEMORIES.lastUpdated;
-      renderMemories();
+    function renderFileList() {
+      const coreContainer = document.getElementById('core-files');
+      const dailyContainer = document.getElementById('daily-files');
+      
+      coreContainer.innerHTML = CORE_FILES.map(f => `
+        <div class="file-item" onclick="loadFile('${f}', this)">
+          <span class="file-name">${f}</span>
+        </div>
+      `).join('');
+      
+      dailyContainer.innerHTML = DAILY_FILES.map(f => `
+        <div class="file-item" onclick="loadFile('${f}', this)">
+          <span class="file-name">${f.replace('.md', '')}</span>
+        </div>
+      `).join('');
     }
     
-    function renderMemories(filter = '') {
-      const container = document.getElementById('memories-container');
-      const filterLower = filter.toLowerCase();
+    async function loadFile(filename, el) {
+      // Update active state
+      document.querySelectorAll('.file-item').forEach(i => i.classList.remove('active'));
+      el.classList.add('active');
       
-      let html = '';
+      const contentEl = document.getElementById('file-content');
+      contentEl.style.display = 'block';
+      contentEl.textContent = '載入中...';
       
-      // Long-term memory
-      if (!filter || MEMORIES.longTerm.toLowerCase().includes(filterLower)) {
-        html += `
-          <div class="memory-section">
-            <h2>📌 長期記憶</h2>
-            <div class="memory-card">
-              <div class="content">${formatMarkdown(MEMORIES.longTerm)}</div>
-            </div>
-          </div>
-        `;
+      try {
+        const res = await fetch(BASE_URL + filename + '?t=' + Date.now());
+        if (!res.ok) throw new Error('找不到檔案');
+        const text = await res.text();
+        contentEl.textContent = text;
+      } catch (e) {
+        contentEl.textContent = '❌ ' + e.message;
       }
-      
-      // Daily memories
-      const filteredDaily = MEMORIES.daily.filter(d => 
-        !filter || d.content.toLowerCase().includes(filterLower) || d.date.includes(filter)
-      );
-      
-      if (filteredDaily.length > 0) {
-        html += `<div class="memory-section"><h2>📅 每日筆記</h2>`;
-        filteredDaily.forEach(day => {
-          html += `
-            <div class="memory-card">
-              <h3>${day.date}</h3>
-              <div class="content">${formatMarkdown(day.content)}</div>
-            </div>
-          `;
-        });
-        html += `</div>`;
-      }
-      
-      if (!html) {
-        html = `<div class="empty-state">找不到符合「${filter}」的記憶</div>`;
-      }
-      
-      container.innerHTML = html;
-    }
-    
-    function filterMemories() {
-      const query = document.getElementById('search-input').value;
-      renderMemories(query);
-    }
-    
-    function formatMarkdown(text) {
-      return text
-        .replace(/^### (.+)$/gm, '<h3>$1</h3>')
-        .replace(/^## (.+)$/gm, '<h2>$1</h2>')
-        .replace(/^# (.+)$/gm, '<h1>$1</h1>')
-        .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
-        .replace(/^- (.+)$/gm, '<li>$1</li>')
-        .replace(/(<li>.*<\/li>\n?)+/g, '<ul>$&</ul>')
-        .replace(/\n\n/g, '<br><br>')
-        .replace(/\n/g, '<br>');
     }
   </script>
 </body>
