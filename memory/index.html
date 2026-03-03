@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🧠 秘書的記憶</title>
+  <style>
+    :root {
+      --bg: #fafafa;
+      --text: #1a1a1a;
+      --muted: #666;
+      --accent: #3b82f6;
+      --border: #e5e5e5;
+      --card: #fff;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #0a0a0a;
+        --text: #e5e5e5;
+        --muted: #888;
+        --accent: #60a5fa;
+        --border: #333;
+        --card: #1a1a1a;
+      }
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+    
+    /* Lock Screen */
+    #lock-screen {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 24px;
+    }
+    #lock-screen h1 {
+      font-size: 3rem;
+      margin-bottom: 8px;
+    }
+    #lock-screen p {
+      color: var(--muted);
+      margin-bottom: 24px;
+    }
+    #lock-screen input {
+      width: 200px;
+      padding: 12px 16px;
+      font-size: 1.25rem;
+      text-align: center;
+      border: 2px solid var(--border);
+      border-radius: 12px;
+      background: var(--card);
+      color: var(--text);
+      letter-spacing: 8px;
+      margin-bottom: 16px;
+    }
+    #lock-screen input:focus {
+      outline: none;
+      border-color: var(--accent);
+    }
+    #lock-screen button {
+      padding: 12px 32px;
+      font-size: 1rem;
+      background: var(--accent);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    #lock-screen .error {
+      color: #ef4444;
+      margin-top: 16px;
+    }
+    
+    /* Main Content */
+    #main-content {
+      display: none;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 32px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--border);
+    }
+    header h1 {
+      font-size: 1.5rem;
+    }
+    header button {
+      padding: 8px 16px;
+      font-size: 0.875rem;
+      background: transparent;
+      color: var(--muted);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    
+    .search-box {
+      width: 100%;
+      padding: 12px 16px;
+      font-size: 1rem;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--card);
+      color: var(--text);
+      margin-bottom: 24px;
+    }
+    .search-box:focus {
+      outline: none;
+      border-color: var(--accent);
+    }
+    
+    .memory-section {
+      margin-bottom: 32px;
+    }
+    .memory-section h2 {
+      font-size: 1rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 12px;
+    }
+    .memory-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 12px;
+    }
+    .memory-card h3 {
+      font-size: 1.1rem;
+      margin-bottom: 8px;
+    }
+    .memory-card .date {
+      font-size: 0.85rem;
+      color: var(--muted);
+      margin-bottom: 12px;
+    }
+    .memory-card .content {
+      font-size: 0.95rem;
+      white-space: pre-wrap;
+    }
+    .memory-card .content h1,
+    .memory-card .content h2,
+    .memory-card .content h3 {
+      font-size: 1rem;
+      margin-top: 16px;
+      margin-bottom: 8px;
+    }
+    .memory-card .content ul {
+      padding-left: 20px;
+    }
+    
+    .empty-state {
+      text-align: center;
+      padding: 48px;
+      color: var(--muted);
+    }
+    
+    .last-updated {
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.85rem;
+      margin-top: 32px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border);
+    }
+  </style>
+</head>
+<body>
+  <!-- Lock Screen -->
+  <div id="lock-screen">
+    <h1>🔐</h1>
+    <p>輸入密碼查看秘書的記憶</p>
+    <input type="password" id="password-input" placeholder="••••" maxlength="10" autocomplete="off">
+    <button onclick="unlock()">進入</button>
+    <p class="error" id="error-msg" style="display:none">密碼錯誤</p>
+  </div>
+  
+  <!-- Main Content -->
+  <div id="main-content">
+    <header>
+      <h1>🧠 秘書的記憶</h1>
+      <button onclick="logout()">登出</button>
+    </header>
+    
+    <input type="text" class="search-box" placeholder="搜尋記憶..." id="search-input" oninput="filterMemories()">
+    
+    <div id="memories-container">
+      <!-- Memory cards will be inserted here -->
+    </div>
+    
+    <p class="last-updated">最後更新：<span id="last-updated"></span></p>
+  </div>
+  
+  <script>
+    // Simple hash function
+    function hash(str) {
+      let h = 0;
+      for (let i = 0; i < str.length; i++) {
+        h = ((h << 5) - h) + str.charCodeAt(i);
+        h |= 0;
+      }
+      return h.toString();
+    }
+    
+    const PASS_HASH = hash('0828');
+    const STORAGE_KEY = 'memory_auth';
+    
+    // Check if already authenticated
+    if (localStorage.getItem(STORAGE_KEY) === PASS_HASH) {
+      showContent();
+    }
+    
+    // Enter key to unlock
+    document.getElementById('password-input').addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') unlock();
+    });
+    
+    function unlock() {
+      const input = document.getElementById('password-input').value;
+      if (hash(input) === PASS_HASH) {
+        localStorage.setItem(STORAGE_KEY, PASS_HASH);
+        showContent();
+      } else {
+        document.getElementById('error-msg').style.display = 'block';
+        document.getElementById('password-input').value = '';
+      }
+    }
+    
+    function logout() {
+      localStorage.removeItem(STORAGE_KEY);
+      location.reload();
+    }
+    
+    function showContent() {
+      document.getElementById('lock-screen').style.display = 'none';
+      document.getElementById('main-content').style.display = 'block';
+      loadMemories();
+    }
+    
+    // Memory data (will be updated by the secretary)
+    const MEMORIES = {
+      lastUpdated: '2026-03-03 13:46',
+      longTerm: `## 例行提醒
+
+### 行事曆提醒（早7晚6）
+- **早 7:00** - 提醒今天的行程（含天氣）
+- **晚 18:00** - 提醒明天的行程
+- 設定日期：2026-02-21
+
+### 複習進度提醒
+- 每天早上（08:00 後）檢查 Notion 複習進度
+- 如果有落後就提醒（每天最多一次）
+- 透過 heartbeat 檢查
+- **目前暫停** - Abigail 走個申不分科`,
+      daily: [
+        {
+          date: '2026-03-03',
+          content: `## Google Calendar Token 更新
+- Token 過期了，重新授權成功
+- 下次過期約 3/10
+
+## Morning Brief 改良計畫
+- Abigail 想加 **天氣** 到每日提醒
+- 已完成！明天開始會有天氣
+
+## Second Brain 改進
+- Abigail 說我常忘東西
+- 新增「主動記憶守則」到 AGENTS.md
+- 聽到重要資訊要立刻寫下來
+
+## 已完成
+- ✅ 加入 Family 和 Too chiu 日曆
+- ✅ 更新 HEARTBEAT.md 加入天氣
+- ✅ 新增「主動記憶守則」到 AGENTS.md
+- ✅ 使用 Open-Meteo API（wttr.in 太慢）
+
+## 喻喻資訊
+- 放學地點：高雄市立高雄女子高級中學（雄女）
+- 地址：801台灣高雄市前金區五福三路122號`
+        }
+      ]
+    };
+    
+    function loadMemories() {
+      document.getElementById('last-updated').textContent = MEMORIES.lastUpdated;
+      renderMemories();
+    }
+    
+    function renderMemories(filter = '') {
+      const container = document.getElementById('memories-container');
+      const filterLower = filter.toLowerCase();
+      
+      let html = '';
+      
+      // Long-term memory
+      if (!filter || MEMORIES.longTerm.toLowerCase().includes(filterLower)) {
+        html += `
+          <div class="memory-section">
+            <h2>📌 長期記憶</h2>
+            <div class="memory-card">
+              <div class="content">${formatMarkdown(MEMORIES.longTerm)}</div>
+            </div>
+          </div>
+        `;
+      }
+      
+      // Daily memories
+      const filteredDaily = MEMORIES.daily.filter(d => 
+        !filter || d.content.toLowerCase().includes(filterLower) || d.date.includes(filter)
+      );
+      
+      if (filteredDaily.length > 0) {
+        html += `<div class="memory-section"><h2>📅 每日筆記</h2>`;
+        filteredDaily.forEach(day => {
+          html += `
+            <div class="memory-card">
+              <h3>${day.date}</h3>
+              <div class="content">${formatMarkdown(day.content)}</div>
+            </div>
+          `;
+        });
+        html += `</div>`;
+      }
+      
+      if (!html) {
+        html = `<div class="empty-state">找不到符合「${filter}」的記憶</div>`;
+      }
+      
+      container.innerHTML = html;
+    }
+    
+    function filterMemories() {
+      const query = document.getElementById('search-input').value;
+      renderMemories(query);
+    }
+    
+    function formatMarkdown(text) {
+      return text
+        .replace(/^### (.+)$/gm, '<h3>$1</h3>')
+        .replace(/^## (.+)$/gm, '<h2>$1</h2>')
+        .replace(/^# (.+)$/gm, '<h1>$1</h1>')
+        .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+        .replace(/^- (.+)$/gm, '<li>$1</li>')
+        .replace(/(<li>.*<\/li>\n?)+/g, '<ul>$&</ul>')
+        .replace(/\n\n/g, '<br><br>')
+        .replace(/\n/g, '<br>');
+    }
+  </script>
+</body>
+</html>
