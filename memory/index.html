@@ -2,33 +2,17 @@
 <html lang="zh-TW">
 <head>
   <meta charset="UTF-8">
+  <script src="../theme.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>🧠 秘書的記憶</title>
   <style>
-    :root {
-      --bg: #fafafa;
-      --text: #1a1a1a;
-      --muted: #666;
-      --accent: #3b82f6;
-      --border: #e5e5e5;
-      --card: #fff;
-    }
-    @media (prefers-color-scheme: dark) {
-      :root {
-        --bg: #0a0a0a;
-        --text: #e5e5e5;
-        --muted: #888;
-        --accent: #60a5fa;
-        --border: #333;
-        --card: #1a1a1a;
-      }
-    }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      font-family: 'Noto Sans TC', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-weight: 300;
       background: var(--bg);
       color: var(--text);
-      line-height: 1.6;
+      line-height: 1.8;
       min-height: 100vh;
     }
     
@@ -69,7 +53,7 @@
       padding: 12px 32px;
       font-size: 1rem;
       background: var(--accent);
-      color: white;
+      color: var(--bg);
       border: none;
       border-radius: 8px;
       cursor: pointer;
@@ -82,9 +66,9 @@
     /* Main Content */
     #main-content {
       display: none;
-      max-width: 800px;
+      max-width: 700px;
       margin: 0 auto;
-      padding: 24px;
+      padding: 40px 24px 80px;
     }
     header {
       display: flex;
@@ -95,9 +79,16 @@
       border-bottom: 1px solid var(--border);
     }
     header h1 {
+      font-family: 'Noto Serif TC', serif;
+      font-weight: 600;
       font-size: 1.5rem;
     }
-    header button {
+    .header-buttons {
+      display: flex;
+      gap: 8px;
+    }
+    .header-buttons a,
+    .header-buttons button {
       padding: 8px 16px;
       font-size: 0.875rem;
       background: transparent;
@@ -105,6 +96,7 @@
       border: 1px solid var(--border);
       border-radius: 6px;
       cursor: pointer;
+      text-decoration: none;
     }
     
     .search-box {
@@ -126,10 +118,10 @@
       margin-bottom: 32px;
     }
     .memory-section h2 {
-      font-size: 1rem;
-      color: var(--muted);
+      font-size: 12px;
       text-transform: uppercase;
-      letter-spacing: 1px;
+      letter-spacing: 2px;
+      color: var(--muted);
       margin-bottom: 12px;
     }
     .memory-card {
@@ -141,16 +133,11 @@
     }
     .memory-card h3 {
       font-size: 1.1rem;
-      margin-bottom: 8px;
-    }
-    .memory-card .date {
-      font-size: 0.85rem;
-      color: var(--muted);
       margin-bottom: 12px;
+      color: var(--accent);
     }
     .memory-card .content {
       font-size: 0.95rem;
-      white-space: pre-wrap;
     }
     .memory-card .content h1,
     .memory-card .content h2,
@@ -158,9 +145,14 @@
       font-size: 1rem;
       margin-top: 16px;
       margin-bottom: 8px;
+      color: var(--text);
     }
     .memory-card .content ul {
       padding-left: 20px;
+      margin: 8px 0;
+    }
+    .memory-card .content li {
+      margin-bottom: 4px;
     }
     
     .empty-state {
@@ -172,12 +164,19 @@
     .last-updated {
       text-align: center;
       color: var(--muted);
-      font-size: 0.85rem;
+      font-size: 12px;
       margin-top: 32px;
       padding-top: 16px;
       border-top: 1px solid var(--border);
     }
+
+    @media print {
+      #lock-screen { display: none !important; }
+      #main-content { display: block !important; }
+      .header-buttons, .search-box { display: none; }
+    }
   </style>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400&family=Noto+Serif+TC:wght@600&display=swap" rel="stylesheet">
 </head>
 <body>
   <!-- Lock Screen -->
@@ -193,7 +192,10 @@
   <div id="main-content">
     <header>
       <h1>🧠 秘書的記憶</h1>
-      <button onclick="logout()">登出</button>
+      <div class="header-buttons">
+        <a href="../">← 返回</a>
+        <button onclick="logout()">登出</button>
+      </div>
     </header>
     
     <input type="text" class="search-box" placeholder="搜尋記憶..." id="search-input" oninput="filterMemories()">
@@ -253,7 +255,7 @@
     
     // Memory data (will be updated by the secretary)
     const MEMORIES = {
-      lastUpdated: '2026-03-03 13:46',
+      lastUpdated: '2026-03-03 13:50',
       longTerm: `## 例行提醒
 
 ### 行事曆提醒（早7晚6）
@@ -273,24 +275,24 @@
 - Token 過期了，重新授權成功
 - 下次過期約 3/10
 
-## Morning Brief 改良計畫
-- Abigail 想加 **天氣** 到每日提醒
+## Morning Brief 改良
+- Abigail 想加 **天氣** 到每日提醒 ✅
 - 已完成！明天開始會有天氣
 
 ## Second Brain 改進
-- Abigail 說我常忘東西
+- Abigail 說我常忘東西 😅
 - 新增「主動記憶守則」到 AGENTS.md
 - 聽到重要資訊要立刻寫下來
 
 ## 已完成
 - ✅ 加入 Family 和 Too chiu 日曆
 - ✅ 更新 HEARTBEAT.md 加入天氣
-- ✅ 新增「主動記憶守則」到 AGENTS.md
-- ✅ 使用 Open-Meteo API（wttr.in 太慢）
+- ✅ 新增「主動記憶守則」
+- ✅ 建立這個記憶網頁
 
 ## 喻喻資訊
-- 放學地點：高雄市立高雄女子高級中學（雄女）
-- 地址：801台灣高雄市前金區五福三路122號`
+- 放學地點：雄女
+- 地址：801高雄市前金區五福三路122號`
         }
       ]
     };
