@@ -183,7 +183,7 @@
   <div id="lock-screen">
     <h1>🔐</h1>
     <p>輸入密碼查看秘書的記憶</p>
-    <input type="password" id="password-input" placeholder="••••" maxlength="10" autocomplete="off">
+    <input type="password" id="password-input" placeholder="••••" maxlength="10" autocomplete="off" inputmode="numeric" pattern="[0-9]*">
     <button onclick="unlock()">進入</button>
     <p class="error" id="error-msg" style="display:none">密碼錯誤</p>
   </div>
