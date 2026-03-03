@@ -103,7 +103,12 @@ node ~/.openclaw/scripts/gcal-auth-manual.mjs token "4/0XXXX..."
 - **網址**：https://saygmu.github.io/study-notes/memory/
 - **密碼**：0828
 - **用途**：讓 Abigail 用手機查看我的記憶
-- **更新方式**：手動編輯 `study-notes/memory/index.html` 中的 `MEMORIES` 物件，然後 git push
+- **同步指令**：
+```bash
+cp ~/.openclaw/workspace/{AGENTS,TOOLS,MEMORY}.md ~/.openclaw/workspace/study-notes/memory/raw/
+cp ~/.openclaw/workspace/memory/*.md ~/.openclaw/workspace/study-notes/memory/raw/
+cd ~/.openclaw/workspace/study-notes && git add -A && git commit -m "同步記憶檔案" && git push
+```
 
 ---
 
