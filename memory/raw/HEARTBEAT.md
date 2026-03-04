@@ -37,6 +37,7 @@
 
 ### 記憶檔案同步（隨時）
 ⚠️ **檔案有新增或更動時就要同步到網站！** 不要等到晚上。
+⚠️ **新增每日筆記時，要更新 `memory/index.html` 的 `DAILY_FILES` 陣列！**
 ```bash
 cp ~/.openclaw/workspace/{AGENTS,TOOLS,MEMORY}.md ~/.openclaw/workspace/study-notes/memory/raw/
 cp ~/.openclaw/workspace/memory/*.md ~/.openclaw/workspace/study-notes/memory/raw/
