@@ -35,11 +35,13 @@
 
 ## 例行任務
 
-### 行事曆提醒（早7晚6）
-- **早 7:00** - 提醒今天的行程 + 天氣
-- **晚 18:00** - 提醒明天的行程
-- 設定日期：2026-02-21
-- ⚠️ 之前漏設過，Abigail 有提醒
+### 行事曆提醒（系統 crontab）
+**已改用 Pi 系統 crontab，不再用 OpenClaw cron**（2026-03-05）
+- **07:00** - 早安 + 天氣 + 行程 (`morning-greeting.mjs`)
+- **18:00** - 明天行程提醒 (`evening-greeting.mjs`)
+- **22:30** - 眼藥水提醒 (`eye-drops.mjs`)
+- 腳本：`~/.openclaw/scripts/`
+- Log：`~/.openclaw/scripts/*.log`
 
 ### 複習進度提醒
 - **目前暫停** - Abigail 走個申不分科
@@ -88,6 +90,8 @@
 - iOS Safari 背景 JS 約 5-10 秒後暫停，要用 visibilitychange 重算
 - PWA 快取很頑固，要清 Service Worker + caches API
 - wttr.in 太慢，用 Open-Meteo API
+- Node.js `fetch` 在 Pi 上會 timeout，用 `child_process.execSync` + curl
+- **SVG 文字**：不要用 Unicode 下標 `₂` 或 `baseline-shift`，純文字最穩
 
 ### 工作方式
 - **講義前先看 TOOLS.md 的 checklist**
@@ -95,6 +99,8 @@
 - 公式要用 KaTeX，分數用 `\dfrac`
 - 仔細看完原始素材再開始寫
 - 找不到適合的圖就自己畫
+- **講義完成要自己截圖檢查**，確認圖片正確再叫 Abigail
+- **記憶後加「（已記）」**
 
 ### Cron 提醒
 - `deliver: true` 不可靠，讓 agent 直接用 message tool 發送
@@ -124,4 +130,4 @@
 
 ---
 
-*最後更新：2026-03-04*
+*最後更新：2026-03-05*
