@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <script src="../theme.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>晶場理論與配位化合物</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600&family=Noto+Sans+TC:wght@300;400;500&display=swap');
+    
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    body {
+      font-family: 'Noto Sans TC', sans-serif;
+      font-weight: 300;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 2;
+      font-size: 16px;
+      transition: all 0.3s ease;
+    }
+
+    .container {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 60px 24px;
+    }
+
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+      padding: 16px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 100;
+      font-size: 14px;
+    }
+
+    nav a {
+      color: var(--muted);
+      text-decoration: none;
+    }
+
+    nav a:hover { color: var(--text); }
+
+    .nav-actions {
+      display: flex;
+      gap: 20px;
+    }
+
+    .nav-actions button {
+      background: none;
+      border: none;
+      color: var(--muted);
+      cursor: pointer;
+      font-size: 14px;
+      font-family: inherit;
+    }
+
+    .nav-actions button:hover { color: var(--text); }
+
+    h1 {
+      font-family: 'Noto Serif TC', serif;
+      font-weight: 600;
+      font-size: 2.2rem;
+      margin: 40px 0 16px;
+      letter-spacing: 2px;
+    }
+
+    .subtitle {
+      color: var(--muted);
+      margin-bottom: 60px;
+      font-size: 14px;
+    }
+    
+    h2 {
+      font-family: 'Noto Serif TC', serif;
+      font-weight: 600;
+      font-size: 1.25rem;
+      margin: 60px 0 24px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    h3 {
+      font-weight: 500;
+      font-size: 1rem;
+      margin: 32px 0 16px;
+      color: var(--muted);
+    }
+
+    p { margin-bottom: 16px; }
+
+    .formula {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 24px;
+      text-align: center;
+      background: var(--card);
+      margin: 24px 0;
+    }
+
+    .formula-note {
+      font-size: 0.85rem;
+      color: var(--muted);
+      margin-top: 12px;
+    }
+
+    .note {
+      border-left: 2px solid var(--accent);
+      padding: 16px 20px;
+      margin: 24px 0;
+      background: var(--card);
+    }
+
+    .note-title {
+      font-weight: 500;
+      margin-bottom: 8px;
+      color: var(--accent);
+    }
+
+    .summary {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 32px;
+      margin: 40px 0;
+      background: var(--card);
+    }
+
+    .summary h3 {
+      margin-top: 0;
+      color: var(--text);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 24px 0;
+      font-size: 15px;
+    }
+
+    th, td {
+      padding: 12px 16px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+
+    th {
+      font-weight: 400;
+      color: var(--muted);
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    ul, ol {
+      margin: 16px 0 16px 24px;
+    }
+
+    li { margin-bottom: 8px; }
+
+    .diagram {
+      text-align: center;
+      margin: 32px 0;
+      padding: 24px;
+      background: var(--card);
+      border-radius: 8px;
+    }
+
+    .diagram svg {
+      max-width: 100%;
+    }
+
+    .orbital-box {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-family: monospace;
+      font-size: 1.1rem;
+      margin: 8px 4px;
+    }
+
+    .orbital-cell {
+      width: 28px;
+      height: 32px;
+      border: 1px solid var(--text);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.9rem;
+    }
+
+    .spin-up::before { content: "↿"; }
+    .spin-down::before { content: "⇂"; }
+    .spin-pair::before { content: "↿⇂"; font-size: 0.8rem; }
+
+    .comparison {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin: 24px 0;
+    }
+
+    .comparison-item {
+      padding: 20px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--card);
+    }
+
+    .comparison-item h4 {
+      font-weight: 500;
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .highlight {
+      background: var(--highlight);
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+
+    .example {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 20px;
+      margin: 20px 0;
+    }
+
+    .example-title {
+      font-weight: 500;
+      color: var(--accent);
+      margin-bottom: 12px;
+    }
+
+    .energy-diagram {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 24px;
+      margin: 24px 0;
+    }
+
+    .energy-level {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin: 8px 0;
+    }
+
+    .energy-label {
+      width: 60px;
+      text-align: right;
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+
+    .energy-orbitals {
+      display: flex;
+      gap: 8px;
+    }
+
+    .orbital-line {
+      width: 40px;
+      height: 2px;
+      background: var(--text);
+      position: relative;
+    }
+
+    footer {
+      margin-top: 80px;
+      padding-top: 24px;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    @media (max-width: 600px) {
+      h1 { font-size: 1.75rem; }
+      .container { padding: 60px 16px; }
+      .comparison { grid-template-columns: 1fr; }
+    }
+
+    @media print {
+      nav, .theme-toggle-btn { display: none; }
+      .container { padding: 20px; }
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="../index.html">← 返回</a>
+    <div class="nav-actions">
+      <button onclick="window.print()">列印</button>
+    </div>
+  </nav>
+
+  <div class="container">
+    <h1>晶場理論與配位化合物</h1>
+    <p class="subtitle">Crystal Field Theory · 混成軌域與電子組態</p>
+
+    <h2>一、配位化合物基礎</h2>
+    
+    <p>配位化合物（錯合物）由<strong>中心金屬離子</strong>與<strong>配位基</strong>組成。配位基提供孤對電子給金屬離子形成配位鍵。</p>
+
+    <div class="formula">
+      $[\text{Ni(CN)}_4]^{2-}$
+      <div class="formula-note">中心金屬：Ni²⁺ ｜ 配位基：CN⁻ ｜ 配位數：4</div>
+    </div>
+
+    <h3>常見配位基</h3>
+    <table>
+      <tr>
+        <th>配位基</th>
+        <th>提供電子對數</th>
+        <th>場強</th>
+      </tr>
+      <tr>
+        <td>$\text{CN}^-$（氰根）</td>
+        <td>1</td>
+        <td>強場</td>
+      </tr>
+      <tr>
+        <td>$\text{CO}$（一氧化碳）</td>
+        <td>1</td>
+        <td>強場</td>
+      </tr>
+      <tr>
+        <td>$\text{NH}_3$（氨）</td>
+        <td>1</td>
+        <td>中場</td>
+      </tr>
+      <tr>
+        <td>$\text{H}_2\text{O}$（水）</td>
+        <td>1</td>
+        <td>弱場</td>
+      </tr>
+      <tr>
+        <td>$\text{Cl}^-$（氯離子）</td>
+        <td>1</td>
+        <td>弱場</td>
+      </tr>
+      <tr>
+        <td>en（乙二胺）</td>
+        <td>2</td>
+        <td>中場</td>
+      </tr>
+    </table>
+
+    <h2>二、混成軌域</h2>
+
+    <p>金屬離子會進行軌域混成，提供空軌域接受配位基的電子對。</p>
+
+    <table>
+      <tr>
+        <th>混成類型</th>
+        <th>幾何形狀</th>
+        <th>配位數</th>
+        <th>使用軌域</th>
+      </tr>
+      <tr>
+        <td>$sp^3$</td>
+        <td>四面體</td>
+        <td>4</td>
+        <td>1s + 3p</td>
+      </tr>
+      <tr>
+        <td>$dsp^2$</td>
+        <td>平面四方</td>
+        <td>4</td>
+        <td>1d + 1s + 2p</td>
+      </tr>
+      <tr>
+        <td>$sp^3d^2$ 或 $d^2sp^3$</td>
+        <td>八面體</td>
+        <td>6</td>
+        <td>2d + 1s + 3p</td>
+      </tr>
+    </table>
+
+    <div class="note">
+      <div class="note-title">💡 內軌與外軌</div>
+      <p><strong>內軌錯合物</strong>：使用 $(n-1)d$ 軌域混成（如 $d^2sp^3$）<br>
+      <strong>外軌錯合物</strong>：使用 $nd$ 軌域混成（如 $sp^3d^2$）</p>
+    </div>
+
+    <h2>三、晶場分裂</h2>
+
+    <p>當配位基接近金屬離子時，d 軌域會因為<strong>靜電排斥</strong>而分裂成不同能量。</p>
+
+    <h3>八面體場</h3>
+    <div class="diagram">
+      <svg width="300" height="200" viewBox="0 0 300 200">
+        <!-- 原始能階 -->
+        <line x1="30" y1="100" x2="90" y2="100" stroke="currentColor" stroke-width="2"/>
+        <text x="60" y="120" text-anchor="middle" fill="currentColor" font-size="12">自由離子</text>
+        <text x="60" y="90" text-anchor="middle" fill="currentColor" font-size="11">5個 d 軌域</text>
+        
+        <!-- 箭頭 -->
+        <polygon points="110,100 130,95 130,105" fill="currentColor"/>
+        
+        <!-- 分裂後 -->
+        <line x1="160" y1="60" x2="200" y2="60" stroke="currentColor" stroke-width="2"/>
+        <line x1="210" y1="60" x2="250" y2="60" stroke="currentColor" stroke-width="2"/>
+        <text x="205" y="45" text-anchor="middle" fill="currentColor" font-size="12">$e_g$</text>
+        <text x="270" y="65" text-anchor="start" fill="currentColor" font-size="11">($d_{z^2}, d_{x^2-y^2}$)</text>
+        
+        <line x1="150" y1="140" x2="190" y2="140" stroke="currentColor" stroke-width="2"/>
+        <line x1="200" y1="140" x2="240" y2="140" stroke="currentColor" stroke-width="2"/>
+        <line x1="250" y1="140" x2="290" y2="140" stroke="currentColor" stroke-width="2"/>
+        <text x="220" y="160" text-anchor="middle" fill="currentColor" font-size="12">$t_{2g}$</text>
+        <text x="220" y="180" text-anchor="middle" fill="currentColor" font-size="11">($d_{xy}, d_{xz}, d_{yz}$)</text>
+        
+        <!-- Δ 標示 -->
+        <line x1="140" y1="60" x2="140" y2="140" stroke="currentColor" stroke-width="1" stroke-dasharray="4"/>
+        <text x="135" y="105" text-anchor="end" fill="currentColor" font-size="14">Δ</text>
+      </svg>
+    </div>
+
+    <p>在八面體場中：</p>
+    <ul>
+      <li><strong>$e_g$ 軌域</strong>（$d_{z^2}, d_{x^2-y^2}$）：指向配位基，能量<strong>較高</strong></li>
+      <li><strong>$t_{2g}$ 軌域</strong>（$d_{xy}, d_{xz}, d_{yz}$）：指向配位基之間，能量<strong>較低</strong></li>
+    </ul>
+
+    <h2>四、強場 vs 弱場</h2>
+
+    <div class="comparison">
+      <div class="comparison-item">
+        <h4>🔵 強場配位基</h4>
+        <p>造成<strong>大的分裂能 Δ</strong></p>
+        <ul>
+          <li>電子傾向<strong>成對</strong>填入低能階</li>
+          <li>形成<strong>低自旋</strong>錯合物</li>
+          <li>例：$\text{CN}^-$, $\text{CO}$</li>
+        </ul>
+      </div>
+      <div class="comparison-item">
+        <h4>🔴 弱場配位基</h4>
+        <p>造成<strong>小的分裂能 Δ</strong></p>
+        <ul>
+          <li>電子傾向<strong>先佔據所有軌域</strong></li>
+          <li>形成<strong>高自旋</strong>錯合物</li>
+          <li>例：$\text{Cl}^-$, $\text{H}_2\text{O}$</li>
+        </ul>
+      </div>
+    </div>
+
+    <h3>光譜化學序列</h3>
+    <div class="formula">
+      $\text{I}^- < \text{Br}^- < \text{Cl}^- < \text{F}^- < \text{OH}^- < \text{H}_2\text{O} < \text{NH}_3 < \text{en} < \text{NO}_2^- < \text{CN}^- < \text{CO}$
+      <div class="formula-note">弱場 ←―――――――――――――――――→ 強場</div>
+    </div>
+
+    <h2>五、高自旋 vs 低自旋</h2>
+
+    <div class="example">
+      <div class="example-title">例：$d^5$ 組態（如 Fe³⁺、Mn²⁺）</div>
+      
+      <div class="comparison">
+        <div class="comparison-item">
+          <h4>高自旋（弱場）</h4>
+          <p style="text-align: center; font-family: monospace; font-size: 1.2rem; margin: 16px 0;">
+            $e_g$: ↿ ↿<br>
+            $t_{2g}$: ↿ ↿ ↿
+          </p>
+          <p>未成對電子：<strong>5 個</strong><br>
+          具有<strong>順磁性</strong></p>
+        </div>
+        <div class="comparison-item">
+          <h4>低自旋（強場）</h4>
+          <p style="text-align: center; font-family: monospace; font-size: 1.2rem; margin: 16px 0;">
+            $e_g$: _ _<br>
+            $t_{2g}$: ↿⇂ ↿⇂ ↿
+          </p>
+          <p>未成對電子：<strong>1 個</strong><br>
+          順磁性<strong>較弱</strong></p>
+        </div>
+      </div>
+    </div>
+
+    <div class="note">
+      <div class="note-title">🧲 磁性判斷</div>
+      <p><strong>順磁性</strong>：有未成對電子，會被磁場吸引<br>
+      <strong>反磁性</strong>：所有電子都成對，會被磁場排斥</p>
+    </div>
+
+    <h2>六、平面四方形成條件</h2>
+
+    <p>平面四方（$dsp^2$ 混成）是一種特殊的四配位幾何構型，電子必須<strong>成對</strong>才能空出 d 軌域來混成。</p>
+
+    <div class="summary">
+      <h3>📋 形成 $dsp^2$ 的條件（滿足其一即可）</h3>
+      <table>
+        <tr>
+          <th>條件</th>
+          <th>說明</th>
+          <th>範例</th>
+        </tr>
+        <tr>
+          <td>第一列 + 強場</td>
+          <td>3d 金屬 + 強場配位基</td>
+          <td>$[\text{Ni(CN)}_4]^{2-}$</td>
+        </tr>
+        <tr>
+          <td>第二、三列過渡金屬</td>
+          <td>4d/5d 金屬本身傾向低自旋</td>
+          <td>$[\text{PtCl}_4]^{2-}$, $[\text{PdCl}_4]^{2-}$, $[\text{AuCl}_4]^{-}$</td>
+        </tr>
+        <tr>
+          <td>$d^8$ 組態</td>
+          <td>剛好可以填滿 $t_{2g}$ 和部分 $e_g$</td>
+          <td>Ni²⁺, Pd²⁺, Pt²⁺, Au³⁺</td>
+        </tr>
+      </table>
+    </div>
+
+    <h3>常見離子的混成類型</h3>
+    <table>
+      <tr>
+        <th>離子</th>
+        <th>電子組態</th>
+        <th>常見混成</th>
+        <th>幾何形狀</th>
+      </tr>
+      <tr>
+        <td>Ni²⁺（$d^8$）</td>
+        <td>$[Ar]3d^8$</td>
+        <td>$dsp^2$（強場）/ $sp^3$（弱場）</td>
+        <td>平面四方 / 四面體</td>
+      </tr>
+      <tr>
+        <td>Cu²⁺（$d^9$）</td>
+        <td>$[Ar]3d^9$</td>
+        <td>$dsp^2$</td>
+        <td>平面四方</td>
+      </tr>
+      <tr>
+        <td>Zn²⁺（$d^{10}$）</td>
+        <td>$[Ar]3d^{10}$</td>
+        <td>$sp^3$</td>
+        <td>四面體</td>
+      </tr>
+      <tr>
+        <td>Pt²⁺（$d^8$）</td>
+        <td>$[Xe]4f^{14}5d^8$</td>
+        <td>$dsp^2$</td>
+        <td>平面四方</td>
+      </tr>
+      <tr>
+        <td>Pd²⁺（$d^8$）</td>
+        <td>$[Kr]4d^8$</td>
+        <td>$dsp^2$</td>
+        <td>平面四方</td>
+      </tr>
+      <tr>
+        <td>Au³⁺（$d^8$）</td>
+        <td>$[Xe]4f^{14}5d^8$</td>
+        <td>$dsp^2$</td>
+        <td>平面四方</td>
+      </tr>
+      <tr>
+        <td>Cd²⁺（$d^{10}$）</td>
+        <td>$[Kr]4d^{10}$</td>
+        <td>$sp^3$</td>
+        <td>四面體</td>
+      </tr>
+      <tr>
+        <td>Hg²⁺（$d^{10}$）</td>
+        <td>$[Xe]4f^{14}5d^{10}$</td>
+        <td>$sp^3$</td>
+        <td>四面體</td>
+      </tr>
+    </table>
+
+    <div class="note">
+      <div class="note-title">💡 $d^{10}$ 為何是 $sp^3$？</div>
+      <p>$d^{10}$ 組態的 d 軌域<strong>全滿</strong>，無法空出 d 軌域參與 $dsp^2$ 混成，只能用外層的 s 和 p 軌域形成 $sp^3$。</p>
+    </div>
+
+    <h2>七、範例解析</h2>
+
+    <div class="example">
+      <div class="example-title">例題：$[\text{Ni(CN)}_4]^{2-}$ 的混成軌域</div>
+      <p><strong>步驟 1</strong>：確定中心金屬離子<br>
+      Ni²⁺ 的電子組態：$[Ar]3d^8$（8 個 d 電子）</p>
+      
+      <p><strong>步驟 2</strong>：判斷配位基場強<br>
+      CN⁻ 是<strong>強場</strong>配位基</p>
+      
+      <p><strong>步驟 3</strong>：決定自旋狀態<br>
+      強場 → 電子成對 → 低自旋</p>
+      
+      <p><strong>步驟 4</strong>：畫出電子排列</p>
+      <div class="formula">
+        <p style="font-family: monospace;">
+        3d: [↿⇂][↿⇂][↿⇂][↿⇂][ ] &nbsp; 4s: [ ] &nbsp; 4p: [ ][ ][ ]
+        </p>
+        <div class="formula-note">空出 1 個 d + 1 個 s + 2 個 p → $dsp^2$ 混成</div>
+      </div>
+      
+      <p><strong>結論</strong>：$dsp^2$ 混成，<strong>平面四方</strong>形，<strong>反磁性</strong>（無未成對電子）</p>
+    </div>
+
+    <div class="example">
+      <div class="example-title">例題：$[\text{NiCl}_4]^{2-}$ 的混成軌域</div>
+      <p><strong>步驟 1</strong>：Ni²⁺ → $[Ar]3d^8$</p>
+      
+      <p><strong>步驟 2</strong>：Cl⁻ 是<strong>弱場</strong>配位基</p>
+      
+      <p><strong>步驟 3</strong>：弱場 → 電子不成對 → 高自旋</p>
+      
+      <p><strong>步驟 4</strong>：畫出電子排列</p>
+      <div class="formula">
+        <p style="font-family: monospace;">
+        3d: [↿⇂][↿⇂][↿⇂][↿ ][↿ ] &nbsp; 4s: [ ] &nbsp; 4p: [ ][ ][ ]
+        </p>
+        <div class="formula-note">3d 軌域沒有空位，使用 4s + 4p → $sp^3$ 混成</div>
+      </div>
+      
+      <p><strong>結論</strong>：$sp^3$ 混成，<strong>四面體</strong>形，<strong>順磁性</strong>（有 2 個未成對電子）</p>
+    </div>
+
+    <h2>八、重點整理</h2>
+
+    <div class="summary">
+      <h3>🎯 快速判斷流程</h3>
+      <ol>
+        <li>確定金屬離子的 $d^n$ 組態</li>
+        <li>判斷配位基是強場還是弱場</li>
+        <li>強場 → 低自旋（電子成對）；弱場 → 高自旋</li>
+        <li>根據空軌域決定混成類型</li>
+      </ol>
+
+      <h3 style="margin-top: 24px;">📌 記憶口訣</h3>
+      <ul>
+        <li><strong>$d^8$ + 強場</strong> 或 <strong>二三列</strong> → $dsp^2$（平面四方）</li>
+        <li><strong>$d^{10}$</strong>（Zn²⁺, Cd²⁺, Hg²⁺）→ $sp^3$（四面體）</li>
+        <li>CN⁻、CO 必強場；Cl⁻、H₂O 必弱場</li>
+      </ul>
+    </div>
+
+    <footer>
+      2026.03.05
+    </footer>
+  </div>
+</body>
+</html>
