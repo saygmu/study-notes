@@ -50,6 +50,8 @@ Capture what matters. Decisions, context, things to remember. Skip the secrets u
 - **提醒事項**（幾點要提醒什麼、帶什麼東西）
 - **任何細節** — 寧可多記，不要漏掉
 
+**記憶完成後，在回覆末尾加上（已記）**
+
 **回答問題前：**
 - 先用 `memory_search` 查一下，避免問重複的問題
 - 不確定的事就查，不要亂猜
