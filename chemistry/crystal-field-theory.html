@@ -401,42 +401,42 @@
 
     <h3>八面體場</h3>
     <div class="diagram">
-      <svg width="380" height="240" viewBox="0 0 380 240" style="font-family: 'Noto Sans TC', Arial, sans-serif;">
+      <svg width="360" height="220" viewBox="0 0 360 220" style="font-family: Arial, sans-serif;">
         <!-- 原始能階 -->
-        <line x1="30" y1="120" x2="100" y2="120" stroke="currentColor" stroke-width="2"/>
-        <text x="65" y="145" text-anchor="middle" fill="currentColor" font-size="13">自由離子</text>
-        <text x="65" y="105" text-anchor="middle" fill="currentColor" font-size="12">5 個 d 軌域</text>
+        <line x1="30" y1="110" x2="95" y2="110" stroke="currentColor" stroke-width="2"/>
+        <text x="62" y="90" text-anchor="middle" fill="currentColor" font-size="12">5 個 d 軌域</text>
+        <text x="62" y="135" text-anchor="middle" fill="currentColor" font-size="12">自由離子</text>
         
         <!-- 箭頭 -->
-        <polygon points="120,120 140,114 140,126" fill="currentColor"/>
+        <polygon points="115,110 130,104 130,116" fill="currentColor"/>
         
         <!-- 分裂後 - eg (高能) -->
-        <line x1="170" y1="60" x2="210" y2="60" stroke="currentColor" stroke-width="2"/>
-        <line x1="225" y1="60" x2="265" y2="60" stroke="currentColor" stroke-width="2"/>
-        <text x="218" y="42" text-anchor="middle" fill="currentColor" font-size="15" font-weight="600">e<tspan font-size="11" baseline-shift="sub">g</tspan></text>
-        <text x="218" y="82" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.7">高能量</text>
+        <line x1="160" y1="55" x2="200" y2="55" stroke="currentColor" stroke-width="2"/>
+        <line x1="215" y1="55" x2="255" y2="55" stroke="currentColor" stroke-width="2"/>
+        <text x="207" y="40" text-anchor="middle" fill="currentColor" font-size="16" font-weight="bold">eg</text>
+        <text x="207" y="75" text-anchor="middle" fill="currentColor" font-size="11" opacity="0.7">高能量 (2軌域)</text>
         
         <!-- 分裂後 - t2g (低能) -->
-        <line x1="160" y1="180" x2="195" y2="180" stroke="currentColor" stroke-width="2"/>
-        <line x1="208" y1="180" x2="243" y2="180" stroke="currentColor" stroke-width="2"/>
-        <line x1="256" y1="180" x2="291" y2="180" stroke="currentColor" stroke-width="2"/>
-        <text x="225" y="205" text-anchor="middle" fill="currentColor" font-size="15" font-weight="600">t<tspan font-size="11" baseline-shift="sub">2g</tspan></text>
-        <text x="225" y="225" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.7">低能量</text>
+        <line x1="150" y1="165" x2="185" y2="165" stroke="currentColor" stroke-width="2"/>
+        <line x1="198" y1="165" x2="233" y2="165" stroke="currentColor" stroke-width="2"/>
+        <line x1="246" y1="165" x2="281" y2="165" stroke="currentColor" stroke-width="2"/>
+        <text x="215" y="195" text-anchor="middle" fill="currentColor" font-size="16" font-weight="bold">t2g</text>
+        <text x="215" y="215" text-anchor="middle" fill="currentColor" font-size="11" opacity="0.7">低能量 (3軌域)</text>
         
-        <!-- Δo 標示 -->
-        <line x1="310" y1="60" x2="310" y2="180" stroke="currentColor" stroke-width="1.5"/>
-        <line x1="304" y1="60" x2="316" y2="60" stroke="currentColor" stroke-width="1.5"/>
-        <line x1="304" y1="180" x2="316" y2="180" stroke="currentColor" stroke-width="1.5"/>
-        <text x="325" y="125" text-anchor="start" fill="currentColor" font-size="18" font-weight="600">Δ<tspan font-size="12" baseline-shift="sub">o</tspan></text>
+        <!-- 分裂能 Δ -->
+        <line x1="295" y1="55" x2="295" y2="165" stroke="currentColor" stroke-width="1.5" stroke-dasharray="4,2"/>
+        <line x1="288" y1="55" x2="302" y2="55" stroke="currentColor" stroke-width="1.5"/>
+        <line x1="288" y1="165" x2="302" y2="165" stroke="currentColor" stroke-width="1.5"/>
+        <text x="310" y="115" text-anchor="start" fill="currentColor" font-size="20" font-weight="bold">Δ</text>
         
         <!-- 能量軸 -->
-        <line x1="355" y1="45" x2="355" y2="195" stroke="currentColor" stroke-width="1.5"/>
-        <polygon points="355,45 350,58 360,58" fill="currentColor"/>
-        <text x="362" y="52" text-anchor="start" fill="currentColor" font-size="13" font-weight="500">E</text>
+        <line x1="340" y1="40" x2="340" y2="180" stroke="currentColor" stroke-width="1.5"/>
+        <polygon points="340,40 335,52 345,52" fill="currentColor"/>
+        <text x="347" y="48" text-anchor="start" fill="currentColor" font-size="12">E</text>
       </svg>
-      <p style="font-size: 0.9rem; color: var(--muted); margin-top: 12px;">
-        e<sub>g</sub>：d<sub>z²</sub>, d<sub>x²-y²</sub>（指向配位基）<br>
-        t<sub>2g</sub>：d<sub>xy</sub>, d<sub>xz</sub>, d<sub>yz</sub>（指向配位基之間）
+      <p style="font-size: 0.9rem; color: var(--muted); margin-top: 16px; line-height: 1.8;">
+        <strong>e<sub>g</sub></strong>：d<sub>z²</sub>, d<sub>x²-y²</sub>（軌域指向配位基，受排斥較大）<br>
+        <strong>t<sub>2g</sub></strong>：d<sub>xy</sub>, d<sub>xz</sub>, d<sub>yz</sub>（軌域在配位基之間，受排斥較小）
       </p>
     </div>
 
