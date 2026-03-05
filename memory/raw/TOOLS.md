@@ -330,4 +330,27 @@ padding: 60px 24px (container)
 
 ---
 
+## 系統 Crontab 定時任務
+
+定時提醒改用 Pi 的 crontab，比 OpenClaw cron 穩定！
+
+| 時間 | 腳本 | 功能 |
+|------|------|------|
+| 07:00 | `morning-greeting.mjs` | 早安 + 天氣 + 今明行程 |
+| 18:00 | `evening-greeting.mjs` | 明天行程提醒 |
+| 22:30 | `eye-drops.mjs` | 眼藥水提醒 |
+
+**查看/編輯：**
+```bash
+crontab -l          # 查看
+crontab -e          # 編輯
+```
+
+**腳本位置：** `~/.openclaw/scripts/`
+**Log 位置：** `~/.openclaw/scripts/*.log`
+
+**設定時間：** 2026-03-05
+
+---
+
 Add whatever helps you do your job. This is your cheat sheet.
