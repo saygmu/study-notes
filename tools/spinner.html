@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <script src="../theme.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>幸運轉盤</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body {
+      font-family: 'Noto Sans TC', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 24px;
+      transition: background 0.3s, color 0.3s;
+    }
+    
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      padding: 16px 24px;
+      display: flex;
+      justify-content: space-between;
+      background: var(--bg);
+      z-index: 100;
+    }
+    
+    nav a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 14px;
+    }
+    
+    nav a:hover { color: var(--text); }
+    
+    .container {
+      margin-top: 60px;
+      width: 100%;
+      max-width: 400px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 24px;
+    }
+    
+    h1 {
+      font-family: 'Noto Serif TC', serif;
+      font-size: 1.8rem;
+      font-weight: 600;
+      letter-spacing: 2px;
+    }
+    
+    /* Wheel Container */
+    .wheel-container {
+      position: relative;
+      width: 300px;
+      height: 300px;
+    }
+    
+    .wheel {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      position: relative;
+      transition: transform 4s cubic-bezier(0.17, 0.67, 0.12, 0.99);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+    }
+    
+    .pointer {
+      position: absolute;
+      top: -15px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 0;
+      height: 0;
+      border-left: 15px solid transparent;
+      border-right: 15px solid transparent;
+      border-top: 30px solid var(--text);
+      z-index: 10;
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+    }
+    
+    .center-circle {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: var(--bg);
+      border: 3px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      cursor: pointer;
+      z-index: 5;
+      transition: transform 0.2s;
+    }
+    
+    .center-circle:hover {
+      transform: translate(-50%, -50%) scale(1.1);
+    }
+    
+    .center-circle:active {
+      transform: translate(-50%, -50%) scale(0.95);
+    }
+    
+    /* Result */
+    .result {
+      font-size: 1.5rem;
+      font-weight: 600;
+      min-height: 40px;
+      text-align: center;
+      opacity: 0;
+      transition: opacity 0.5s;
+    }
+    
+    .result.show {
+      opacity: 1;
+    }
+    
+    /* Presets */
+    .presets {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    
+    .preset-btn {
+      padding: 8px 16px;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      background: var(--card);
+      color: var(--text);
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    
+    .preset-btn:hover {
+      border-color: var(--text);
+    }
+    
+    .preset-btn.active {
+      background: var(--text);
+      color: var(--bg);
+    }
+    
+    /* Options Editor */
+    .editor {
+      width: 100%;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+    }
+    
+    .editor-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+    
+    .editor-title {
+      font-size: 14px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    
+    .options-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+    
+    .option-item {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+    
+    .option-item input {
+      flex: 1;
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--bg);
+      color: var(--text);
+      font-size: 14px;
+    }
+    
+    .option-item input:focus {
+      outline: none;
+      border-color: var(--text);
+    }
+    
+    .option-color {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    
+    .option-remove {
+      width: 32px;
+      height: 32px;
+      border: none;
+      background: none;
+      color: var(--muted);
+      cursor: pointer;
+      font-size: 18px;
+      border-radius: 50%;
+      transition: all 0.2s;
+    }
+    
+    .option-remove:hover {
+      background: var(--border);
+      color: var(--text);
+    }
+    
+    .add-btn {
+      width: 100%;
+      padding: 10px;
+      border: 1px dashed var(--border);
+      border-radius: 8px;
+      background: none;
+      color: var(--muted);
+      cursor: pointer;
+      font-size: 14px;
+      transition: all 0.2s;
+    }
+    
+    .add-btn:hover {
+      border-color: var(--text);
+      color: var(--text);
+    }
+    
+    /* Spinning state */
+    .spinning .center-circle {
+      pointer-events: none;
+    }
+    
+    @media (max-width: 420px) {
+      .wheel-container {
+        width: 260px;
+        height: 260px;
+      }
+    }
+    
+    @media print {
+      nav, .presets, .editor { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="../index.html">← 返回</a>
+  </nav>
+  
+  <div class="container">
+    <h1>🎰 幸運轉盤</h1>
+    
+    <div class="wheel-container">
+      <div class="pointer"></div>
+      <canvas class="wheel" id="wheel" width="300" height="300"></canvas>
+      <div class="center-circle" id="spinBtn">▶</div>
+    </div>
+    
+    <div class="result" id="result"></div>
+    
+    <div class="presets" id="presets"></div>
+    
+    <div class="editor">
+      <div class="editor-header">
+        <span class="editor-title">選項</span>
+        <button class="preset-btn" id="savePreset" style="padding: 4px 12px; font-size: 12px;">儲存為新組</button>
+      </div>
+      <div class="options-list" id="optionsList"></div>
+      <button class="add-btn" id="addOption">+ 新增選項</button>
+    </div>
+  </div>
+  
+  <script>
+    // Colors palette
+    const COLORS = [
+      '#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', 
+      '#FFEAA7', '#DDA0DD', '#98D8C8', '#F7DC6F',
+      '#BB8FCE', '#85C1E9', '#F8B500', '#00CED1'
+    ];
+    
+    // Default presets
+    const DEFAULT_PRESETS = {
+      '讀什麼': ['數學', '物理', '化學', '英文', '國文'],
+      '晚餐': ['便當', '麵', '滷味', '炒飯', '不吃'],
+      '休息': ['滑手機', '聽音樂', '發呆', '吃零食', '小睡']
+    };
+    
+    let presets = JSON.parse(localStorage.getItem('spinner_presets')) || DEFAULT_PRESETS;
+    let currentOptions = ['選項 1', '選項 2', '選項 3'];
+    let currentPreset = null;
+    let isSpinning = false;
+    let currentRotation = 0;
+    
+    const wheel = document.getElementById('wheel');
+    const ctx = wheel.getContext('2d');
+    const spinBtn = document.getElementById('spinBtn');
+    const resultEl = document.getElementById('result');
+    const presetsEl = document.getElementById('presets');
+    const optionsListEl = document.getElementById('optionsList');
+    const addOptionBtn = document.getElementById('addOption');
+    const savePresetBtn = document.getElementById('savePreset');
+    
+    // Draw wheel
+    function drawWheel() {
+      const centerX = wheel.width / 2;
+      const centerY = wheel.height / 2;
+      const radius = wheel.width / 2 - 5;
+      
+      ctx.clearRect(0, 0, wheel.width, wheel.height);
+      
+      const sliceAngle = (2 * Math.PI) / currentOptions.length;
+      
+      currentOptions.forEach((option, i) => {
+        const startAngle = i * sliceAngle - Math.PI / 2;
+        const endAngle = startAngle + sliceAngle;
+        
+        // Draw slice
+        ctx.beginPath();
+        ctx.moveTo(centerX, centerY);
+        ctx.arc(centerX, centerY, radius, startAngle, endAngle);
+        ctx.closePath();
+        ctx.fillStyle = COLORS[i % COLORS.length];
+        ctx.fill();
+        ctx.strokeStyle = 'rgba(255,255,255,0.3)';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+        
+        // Draw text
+        ctx.save();
+        ctx.translate(centerX, centerY);
+        ctx.rotate(startAngle + sliceAngle / 2);
+        ctx.textAlign = 'right';
+        ctx.fillStyle = '#fff';
+        ctx.font = 'bold 14px "Noto Sans TC", sans-serif';
+        ctx.shadowColor = 'rgba(0,0,0,0.3)';
+        ctx.shadowBlur = 2;
+        
+        const text = option.length > 6 ? option.slice(0, 6) + '…' : option;
+        ctx.fillText(text, radius - 15, 5);
+        ctx.restore();
+      });
+      
+      // Draw border
+      ctx.beginPath();
+      ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI);
+      ctx.strokeStyle = 'var(--border)';
+      ctx.lineWidth = 3;
+      ctx.stroke();
+    }
+    
+    // Spin
+    function spin() {
+      if (isSpinning || currentOptions.length < 2) return;
+      
+      isSpinning = true;
+      resultEl.classList.remove('show');
+      document.body.classList.add('spinning');
+      
+      // Random result
+      const resultIndex = Math.floor(Math.random() * currentOptions.length);
+      const sliceAngle = 360 / currentOptions.length;
+      
+      // Calculate rotation (5-8 full spins + landing angle)
+      const spins = 5 + Math.random() * 3;
+      const targetAngle = 360 - (resultIndex * sliceAngle + sliceAngle / 2);
+      const totalRotation = spins * 360 + targetAngle;
+      
+      currentRotation += totalRotation;
+      wheel.style.transform = `rotate(${currentRotation}deg)`;
+      
+      // Show result after spin
+      setTimeout(() => {
+        resultEl.textContent = currentOptions[resultIndex];
+        resultEl.classList.add('show');
+        isSpinning = false;
+        document.body.classList.remove('spinning');
+      }, 4000);
+    }
+    
+    // Render options editor
+    function renderOptions() {
+      optionsListEl.innerHTML = '';
+      
+      currentOptions.forEach((option, i) => {
+        const div = document.createElement('div');
+        div.className = 'option-item';
+        div.innerHTML = `
+          <span class="option-color" style="background: ${COLORS[i % COLORS.length]}"></span>
+          <input type="text" value="${option}" data-index="${i}">
+          <button class="option-remove" data-index="${i}">×</button>
+        `;
+        optionsListEl.appendChild(div);
+      });
+      
+      // Event listeners
+      optionsListEl.querySelectorAll('input').forEach(input => {
+        input.addEventListener('change', (e) => {
+          currentOptions[e.target.dataset.index] = e.target.value;
+          drawWheel();
+          currentPreset = null;
+          updatePresetButtons();
+        });
+      });
+      
+      optionsListEl.querySelectorAll('.option-remove').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          if (currentOptions.length > 2) {
+            currentOptions.splice(e.target.dataset.index, 1);
+            renderOptions();
+            drawWheel();
+          }
+        });
+      });
+    }
+    
+    // Render preset buttons
+    function renderPresets() {
+      presetsEl.innerHTML = '';
+      
+      Object.keys(presets).forEach(name => {
+        const btn = document.createElement('button');
+        btn.className = 'preset-btn' + (currentPreset === name ? ' active' : '');
+        btn.textContent = name;
+        btn.addEventListener('click', () => loadPreset(name));
+        
+        // Long press to delete
+        let pressTimer;
+        btn.addEventListener('mousedown', () => {
+          pressTimer = setTimeout(() => {
+            if (confirm(`刪除「${name}」？`)) {
+              delete presets[name];
+              localStorage.setItem('spinner_presets', JSON.stringify(presets));
+              renderPresets();
+            }
+          }, 800);
+        });
+        btn.addEventListener('mouseup', () => clearTimeout(pressTimer));
+        btn.addEventListener('mouseleave', () => clearTimeout(pressTimer));
+        
+        presetsEl.appendChild(btn);
+      });
+    }
+    
+    function updatePresetButtons() {
+      presetsEl.querySelectorAll('.preset-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.textContent === currentPreset);
+      });
+    }
+    
+    // Load preset
+    function loadPreset(name) {
+      currentOptions = [...presets[name]];
+      currentPreset = name;
+      renderOptions();
+      drawWheel();
+      updatePresetButtons();
+    }
+    
+    // Save preset
+    function saveAsPreset() {
+      const name = prompt('幫這組選項取個名字：');
+      if (name && name.trim()) {
+        presets[name.trim()] = [...currentOptions];
+        localStorage.setItem('spinner_presets', JSON.stringify(presets));
+        currentPreset = name.trim();
+        renderPresets();
+      }
+    }
+    
+    // Add option
+    addOptionBtn.addEventListener('click', () => {
+      currentOptions.push(`選項 ${currentOptions.length + 1}`);
+      renderOptions();
+      drawWheel();
+      optionsListEl.lastChild.querySelector('input').focus();
+    });
+    
+    savePresetBtn.addEventListener('click', saveAsPreset);
+    spinBtn.addEventListener('click', spin);
+    
+    // Keyboard spin
+    document.addEventListener('keydown', (e) => {
+      if (e.code === 'Space' && !e.target.matches('input')) {
+        e.preventDefault();
+        spin();
+      }
+    });
+    
+    // Init
+    renderPresets();
+    if (Object.keys(presets).length > 0) {
+      loadPreset(Object.keys(presets)[0]);
+    } else {
+      renderOptions();
+      drawWheel();
+    }
+  </script>
+</body>
+</html>
