@@ -210,27 +210,39 @@
       font-size: 1.25rem;
       font-weight: 600;
       margin-bottom: 24px;
+      text-align: center;
     }
     
     .form-group {
-      margin-bottom: 16px;
+      margin-bottom: 20px;
     }
     
     .form-group label {
       display: block;
       font-size: 0.85rem;
       color: var(--muted);
-      margin-bottom: 6px;
+      margin-bottom: 8px;
+      text-align: left;
     }
     
     .form-group input, .form-group select {
       width: 100%;
-      padding: 12px;
+      padding: 14px 16px;
       border: 1px solid var(--border);
-      border-radius: 8px;
+      border-radius: 12px;
       background: var(--card);
       color: var(--text);
-      font-size: 14px;
+      font-size: 16px;
+      text-align: center;
+      -webkit-appearance: none;
+      appearance: none;
+    }
+    
+    .form-group select {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23888' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 16px center;
+      padding-right: 40px;
     }
     
     .form-group input:focus, .form-group select:focus {
@@ -241,16 +253,22 @@
     .modal-buttons {
       display: flex;
       gap: 12px;
-      margin-top: 24px;
+      margin-top: 28px;
     }
     
     .modal-buttons button {
       flex: 1;
-      padding: 12px;
-      border-radius: 8px;
-      font-size: 14px;
+      padding: 14px;
+      border-radius: 12px;
+      font-size: 15px;
+      font-weight: 500;
       cursor: pointer;
       border: none;
+      transition: opacity 0.2s;
+    }
+    
+    .modal-buttons button:active {
+      opacity: 0.7;
     }
     
     .btn-cancel {
