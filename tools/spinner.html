@@ -397,9 +397,12 @@
       // we need: current_pos + R = 360 → R = 360 - current_pos
       // The slice starts at sliceCenter from top, we want it at 0
       // So rotate by: -sliceCenter (or equivalently 360 - sliceCenter)
-      // Try adding 180 to fix potential direction issue
-      let targetPos = 180 - sliceCenter;
-      if (targetPos < 0) targetPos += 360;
+      // Aim at the slice center: we want slice center to end up at top (0°)
+      // When rotating CW by R, a point at angle θ ends up at (θ + R) mod 360
+      // So: sliceCenter + R = 360 → R = 360 - sliceCenter
+      // Adding sliceAngle to compensate for observed offset
+      let targetPos = 360 - sliceCenter + sliceAngle;
+      if (targetPos >= 360) targetPos -= 360;
       // Account for current wheel position
       const currentPos = currentRotation % 360;
       let delta = targetPos - currentPos;
