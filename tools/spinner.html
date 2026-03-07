@@ -385,8 +385,21 @@
       
       // Calculate rotation (5-8 full spins + landing angle)
       const spins = 5 + Math.random() * 3;
-      // Where the slice center should be (at top = 0°)
-      const targetPos = 360 - (resultIndex * sliceAngle + sliceAngle / 2);
+      // Slice i center is at: (i + 0.5) * sliceAngle degrees from top (clockwise)
+      // To bring it to the pointer (at top), we rotate the wheel
+      // so that slice center ends up at 0° (top)
+      // When wheel rotates CW by R, position X ends up at position (X + R)
+      // We want: sliceCenter + R = 360 (full rotation to land at top)
+      // So: R = 360 - sliceCenter
+      const sliceCenter = (resultIndex + 0.5) * sliceAngle;
+      // Try: rotate so the slice comes to where pointer is
+      // But rotating CW moves things CW, so to bring something to top,
+      // we need: current_pos + R = 360 → R = 360 - current_pos
+      // The slice starts at sliceCenter from top, we want it at 0
+      // So rotate by: -sliceCenter (or equivalently 360 - sliceCenter)
+      // Try adding 180 to fix potential direction issue
+      let targetPos = 180 - sliceCenter;
+      if (targetPos < 0) targetPos += 360;
       // Account for current wheel position
       const currentPos = currentRotation % 360;
       let delta = targetPos - currentPos;
