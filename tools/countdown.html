@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <script src="../theme.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>倒數日曆</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body {
+      font-family: 'Noto Sans TC', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      padding: 24px;
+      transition: background 0.3s, color 0.3s;
+    }
+    
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      padding: 16px 24px;
+      display: flex;
+      justify-content: space-between;
+      background: var(--bg);
+      z-index: 100;
+    }
+    
+    nav a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 14px;
+    }
+    
+    nav a:hover { color: var(--text); }
+    
+    .container {
+      max-width: 600px;
+      margin: 60px auto 0;
+    }
+    
+    h1 {
+      font-family: 'Noto Serif TC', serif;
+      font-size: 2rem;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-align: center;
+      margin-bottom: 8px;
+    }
+    
+    .subtitle {
+      text-align: center;
+      color: var(--muted);
+      font-size: 14px;
+      margin-bottom: 32px;
+    }
+    
+    .countdown-list {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    
+    .countdown-item {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    
+    .countdown-item:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    
+    .countdown-item.passed {
+      opacity: 0.5;
+    }
+    
+    .countdown-item.urgent {
+      border-color: #e74c3c;
+      background: rgba(231, 76, 60, 0.05);
+    }
+    
+    .countdown-item.soon {
+      border-color: #f39c12;
+      background: rgba(243, 156, 18, 0.05);
+    }
+    
+    .event-info {
+      flex: 1;
+    }
+    
+    .event-name {
+      font-size: 1.1rem;
+      font-weight: 500;
+      margin-bottom: 4px;
+    }
+    
+    .event-date {
+      font-size: 13px;
+      color: var(--muted);
+    }
+    
+    .event-tag {
+      display: inline-block;
+      font-size: 11px;
+      padding: 2px 8px;
+      border-radius: 10px;
+      margin-right: 8px;
+      background: var(--border);
+      color: var(--muted);
+    }
+    
+    .event-tag.exam { background: #e74c3c; color: white; }
+    .event-tag.school { background: #27ae60; color: white; }
+    .event-tag.interview { background: #9b59b6; color: white; }
+    
+    .days-left {
+      text-align: right;
+      min-width: 80px;
+    }
+    
+    .days-number {
+      font-size: 2rem;
+      font-weight: 700;
+      line-height: 1;
+    }
+    
+    .days-label {
+      font-size: 12px;
+      color: var(--muted);
+    }
+    
+    .days-left.passed .days-number {
+      color: var(--muted);
+      font-size: 1.2rem;
+    }
+    
+    .section-title {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--muted);
+      margin: 32px 0 16px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--border);
+    }
+    
+    .section-title:first-of-type {
+      margin-top: 0;
+    }
+    
+    @media (max-width: 480px) {
+      .countdown-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+      }
+      
+      .days-left {
+        text-align: left;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="../index.html">← 返回</a>
+  </nav>
+  
+  <div class="container">
+    <h1>⏳ 倒數日曆</h1>
+    <p class="subtitle" id="today"></p>
+    
+    <div class="countdown-list" id="countdownList"></div>
+  </div>
+  
+  <script>
+    // Important events
+    const EVENTS = [
+      { name: '一篩結果公告', date: '2026-03-31', tag: 'school' },
+      { name: '第 2 次模擬考', date: '2026-04-08', tag: 'exam' },
+      { name: '審查資料上傳測試', date: '2026-04-10', tag: 'school' },
+      { name: '第 2 次定期考', date: '2026-04-27', tag: 'exam' },
+      { name: '第 3 次模擬考', date: '2026-05-05', tag: 'exam' },
+      { name: '交大資工乙 筆試', date: '2026-05-16', tag: 'interview' },
+      { name: '清大資工乙 筆試', date: '2026-05-16', tag: 'interview' },
+      { name: '清大電機乙 筆試 🔥', date: '2026-05-17', tag: 'interview' },
+      { name: '成大資工 筆試', date: '2026-05-22', tag: 'interview' },
+      { name: '大學公告錄取名單', date: '2026-06-01', tag: 'school' },
+      { name: '畢業典禮 🎓', date: '2026-06-02', tag: 'school' },
+      { name: '志願序登記', date: '2026-06-04', tag: 'school' },
+      { name: '統一分發結果公告', date: '2026-06-11', tag: 'school' },
+    ];
+    
+    const TAG_LABELS = {
+      exam: '考試',
+      school: '學校',
+      interview: '二階'
+    };
+    
+    function formatDate(dateStr) {
+      const d = new Date(dateStr);
+      return `${d.getMonth() + 1}/${d.getDate()} (${['日','一','二','三','四','五','六'][d.getDay()]})`;
+    }
+    
+    function getDaysUntil(dateStr) {
+      const now = new Date();
+      now.setHours(0, 0, 0, 0);
+      const target = new Date(dateStr);
+      target.setHours(0, 0, 0, 0);
+      return Math.ceil((target - now) / (1000 * 60 * 60 * 24));
+    }
+    
+    function render() {
+      const today = new Date();
+      document.getElementById('today').textContent = 
+        `今天是 ${today.getFullYear()}/${today.getMonth()+1}/${today.getDate()}`;
+      
+      // Sort events by date
+      const sorted = [...EVENTS].sort((a, b) => new Date(a.date) - new Date(b.date));
+      
+      // Separate upcoming and passed
+      const upcoming = sorted.filter(e => getDaysUntil(e.date) >= 0);
+      const passed = sorted.filter(e => getDaysUntil(e.date) < 0);
+      
+      let html = '';
+      
+      if (upcoming.length > 0) {
+        html += '<div class="section-title">即將到來</div>';
+        upcoming.forEach(event => {
+          const days = getDaysUntil(event.date);
+          let urgency = '';
+          if (days <= 3) urgency = 'urgent';
+          else if (days <= 7) urgency = 'soon';
+          
+          html += `
+            <div class="countdown-item ${urgency}">
+              <div class="event-info">
+                <span class="event-tag ${event.tag}">${TAG_LABELS[event.tag]}</span>
+                <div class="event-name">${event.name}</div>
+                <div class="event-date">${formatDate(event.date)}</div>
+              </div>
+              <div class="days-left">
+                <div class="days-number">${days}</div>
+                <div class="days-label">${days === 0 ? '今天！' : '天'}</div>
+              </div>
+            </div>
+          `;
+        });
+      }
+      
+      if (passed.length > 0) {
+        html += '<div class="section-title">已過去</div>';
+        passed.forEach(event => {
+          const days = Math.abs(getDaysUntil(event.date));
+          html += `
+            <div class="countdown-item passed">
+              <div class="event-info">
+                <span class="event-tag ${event.tag}">${TAG_LABELS[event.tag]}</span>
+                <div class="event-name">${event.name}</div>
+                <div class="event-date">${formatDate(event.date)}</div>
+              </div>
+              <div class="days-left passed">
+                <div class="days-number">-${days} 天</div>
+              </div>
+            </div>
+          `;
+        });
+      }
+      
+      document.getElementById('countdownList').innerHTML = html;
+    }
+    
+    render();
+    // Update every minute
+    setInterval(render, 60000);
+  </script>
+</body>
+</html>
