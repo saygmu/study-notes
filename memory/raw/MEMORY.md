@@ -52,11 +52,6 @@
 - 她決定要不要做
 - cron job: `990b1f12-6087-49e4-8e93-b8cf23f48aa6`
 
-### 每日專案提案
-- **每天 18:00** 傳一個新專案點子給 Abigail
-- 她決定要不要做
-- cron job: `cb83c447-8ed3-408e-967b-f94f49863133`
-
 ### 記憶同步
 - **檔案有更新就要立刻同步**，不是等到晚上！
 - 新增每日筆記時要更新 `memory/index.html` 的 `DAILY_FILES`
@@ -90,6 +85,12 @@
 ### 講義網站
 - 網址：https://saygmu.github.io/study-notes/
 - 要用 theme.js、更新版本號、首頁加連結
+
+### 倒數日曆
+- 網址：https://saygmu.github.io/study-notes/tools/countdown.html
+- 功能：顯示重要日期倒數、可新增/編輯事件
+- 預設包含：考試、筆試、申請流程日期
+- 資料存在瀏覽器 localStorage
 
 ---
 
@@ -153,4 +154,4 @@ Notion 筆試準備頁面：https://www.notion.so/31befd70a0ce81f58438e282108153
 
 ---
 
-*最後更新：2026-03-06*
+*最後更新：2026-03-07*
