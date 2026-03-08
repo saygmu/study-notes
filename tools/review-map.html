@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <script src="../theme.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>智慧複習地圖</title>
+  <style>
+    body{font-family:'Noto Sans TC',sans-serif;background:var(--bg);color:var(--text);margin:0;line-height:1.8}
+    .wrap{max-width:760px;margin:0 auto;padding:24px}
+    .nav{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}
+    a{color:var(--text)}
+    h1{font-family:'Noto Serif TC',serif;margin:8px 0 6px}
+    .muted{color:var(--muted);font-size:14px}
+    .card{border:1px solid var(--border);border-radius:12px;padding:16px;background:var(--card);margin:14px 0}
+    input,button{font:inherit}
+    input{width:100%;padding:10px;border:1px solid var(--border);border-radius:8px;background:transparent;color:var(--text)}
+    button{padding:10px 14px;border:1px solid var(--border);border-radius:10px;background:var(--card);cursor:pointer;color:var(--text)}
+    .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .task{border:1px solid var(--border);border-radius:10px;padding:12px;margin:8px 0;background:var(--bg)}
+    .pill{font-size:12px;border:1px solid var(--border);padding:2px 8px;border-radius:999px;color:var(--muted)}
+    @media (max-width:640px){.grid{grid-template-columns:1fr}}
+    @media print {.nav,.actions{display:none}}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="nav"><a href="../index.html">← 返回</a><button onclick="window.print()">列印</button></div>
+    <h1>智慧複習地圖</h1>
+    <div class="muted">MVP：輸入考試日＋章節，產生每日任務卡（會存到你的瀏覽器）</div>
+
+    <div class="card">
+      <div class="grid">
+        <div>
+          <label>考試日期</label>
+          <input id="examDate" type="date">
+        </div>
+        <div>
+          <label>科目（可空白）</label>
+          <input id="subject" placeholder="例如：化學">
+        </div>
+      </div>
+      <div style="margin-top:10px">
+        <label>章節（用逗號分隔）</label>
+        <input id="chapters" placeholder="例如：晶場理論, 平衡常數, 氧化還原">
+      </div>
+      <div class="actions" style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap">
+        <button onclick="buildPlan()">產生任務卡</button>
+        <button onclick="loadDemo()">載入示範</button>
+        <button onclick="clearAll()">清除</button>
+      </div>
+    </div>
+
+    <div id="summary" class="card" style="display:none"></div>
+    <div id="tasks"></div>
+  </div>
+
+  <script>
+    const KEY='review-map-mvp-v1';
+    const $=id=>document.getElementById(id);
+
+    function daysBetween(today,target){
+      const a=new Date(today.getFullYear(),today.getMonth(),today.getDate());
+      const b=new Date(target.getFullYear(),target.getMonth(),target.getDate());
+      return Math.max(1,Math.ceil((b-a)/86400000));
+    }
+
+    function priorityByIndex(i,total){
+      const ratio=(i+1)/total;
+      if(ratio<=0.33) return '高優先';
+      if(ratio<=0.66) return '中優先';
+      return '穩固複習';
+    }
+
+    function buildPlan(){
+      const exam=$('examDate').value;
+      const subject=$('subject').value.trim();
+      const chapters=$('chapters').value.split(',').map(v=>v.trim()).filter(Boolean);
+      if(!exam||chapters.length===0){alert('至少要填考試日期和一個章節');return;}
+
+      const today=new Date();
+      const target=new Date(exam+'T00:00:00');
+      const days=daysBetween(today,target);
+      const plan=[];
+
+      for(let i=0;i<chapters.length;i++){
+        const dayOffset=Math.floor((i*days)/chapters.length);
+        const due=new Date(today); due.setDate(today.getDate()+dayOffset);
+        plan.push({
+          chapter:chapters[i],
+          due:due.toISOString().slice(0,10),
+          priority:priorityByIndex(i,chapters.length),
+          status:'未開始'
+        });
+      }
+
+      const payload={exam,subject,chapters,plan,updatedAt:new Date().toISOString()};
+      localStorage.setItem(KEY,JSON.stringify(payload));
+      render(payload);
+    }
+
+    function render(data){
+      $('summary').style.display='block';
+      $('summary').innerHTML=`
+        <div><span class="pill">${data.subject||'未命名科目'}</span></div>
+        <div style="margin-top:8px">考試日：<b>${data.exam}</b> ・ 章節數：<b>${data.chapters.length}</b></div>
+      `;
+      $('tasks').innerHTML=data.plan.map((t,idx)=>`
+        <div class="task">
+          <div style="display:flex;justify-content:space-between;gap:10px;align-items:center">
+            <b>${idx+1}. ${t.chapter}</b>
+            <span class="pill">${t.priority}</span>
+          </div>
+          <div class="muted">建議日期：${t.due}</div>
+          <div style="margin-top:8px;display:flex;gap:8px;flex-wrap:wrap">
+            <button onclick="setStatus(${idx},'我會了')">我會了</button>
+            <button onclick="setStatus(${idx},'還不熟')">還不熟</button>
+            <span class="pill">${t.status}</span>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function setStatus(i,s){
+      const data=JSON.parse(localStorage.getItem(KEY)||'null');
+      if(!data) return;
+      data.plan[i].status=s;
+      localStorage.setItem(KEY,JSON.stringify(data));
+      render(data);
+    }
+
+    function loadDemo(){
+      $('subject').value='化學';
+      $('chapters').value='晶場理論, 化學平衡, 酸鹼滴定, 氧化還原';
+      const d=new Date(); d.setDate(d.getDate()+14);
+      $('examDate').value=d.toISOString().slice(0,10);
+      buildPlan();
+    }
+
+    function clearAll(){
+      localStorage.removeItem(KEY);
+      $('tasks').innerHTML='';
+      $('summary').style.display='none';
+    }
+
+    (function init(){
+      const saved=localStorage.getItem(KEY);
+      if(saved){
+        const data=JSON.parse(saved);
+        $('examDate').value=data.exam||'';
+        $('subject').value=data.subject||'';
+        $('chapters').value=(data.chapters||[]).join(', ');
+        render(data);
+      }
+    })();
+  </script>
+</body>
+</html>
