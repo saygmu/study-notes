@@ -10,22 +10,24 @@
     *{margin:0;padding:0;box-sizing:border-box}
     body{font-family:'Noto Sans TC',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;line-height:1.8;padding:24px}
 
-    nav{position:fixed;top:0;left:0;right:0;padding:16px 24px;display:flex;justify-content:space-between;align-items:center;background:var(--bg);z-index:100}
+    nav{position:fixed;top:0;left:0;right:0;padding:14px 24px;display:flex;justify-content:space-between;align-items:center;background:var(--bg);z-index:100;border-bottom:1px solid var(--border)}
     nav a,nav button{color:var(--muted);text-decoration:none;font-size:14px;background:none;border:none;cursor:pointer}
     nav a:hover,nav button:hover{color:var(--text)}
+    .print-btn{border:1px solid var(--border);border-radius:12px;padding:10px 16px;background:var(--card);color:var(--text)}
 
-    .container{max-width:720px;margin:64px auto 0}
-    h1{font-family:'Noto Serif TC',serif;font-size:2rem;font-weight:600;letter-spacing:2px;text-align:center;margin-bottom:8px}
-    .subtitle{text-align:center;color:var(--muted);font-size:14px;margin-bottom:28px}
+    .container{max-width:640px;margin:72px auto 0}
+    h1{font-family:'Noto Serif TC',serif;font-size:2.35rem;font-weight:600;letter-spacing:1px;text-align:left;margin-bottom:6px}
+    .subtitle{color:var(--muted);font-size:13px;margin-bottom:26px}
+    .subtitle-en{color:var(--muted);font-size:13px;margin-top:-6px;margin-bottom:24px;opacity:.9}
 
-    .card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:20px;margin-bottom:14px}
+    .card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px;margin-bottom:12px}
     .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
     .field label{display:block;font-size:13px;color:var(--muted);margin-bottom:6px}
-    input{width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:10px;background:var(--bg);color:var(--text);font:inherit}
+    input{width:100%;padding:11px 12px;border:1px solid var(--border);border-radius:10px;background:var(--bg);color:var(--text);font:inherit}
     input:focus{outline:none;border-color:var(--accent)}
 
     .actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
-    .btn{padding:10px 14px;border:1px solid var(--border);border-radius:10px;background:var(--bg);color:var(--text);font:inherit;cursor:pointer}
+    .btn{padding:10px 16px;border:1px solid var(--border);border-radius:999px;background:var(--bg);color:var(--text);font:inherit;cursor:pointer}
     .btn.primary{background:var(--text);color:var(--bg);border-color:var(--text)}
 
     #summary{display:none}
@@ -59,12 +61,13 @@
 <body>
   <nav>
     <a href="../index.html">← 返回</a>
-    <button onclick="window.print()">列印</button>
+    <button class="print-btn" onclick="window.print()">列印</button>
   </nav>
 
   <div class="container">
     <h1>智慧複習地圖</h1>
-    <p class="subtitle">輸入考試日＋章節 自動拆成每日任務卡</p>
+    <p class="subtitle">輸入考試日＋章節 產生每日任務卡</p>
+    <p class="subtitle-en">Smart Review Map</p>
 
     <div class="card">
       <div class="grid">
