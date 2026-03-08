@@ -5,58 +5,96 @@
   <script src="../theme.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>智慧複習地圖</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500&family=Noto+Serif+TC:wght@600&display=swap" rel="stylesheet">
   <style>
-    body{font-family:'Noto Sans TC',sans-serif;background:var(--bg);color:var(--text);margin:0;line-height:1.8}
-    .wrap{max-width:760px;margin:0 auto;padding:24px}
-    .nav{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}
-    a{color:var(--text)}
-    h1{font-family:'Noto Serif TC',serif;margin:8px 0 6px}
-    .muted{color:var(--muted);font-size:14px}
-    .card{border:1px solid var(--border);border-radius:12px;padding:16px;background:var(--card);margin:14px 0}
-    input,button{font:inherit}
-    input{width:100%;padding:10px;border:1px solid var(--border);border-radius:8px;background:transparent;color:var(--text)}
-    button{padding:10px 14px;border:1px solid var(--border);border-radius:10px;background:var(--card);cursor:pointer;color:var(--text)}
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{font-family:'Noto Sans TC',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;line-height:1.8;padding:24px}
+
+    nav{position:fixed;top:0;left:0;right:0;padding:16px 24px;display:flex;justify-content:space-between;align-items:center;background:var(--bg);z-index:100}
+    nav a,nav button{color:var(--muted);text-decoration:none;font-size:14px;background:none;border:none;cursor:pointer}
+    nav a:hover,nav button:hover{color:var(--text)}
+
+    .container{max-width:720px;margin:64px auto 0}
+    h1{font-family:'Noto Serif TC',serif;font-size:2rem;font-weight:600;letter-spacing:2px;text-align:center;margin-bottom:8px}
+    .subtitle{text-align:center;color:var(--muted);font-size:14px;margin-bottom:28px}
+
+    .card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:20px;margin-bottom:14px}
     .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-    .task{border:1px solid var(--border);border-radius:10px;padding:12px;margin:8px 0;background:var(--bg)}
-    .pill{font-size:12px;border:1px solid var(--border);padding:2px 8px;border-radius:999px;color:var(--muted)}
-    @media (max-width:640px){.grid{grid-template-columns:1fr}}
-    @media print {.nav,.actions{display:none}}
+    .field label{display:block;font-size:13px;color:var(--muted);margin-bottom:6px}
+    input{width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:10px;background:var(--bg);color:var(--text);font:inherit}
+    input:focus{outline:none;border-color:var(--accent)}
+
+    .actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+    .btn{padding:10px 14px;border:1px solid var(--border);border-radius:10px;background:var(--bg);color:var(--text);font:inherit;cursor:pointer}
+    .btn.primary{background:var(--text);color:var(--bg);border-color:var(--text)}
+
+    #summary{display:none}
+    .meta{display:flex;gap:10px;flex-wrap:wrap}
+    .pill{font-size:12px;border:1px solid var(--border);border-radius:999px;padding:3px 10px;color:var(--muted)}
+
+    .task{border:1px solid var(--border);border-radius:14px;padding:14px;background:var(--card);margin-bottom:10px}
+    .task-head{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
+    .task-title{font-weight:500}
+    .task-date{font-size:13px;color:var(--muted)}
+    .task-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:10px}
+    .tiny{padding:7px 10px;font-size:13px;border:1px solid var(--border);border-radius:8px;background:var(--bg);color:var(--text);cursor:pointer}
+
+    .hint{font-size:12px;color:var(--muted);text-align:center;margin-top:12px}
+
+    @media (max-width:640px){
+      body{padding:16px}
+      nav{padding:12px 16px}
+      .container{margin-top:56px}
+      .grid{grid-template-columns:1fr}
+    }
+
+    @media print {
+      nav,.actions,.task-actions,.hint{display:none}
+      body{padding:0}
+      .container{margin:0;max-width:none}
+      .card,.task{break-inside:avoid}
+    }
   </style>
 </head>
 <body>
-  <div class="wrap">
-    <div class="nav"><a href="../index.html">← 返回</a><button onclick="window.print()">列印</button></div>
+  <nav>
+    <a href="../index.html">← 返回</a>
+    <button onclick="window.print()">列印</button>
+  </nav>
+
+  <div class="container">
     <h1>智慧複習地圖</h1>
-    <div class="muted">MVP：輸入考試日＋章節，產生每日任務卡（會存到你的瀏覽器）</div>
+    <p class="subtitle">輸入考試日＋章節 自動拆成每日任務卡</p>
 
     <div class="card">
       <div class="grid">
-        <div>
+        <div class="field">
           <label>考試日期</label>
           <input id="examDate" type="date">
         </div>
-        <div>
+        <div class="field">
           <label>科目（可空白）</label>
           <input id="subject" placeholder="例如：化學">
         </div>
       </div>
-      <div style="margin-top:10px">
-        <label>章節（用逗號分隔）</label>
-        <input id="chapters" placeholder="例如：晶場理論, 平衡常數, 氧化還原">
+      <div class="field" style="margin-top:10px">
+        <label>章節（逗號分隔）</label>
+        <input id="chapters" placeholder="晶場理論, 酸鹼滴定, 氧化還原">
       </div>
-      <div class="actions" style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap">
-        <button onclick="buildPlan()">產生任務卡</button>
-        <button onclick="loadDemo()">載入示範</button>
-        <button onclick="clearAll()">清除</button>
+      <div class="actions">
+        <button class="btn primary" onclick="buildPlan()">產生任務卡</button>
+        <button class="btn" onclick="loadDemo()">示範資料</button>
+        <button class="btn" onclick="clearAll()">清除</button>
       </div>
     </div>
 
-    <div id="summary" class="card" style="display:none"></div>
+    <div id="summary" class="card"></div>
     <div id="tasks"></div>
+    <p class="hint">資料只存在你的瀏覽器 localStorage</p>
   </div>
 
   <script>
-    const KEY='review-map-mvp-v1';
+    const KEY='review-map-mvp-v2';
     const $=id=>document.getElementById(id);
 
     function daysBetween(today,target){
@@ -66,9 +104,9 @@
     }
 
     function priorityByIndex(i,total){
-      const ratio=(i+1)/total;
-      if(ratio<=0.33) return '高優先';
-      if(ratio<=0.66) return '中優先';
+      const r=(i+1)/total;
+      if(r<=0.33) return '高優先';
+      if(r<=0.66) return '中優先';
       return '穩固複習';
     }
 
@@ -76,45 +114,45 @@
       const exam=$('examDate').value;
       const subject=$('subject').value.trim();
       const chapters=$('chapters').value.split(',').map(v=>v.trim()).filter(Boolean);
-      if(!exam||chapters.length===0){alert('至少要填考試日期和一個章節');return;}
+      if(!exam||chapters.length===0){alert('至少要填考試日期和一個章節');return}
 
       const today=new Date();
       const target=new Date(exam+'T00:00:00');
       const days=daysBetween(today,target);
-      const plan=[];
 
-      for(let i=0;i<chapters.length;i++){
+      const plan=chapters.map((chapter,i)=>{
         const dayOffset=Math.floor((i*days)/chapters.length);
         const due=new Date(today); due.setDate(today.getDate()+dayOffset);
-        plan.push({
-          chapter:chapters[i],
-          due:due.toISOString().slice(0,10),
-          priority:priorityByIndex(i,chapters.length),
-          status:'未開始'
-        });
-      }
+        return {chapter,due:due.toISOString().slice(0,10),priority:priorityByIndex(i,chapters.length),status:'未開始'}
+      });
 
-      const payload={exam,subject,chapters,plan,updatedAt:new Date().toISOString()};
-      localStorage.setItem(KEY,JSON.stringify(payload));
-      render(payload);
+      const data={exam,subject,chapters,plan,updatedAt:new Date().toISOString()};
+      localStorage.setItem(KEY,JSON.stringify(data));
+      render(data);
     }
 
     function render(data){
       $('summary').style.display='block';
       $('summary').innerHTML=`
-        <div><span class="pill">${data.subject||'未命名科目'}</span></div>
-        <div style="margin-top:8px">考試日：<b>${data.exam}</b> ・ 章節數：<b>${data.chapters.length}</b></div>
+        <div class="meta">
+          <span class="pill">${data.subject||'未命名科目'}</span>
+          <span class="pill">考試日 ${data.exam}</span>
+          <span class="pill">${data.chapters.length} 個章節</span>
+        </div>
       `;
-      $('tasks').innerHTML=data.plan.map((t,idx)=>`
+
+      $('tasks').innerHTML=data.plan.map((t,i)=>`
         <div class="task">
-          <div style="display:flex;justify-content:space-between;gap:10px;align-items:center">
-            <b>${idx+1}. ${t.chapter}</b>
+          <div class="task-head">
+            <div>
+              <div class="task-title">${i+1}. ${t.chapter}</div>
+              <div class="task-date">建議日期 ${t.due}</div>
+            </div>
             <span class="pill">${t.priority}</span>
           </div>
-          <div class="muted">建議日期：${t.due}</div>
-          <div style="margin-top:8px;display:flex;gap:8px;flex-wrap:wrap">
-            <button onclick="setStatus(${idx},'我會了')">我會了</button>
-            <button onclick="setStatus(${idx},'還不熟')">還不熟</button>
+          <div class="task-actions">
+            <button class="tiny" onclick="setStatus(${i},'我會了')">我會了</button>
+            <button class="tiny" onclick="setStatus(${i},'還不熟')">還不熟</button>
             <span class="pill">${t.status}</span>
           </div>
         </div>
@@ -139,8 +177,11 @@
 
     function clearAll(){
       localStorage.removeItem(KEY);
-      $('tasks').innerHTML='';
       $('summary').style.display='none';
+      $('tasks').innerHTML='';
+      $('examDate').value='';
+      $('subject').value='';
+      $('chapters').value='';
     }
 
     (function init(){
