@@ -237,21 +237,22 @@
       margin-top: 6px;
     }
 
+    body.mobile .card { padding: 16px; }
+    body.mobile .actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
+    body.mobile .actions .btn {
+      width: 100%;
+      height: 42px;
+    }
+    body.mobile .actions .btn:last-child {
+      grid-column: 1 / -1;
+    }
+
     @media (max-width: 768px) {
       .container { padding: 56px 16px 24px; }
       h1 { font-size: 2rem; margin-top: 28px; }
-      .card { padding: 16px; }
-      .actions {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-      }
-      .actions .btn {
-        width: 100%;
-        height: 42px;
-      }
-      .actions .btn:last-child {
-        grid-column: 1 / -1;
-      }
     }
 
     @media print {
@@ -403,7 +404,13 @@
       $('chapters').value = '';
     }
 
+    function applyMobileLayout() {
+      document.body.classList.toggle('mobile', window.innerWidth <= 768);
+    }
+
     (function init() {
+      applyMobileLayout();
+      window.addEventListener('resize', applyMobileLayout);
       const saved = localStorage.getItem(KEY);
       if (saved) {
         const data = JSON.parse(saved);
