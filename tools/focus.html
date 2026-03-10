@@ -230,12 +230,12 @@
       font-family: inherit;
     }
 
-    .btn-secondary:hover {
-      border-color: var(--muted);
-      color: var(--text);
+    .btn-main:active, .btn-secondary:active, .spotify-btn:active {
+      transform: scale(0.95);
+      opacity: 0.8;
     }
 
-    /* Quote */
+    /* Subject selector */
     .quote {
       position: fixed;
       bottom: 0;
@@ -793,7 +793,10 @@
 
     async function spotifyAction(action) {
       const token = localStorage.getItem('spotify_token');
-      if (!token) return;
+      if (!token) {
+        connectSpotify(); // 如果沒連線，點按鈕直接跳授權
+        return;
+      }
       let endpoint = action;
       let method = 'POST';
       if (action === 'toggle') {
@@ -802,10 +805,15 @@
         method = 'PUT';
       }
       try {
-        await fetch(`https://api.spotify.com/v1/me/player/${endpoint}`, {
+        const res = await fetch(`https://api.spotify.com/v1/me/player/${endpoint}`, {
           method,
           headers: { 'Authorization': `Bearer ${token}` }
         });
+        
+        if (res.status === 404) {
+          alert('請先在手機或電腦開啟 Spotify 並播放任一首歌曲，秘書才能接手控制喔！');
+        }
+        
         setTimeout(updateSpotifyPlayer, 500);
       } catch (err) { console.error('Spotify action failed:', err); }
     }
@@ -967,9 +975,11 @@
       }, 1000);
 
       // Prevent screen sleep
-      if ('wakeLock' in navigator) {
-        navigator.wakeLock.request('screen').catch(() => {});
-      }
+      try {
+        if ('wakeLock' in navigator) {
+          navigator.wakeLock.request('screen').catch(() => {});
+        }
+      } catch (e) {}
     }
 
     function stopTimer() {
