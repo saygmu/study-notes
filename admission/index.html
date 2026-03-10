@@ -62,14 +62,6 @@
       border-bottom: 1px solid var(--border);
     }
 
-    .card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 24px;
-      margin: 24px 0;
-    }
-
     .note {
       border-left: 3px solid var(--accent);
       padding: 16px 20px;
@@ -82,26 +74,6 @@
       color: var(--accent);
     }
 
-    .link-list {
-      list-style: none;
-    }
-    .link-list li {
-      margin-bottom: 12px;
-      padding-bottom: 12px;
-      border-bottom: 1px dashed var(--border);
-    }
-    .link-list li:last-child { border: none; }
-    .link-list a {
-      color: var(--text);
-      text-decoration: none;
-      font-weight: 400;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .link-list a:hover { color: var(--accent); }
-    .link-list a::before { content: '🔗'; font-size: 14px; }
-
     .target-list {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -111,14 +83,24 @@
       .target-list { grid-template-columns: 1fr; }
     }
     .target-item {
-      padding: 16px;
+      padding: 20px;
       border: 1px solid var(--border);
-      border-radius: 8px;
+      border-radius: 12px;
       background: var(--card);
+      display: flex;
+      flex-direction: column;
+      text-decoration: none;
+      color: inherit;
+      transition: transform 0.2s, border-color 0.2s;
     }
-    .target-school { font-weight: 500; font-size: 1.1rem; }
+    .target-item:hover {
+      border-color: var(--accent);
+      transform: translateY(-2px);
+    }
+    .target-school { font-weight: 500; font-size: 1.15rem; color: var(--text); margin-bottom: 4px; }
     .target-date { font-size: 13px; color: var(--muted); }
-    .target-exam { font-size: 14px; margin-top: 8px; color: var(--accent); }
+    .target-exam { font-size: 14px; margin-top: 12px; color: var(--accent); font-weight: 400; }
+    .target-link-hint { font-size: 11px; color: var(--muted); margin-top: 8px; text-align: right; }
 
     footer {
       margin-top: 64px;
@@ -127,6 +109,11 @@
       text-align: center;
       color: var(--muted);
       font-size: 13px;
+    }
+
+    @media print {
+      nav { display: none; }
+      .container { padding-top: 0; }
     }
   </style>
 </head>
@@ -149,50 +136,48 @@
 
     <h2>志願戰情</h2>
     <div class="target-list">
-      <div class="target-item">
+      <a href="https://dee.site.nthu.edu.tw/p/405-1175-301947,c5156.php?Lang=zh-tw" target="_blank" class="target-item">
         <div class="target-school">清大電機乙</div>
         <div class="target-date">甄試日期：5/17</div>
         <div class="target-exam">筆試佔比 30% (最高!)</div>
-      </div>
-      <div class="target-item">
+        <div class="target-link-hint">🔗 查看指引</div>
+      </a>
+      
+      <a href="https://aa.nycu.edu.tw/userfiles/aach/files/20260109091255255.pdf" target="_blank" class="target-item">
         <div class="target-school">交大資工乙</div>
         <div class="target-date">甄試日期：5/16</div>
         <div class="target-exam">筆試佔比 10%</div>
-      </div>
-      <div class="target-item">
+        <div class="target-link-hint">🔗 查看指引 (PDF)</div>
+      </a>
+
+      <a href="https://dcs.site.nthu.edu.tw/p/406-1174-298552,r668.php" target="_blank" class="target-item">
         <div class="target-school">清大資工乙</div>
         <div class="target-date">甄試日期：5/16</div>
         <div class="target-exam">筆試佔比 10%</div>
-      </div>
-      <div class="target-item">
+        <div class="target-link-hint">🔗 查看指引</div>
+      </a>
+
+      <a href="https://drive.google.com/file/d/1NzkZpNk1AHAfK4ng-BX5QNPIKVdsQLdL/view" target="_blank" class="target-item">
         <div class="target-school">成大資工</div>
         <div class="target-date">甄試日期：5/22</div>
         <div class="target-exam">筆試佔比 10%</div>
-      </div>
-      <div class="target-item">
-        <div class="target-school">成大電機乙</div>
-        <div class="target-date">免筆試</div>
-      </div>
-      <div class="target-item">
-        <div class="target-school">中山電機</div>
-        <div class="target-date">免筆試</div>
-      </div>
-    </div>
+        <div class="target-link-hint">🔗 查看指引 (Drive)</div>
+      </a>
 
-    <h2>資源連結</h2>
-    <ul class="link-list">
-      <li><a href="https://academic.web2.ncku.edu.tw/p/412-1159-27125.php?Lang=zh-tw" target="_blank">115 學年度 (成大)</a></li>
-      <li><a href="https://dee.site.nthu.edu.tw/p/405-1175-301947,c5156.php?Lang=zh-tw" target="_blank">115 學年度大學申請入學審查資料準備指引 (清大)</a></li>
-      <li><a href="https://drive.google.com/file/u/0/d/1aI-wq1yOE2q-m3fFHXPUYk6yXeBU5zgB/view?usp=drive_link&pli=1" target="_blank">(115)10-機械工程學系.pdf</a></li>
-      <li><a href="https://drive.google.com/file/d/1NzkZpNk1AHAfK4ng-BX5QNPIKVdsQLdL/view" target="_blank">(115)39-電機工程學系(乙組).pdf</a></li>
-      <li><a href="https://aa.nycu.edu.tw/userfiles/aach/files/20260109091255255.pdf" target="_blank">(013072)交大資訊工程學系(乙組).docx</a></li>
-      <li><a href="https://dcs.site.nthu.edu.tw/p/406-1174-298552,r668.php" target="_blank">【115學年度申請入學】審查資料準備指引清大資工</a></li>
-      <li><a href="https://hs.nsysu.edu.tw/p/404-1078-369263.php?Lang=zh-tw" target="_blank">115學年度申請入學第二階段指定項目甄試之準備指引 (中山)</a></li>
-      <li><a href="https://rpa35.nsysu.edu.tw/static/file/78/1078/img/4776/410998425.pdf" target="_blank">中山電機簡章 (410998425.pdf)</a></li>
-      <li><a href="https://aa.nycu.edu.tw/userfiles/aach/files/20260206174531774.pdf" target="_blank">交大機械簡章 (20260206174531774.pdf)</a></li>
-      <li><a href="https://aa.nycu.edu.tw/aa/ch/app/data/view?module=nycu0073&id=4476&serno=300f531d-fa52-4dae-8a39-b263ab64be48" target="_blank">NYCU 書審指引 (國立陽明交通大學)</a></li>
-      <li><a href="https://campus4.ncku.edu.tw/wwwmenu/program/fresh/query_stuno.php?fbclid=PARlRTSAQOD4pleHRuA2FlbQIxMABzcnRjBmFwcF9pZA8xMjQwMjQ1NzQyODc0MTQAAadk_0-S7LbMFxM-TCXFbIGN1SmPixMPPKR5H0mflXx3qJz7U6Z69e-zHP4OhA_aem_t0bc53eIep992Et3E_ogdw" target="_blank">新生學號查詢</a></li>
-    </ul>
+      <a href="https://drive.google.com/file/d/1NzkZpNk1AHAfK4ng-BX5QNPIKVdsQLdL/view" target="_blank" class="target-item">
+        <div class="target-school">成大電機乙</div>
+        <div class="target-date">甄試日期：待確認</div>
+        <div class="target-exam">免筆試</div>
+        <div class="target-link-hint">🔗 查看指引 (Drive)</div>
+      </a>
+
+      <a href="https://rpa35.nsysu.edu.tw/static/file/78/1078/img/4776/410998425.pdf" target="_blank" class="target-item">
+        <div class="target-school">中山電機</div>
+        <div class="target-date">甄試日期：待確認</div>
+        <div class="target-exam">免筆試</div>
+        <div class="target-link-hint">🔗 查看簡章 (PDF)</div>
+      </a>
+    </div>
 
     <footer>秘書竭誠為您服務</footer>
   </div>
