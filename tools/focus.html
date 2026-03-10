@@ -249,6 +249,111 @@
       background: linear-gradient(to top, var(--bg) 60%, transparent);
     }
 
+    /* Spotify Player */
+    .spotify-player {
+      position: fixed;
+      bottom: 80px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: calc(100% - 48px);
+      max-width: 400px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+      z-index: 50;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .spotify-player.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .spotify-art {
+      width: 40px;
+      height: 40px;
+      border-radius: 4px;
+      background: var(--border);
+      flex-shrink: 0;
+      background-size: cover;
+    }
+
+    .spotify-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .spotify-title {
+      font-size: 14px;
+      font-weight: 500;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .spotify-artist {
+      font-size: 12px;
+      color: var(--muted);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .spotify-controls {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .spotify-btn {
+      background: none;
+      border: none;
+      color: var(--text);
+      cursor: pointer;
+      font-size: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .spotify-btn:disabled {
+      color: var(--muted);
+      cursor: default;
+    }
+
+    .spotify-connect {
+      position: fixed;
+      bottom: 100px;
+      right: 24px;
+      z-index: 40;
+    }
+
+    .btn-spotify {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: #1DB954;
+      color: white;
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(29, 185, 84, 0.3);
+      transition: transform 0.2s;
+    }
+
+    .btn-spotify:hover {
+      transform: scale(1.05);
+    }
+
     /* Stats panel */
     .stats-panel {
       position: fixed;
@@ -473,6 +578,26 @@
       <button class="btn-main" id="mainBtn" onclick="toggleTimer()">開始</button>
       <button class="btn-secondary" onclick="window.location.href='focus-stats.html?v=164'">記錄</button>
     </div>
+  </div>
+
+  <!-- Spotify Player -->
+  <div class="spotify-player" id="spotifyPlayer">
+    <div class="spotify-art" id="spotifyArt"></div>
+    <div class="spotify-info">
+      <div class="spotify-title" id="spotifyTitle">Not Playing</div>
+      <div class="spotify-artist" id="spotifyArtist">Connect Spotify to control music</div>
+    </div>
+    <div class="spotify-controls">
+      <button class="spotify-btn" onclick="spotifyAction('previous')">⏮</button>
+      <button class="spotify-btn" id="spotifyPlayBtn" onclick="spotifyAction('toggle')">▶️</button>
+      <button class="spotify-btn" onclick="spotifyAction('next')">⏭</button>
+    </div>
+  </div>
+
+  <div class="spotify-connect" id="spotifyConnect">
+    <button class="btn-spotify" onclick="connectSpotify()" title="連結 Spotify">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.503 17.306c-.215.352-.676.463-1.028.249-2.852-1.742-6.443-2.136-10.672-1.169-.404.093-.811-.161-.904-.565-.093-.404.161-.811.565-.904 4.629-1.059 8.591-.61 11.79 1.344.352.215.463.676.249 1.028zm1.47-3.253c-.271.44-.847.579-1.287.308-3.265-2.006-8.243-2.589-12.103-1.417-.497.151-1.021-.132-1.173-.629-.151-.497.132-1.021.629-1.173 4.417-1.34 9.905-.688 13.626 1.597.44.271.579.847.308 1.287zm.126-3.411c-3.914-2.324-10.373-2.54-14.137-1.398-.601.183-1.238-.163-1.421-.764-.183-.601.163-1.238.764-1.421 4.316-1.311 11.45-1.049 15.961 1.629.54.32.715 1.018.395 1.558-.32.54-1.018.715-1.558.395z"/></svg>
+    </button>
   </div>
 
   <div class="quote" id="quote"></div>
