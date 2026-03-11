@@ -1,39 +1,20 @@
 # HEARTBEAT.md
 
-## 定期檢查項目
+## ⚠️ 定時提醒已改用系統 crontab
 
-### 早安提醒 (07:00-10:00)
-- 檢查 `heartbeat-state.json` 的 `lastMorningCalendar`
-- 如果今天還沒發，且現在是 07:00-10:00 之間：
-  1. 查天氣：`curl -s "https://api.open-meteo.com/v1/forecast?latitude=22.6273&longitude=120.3014&current_weather=true&daily=temperature_2m_max,temperature_2m_min,precipitation_probability_max&timezone=Asia/Taipei"`
-  2. 查行事曆：`node ~/.openclaw/scripts/gcal.mjs events 2`
-  3. 發送早安訊息，包含：
-     - 🌤️ 高雄今日天氣（氣溫、降雨機率）
-     - 📅 今天的行程
-     - 📆 明天的重要行程（如果有）
-  4. 更新 `lastMorningCalendar` 為今天日期
+以下任務不再由 heartbeat 處理，改用 Pi 系統 crontab 執行：
+- ✅ 早安提醒 (07:00) → `morning-greeting.mjs`
+- ✅ 晚間提醒 (18:00) → `evening-greeting.mjs`  
+- ✅ 眼藥水提醒 (22:30) → `eye-drops.mjs`
 
-**天氣代碼對照：**
-- 0: 晴 ☀️
-- 1-3: 多雲 ⛅
-- 45-48: 霧 🌫️
-- 51-55: 毛毛雨 🌦️
-- 61-65: 雨 🌧️
-- 80-82: 陣雨 🌦️
-- 95-99: 雷雨 ⛈️
+腳本位置：`~/.openclaw/scripts/`
+Log 位置：`~/.openclaw/scripts/*.log`
 
-### 晚間行事曆提醒 (18:00-21:00)
-- 檢查 `heartbeat-state.json` 的 `lastEveningCalendar`
-- 如果今天還沒發，且現在是 18:00-21:00 之間：
-  - 執行 `node ~/.openclaw/scripts/gcal.mjs events 2`
-  - 發送明天的行事曆提醒
-  - 更新 `lastEveningCalendar` 為今天日期
+查看 crontab：`crontab -l`
 
-### 眼藥水提醒 (22:30-23:30)
-- 檢查 `heartbeat-state.json` 的 `lastEyeDrops`
-- 如果今天還沒提醒，且現在是 22:30-23:30 之間：
-  - 發送「💧 眼藥水時間！記得點喔～」
-  - 更新 `lastEyeDrops` 為今天日期
+---
+
+## Heartbeat 仍負責的項目
 
 ### 記憶檔案同步（隨時）
 ⚠️ **檔案有新增或更動時就要同步到網站！** 不要等到晚上。
