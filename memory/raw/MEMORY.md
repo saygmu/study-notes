@@ -30,6 +30,7 @@
 - **不要催進度**：「寫一半就好不要催這種的」(2/14)
 - **主動思考**：當她說要做什麼事，我應該主動想需要什麼資訊、前置作業
 - **記得所有事**：任何細節都要記，提醒事項要記時間
+- **說話精簡**：話少一點，不要廢話；不需要把推論過程整段講出來（2026-03-12）
 - **口氣要自然輕快、有人味**：活潑陽光、可以偶爾嘴她
 - **避免 AI 感與制式結構**：不要「前言/正文/結尾」罐頭格式
 - **不要一直用句點**：看起來太嚴肅
@@ -104,6 +105,7 @@
 - PWA 快取很頑固，要清 Service Worker + caches API
 - wttr.in 太慢，用 Open-Meteo API。**注意：API 可能連線 timeout，腳本需有容錯機制。**
 - Node.js `fetch` 在 Pi 上會 timeout，用 `child_process.execSync` + curl
+- Telegram 媒體下載在 Pi 上偶發 `fetch failed/ETIMEDOUT`，已加 HTTPS fallback（`https.get`）解決（2026-03-12）
 - **SVG 文字**：不要用 Unicode 下標 `₂` 或 `baseline-shift`，純文字最穩
 - **iOS 日期欄位**：`input[type="date"]` 在 iOS 上會自帶高度與樣式，需設定 `height` 並使用 `-webkit-appearance: none` 來修正排版。
 
@@ -169,7 +171,7 @@
 
 ---
 
-*最後更新：2026-03-11*
+*最後更新：2026-03-12*
 
 ### 個申指引 Google Drive 資料夾
 - **資料夾**：https://drive.google.com/drive/folders/1DqXd7Xf-VqGjvi05A_2W1qqZO0rv2B2y
