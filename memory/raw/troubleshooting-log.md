@@ -161,18 +161,26 @@
 
 ## 格式模板
 
-```
-## YYYY-MM-DD：問題簡述
+---
+
+## 2026-03-17：筆試推送與早安提醒失效
 
 ### 問題
-（描述症狀）
+- `morning-greeting.mjs` 報錯 `curl` timeout (status: 28)
+- `exam-push.mjs` 手動執行也報錯 `curl` timeout
+- Abigail 抱怨沒收到科普題目
 
 ### 發現的原因
-（root cause）
+- Pi 上的 `curl` 連線到 `api.telegram.org` 發生逾時，可能是暫時性的網路問題或 DNS 解析延遲。
+- `exam-push.mjs` 觀念資料庫為空，導致之前幾天也沒東西送。
 
 ### 修復方式
-（怎麼解決的）
+1. 更新 `exam-push.mjs` 填入 `CONCEPTS` 資料
+2. 手動發送內容給 Abigail
+3. 更新 `exam-prep.json` 重設 review 日期
 
 ### 後續追蹤
-- [ ] 待確認的事項
-```
+- [ ] 監控網路穩定性
+- [ ] 考慮將腳本中的 `curl` 改為更穩健的重試機制
+- [ ] 確保觀念資料庫有持續更新
+
