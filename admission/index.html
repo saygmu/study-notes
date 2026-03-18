@@ -1,121 +1,122 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
-  <meta charset="UTF-8">
-  <script src="../theme.js"></script>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>個申戰情室</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500&family=Noto+Serif+TC:wght@600&display=swap" rel="stylesheet">
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    
-    body {
-      font-family: 'Noto Sans TC', sans-serif;
-      font-weight: 300;
-      font-size: 16px;
-      line-height: 2;
-      color: var(--text);
-      background: var(--bg);
-    }
+<meta charset="UTF-8">
+<script src="../theme.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>個申戰情室</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=Noto+Serif+TC:wght@600;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box }
+:root {
+  --bg: #fefefe;
+  --text: #2d2d2d;
+  --muted: #888;
+  --accent: #2d2d2d;
+  --border: #e8e8e8;
+  --card: #f9f9f9;
+  --success: #22c55e;
+}
+body { background:var(--bg); color:var(--text); font-family:'Noto Sans TC',sans-serif; font-weight:300; line-height:1.8; overflow-x:hidden }
+.container { max-width: 720px; margin:0 auto; padding:40px 24px 80px }
 
-    nav {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      background: var(--bg);
-      border-bottom: 1px solid var(--border);
-      padding: 12px 24px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      z-index: 100;
-    }
-    nav a { color: var(--muted); text-decoration: none; font-size: 14px; }
-    nav a:hover { color: var(--text); }
+nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+  padding: 12px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 100;
+}
+nav a { color: var(--muted); text-decoration: none; font-size: 14px; }
+nav a:hover { color: var(--text); }
 
-    .container {
-      max-width: 720px;
-      margin: 0 auto;
-      padding: 80px 24px 60px;
-    }
+header { padding: 48px 0 36px; }
+h1 { font-family:'Noto Serif TC',serif; font-size: 2.2rem; font-weight:600; margin-bottom: 8px; letter-spacing: 1px; }
+.subtitle { color: var(--muted); font-size: 14px; margin-bottom: 48px; }
 
-    h1 {
-      font-family: 'Noto Serif TC', serif;
-      font-weight: 600;
-      font-size: 2.2rem;
-      margin-bottom: 8px;
-      letter-spacing: 1px;
-    }
-    .subtitle {
-      color: var(--muted);
-      font-size: 14px;
-      margin-bottom: 48px;
-    }
-    h2 {
-      font-family: 'Noto Serif TC', serif;
-      font-weight: 600;
-      font-size: 1.25rem;
-      margin: 48px 0 24px;
-      padding-bottom: 8px;
-      border-bottom: 1px solid var(--border);
-    }
+.stats-bar { display:flex; gap:24px; margin-bottom: 48px; border-bottom: 1px solid var(--border); padding-bottom: 24px; }
+.stat { flex:1; text-align:left; }
+.stat-num { font-family:'JetBrains Mono',monospace; font-size: 1.5rem; font-weight:700; color:var(--text); }
+.stat-label { font-size: 11px; color:var(--muted); text-transform: uppercase; letter-spacing: 1px; }
 
-    .note {
-      border-left: 3px solid var(--accent);
-      padding: 16px 20px;
-      margin: 24px 0;
-      background: var(--card);
-    }
-    .note strong {
-      display: block;
-      margin-bottom: 8px;
-      color: var(--accent);
-    }
+.filter-bar { display:flex; gap:8px; margin-bottom:32px; flex-wrap:wrap; }
+.filter-btn { padding:6px 14px; border:1px solid var(--border); border-radius:6px; background:transparent; color:var(--muted); font-size:13px; cursor:pointer; transition:all .2s; }
+.filter-btn:hover { border-color:var(--text); color:var(--text); }
+.filter-btn.active { background:var(--text); border-color:var(--text); color:var(--bg); }
 
-    .target-list {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 16px;
-    }
-    @media (max-width: 600px) {
-      .target-list { grid-template-columns: 1fr; }
-    }
-    .target-item {
-      padding: 20px;
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      background: var(--card);
-      display: flex;
-      flex-direction: column;
-      text-decoration: none;
-      color: inherit;
-      transition: transform 0.2s, border-color 0.2s;
-    }
-    .target-item:hover {
-      border-color: var(--accent);
-      transform: translateY(-2px);
-    }
-    .target-school { font-weight: 500; font-size: 1.15rem; color: var(--text); margin-bottom: 4px; }
-    .target-date { font-size: 13px; color: var(--muted); }
-    .target-exam { font-size: 14px; margin-top: 12px; color: var(--accent); font-weight: 400; }
-    .target-link-hint { font-size: 11px; color: var(--muted); margin-top: 8px; text-align: right; }
+.schools-grid { display:grid; grid-template-columns:1fr; gap:16px; }
+.school-card { background:var(--bg); border:1px solid var(--border); border-radius:12px; overflow:hidden; transition:all .3s; position:relative; }
+.school-card:hover { border-color:var(--muted); }
+.card-header { padding:20px 24px; display:flex; align-items:center; justify-content:space-between; cursor:pointer; }
+.card-header-left { display:flex; align-items:center; gap:16px; }
+.school-icon { width:40px; height:40px; border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:16px; font-weight:700; color:#fff; flex-shrink:0; }
+.school-name { font-family:'Noto Serif TC',serif; font-size:1.1rem; font-weight:600; }
+.school-dept { font-size:12px; color:var(--muted); margin-top:2px; }
+.expand-icon { color:var(--muted); font-size:12px; transition:transform .3s; }
+.school-card[data-expanded="true"] .expand-icon { transform:rotate(180deg) }
 
-    footer {
-      margin-top: 64px;
-      padding-top: 24px;
-      border-top: 1px solid var(--border);
-      text-align: center;
-      color: var(--muted);
-      font-size: 13px;
-    }
+.tag-row { padding:0 24px 16px; display:flex; gap:8px; flex-wrap:wrap; }
+.tag { padding:2px 8px; border-radius:4px; font-size:11px; font-weight:400; border:1px solid var(--border); color:var(--muted); }
 
-    @media print {
-      nav { display: none; }
-      .container { padding-top: 0; }
-    }
-  </style>
+.progress-row { padding:0 24px 20px; display:flex; align-items:center; gap:12px; }
+.progress-track { flex:1; height:2px; background:var(--border); overflow:hidden; }
+.progress-fill { height:100%; background:var(--text); transition:width .5s; }
+.progress-text { font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--muted); }
+
+.card-detail { max-height:0; overflow:hidden; transition:max-height .5s cubic-bezier(.4,0,.2,1); }
+.school-card[data-expanded="true"] .card-detail { max-height:10000px; }
+.detail-inner { padding:0 24px 24px; border-top:1px solid var(--border); }
+.detail-tabs { display:flex; gap:16px; margin-top:16px; }
+.detail-tab { padding:8px 0; font-size:13px; font-weight:600; color:var(--muted); cursor:pointer; border:none; border-bottom:2px solid transparent; transition:all .2s; background:none; font-family:'Noto Sans TC',sans-serif; }
+.detail-tab.active { color:var(--text); border-bottom-color:var(--text); }
+.tab-content { display:none; padding-top:20px; }
+.tab-content.active { display:block; }
+
+.section-group { margin-top:24px; }
+.section-title { font-family:'Noto Serif TC',serif; font-size:14px; font-weight:700; margin-bottom:12px; border-left: 2px solid var(--text); padding-left: 8px; }
+.checklist { list-style:none; }
+.checklist li { padding:12px 0; border-bottom:1px solid var(--border); font-size:14px; display:flex; align-items:flex-start; gap:12px; }
+.checklist li:last-child { border:none; }
+.check-icon { width:18px; height:18px; border:1px solid var(--muted); border-radius:4px; display:flex; align-items:center; justify-content:center; flex-shrink:0; cursor:pointer; font-size:10px; color:transparent; margin-top:4px; transition:all .2s; }
+.check-icon.checked { background:var(--text); border-color:var(--text); color:var(--bg); }
+
+.question-item { padding:16px; margin-bottom:12px; background:var(--card); border-radius:8px; font-size:14px; display:flex; gap:12px; }
+.q-label { font-family:'JetBrains Mono',monospace; font-size:10px; color:var(--muted); margin-bottom:4px; text-transform:uppercase; letter-spacing:1px; }
+
+.curriculum-grid { display:grid; grid-template-columns: repeat(2, 1fr); gap:12px; margin-top:12px; }
+.curr-year { background:var(--card); border-radius:8px; padding:16px; }
+.curr-year-label { font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:700; margin-bottom:8px; letter-spacing:1px; color:var(--muted); }
+.curr-item { font-size:12px; margin-bottom:4px; }
+
+.analysis-box { margin-top:16px; padding:20px; background:var(--card); border-radius:8px; border-left: 2px solid var(--border); }
+.analysis-box h4 { font-family:'Noto Serif TC',serif; font-size:14px; margin-bottom:12px; }
+.analysis-box p, .analysis-box li { font-size:13px; line-height:1.8; color:var(--text); }
+.analysis-box ul { list-style:none; margin-top:8px; }
+.analysis-box li::before { content:'→ '; color:var(--muted); }
+
+.info-note { font-size:13px; color:var(--muted); line-height:1.7; padding:16px; background:var(--card); border-radius:8px; margin-bottom:24px; border-left: 2px solid var(--border); }
+.external-link { display:inline-block; margin-top:12px; font-size:12px; color:var(--text); text-decoration:none; border-bottom:1px solid var(--border); }
+
+footer { text-align:center; padding:48px 0 32px; color:var(--muted); font-size:12px; border-top:1px solid var(--border); margin-top:64px; }
+
+@media (max-width: 600px) {
+  .curriculum-grid { grid-template-columns: 1fr; }
+  .stat-num { font-size: 1.2rem; }
+}
+
+@media print {
+  nav { display:none; }
+  .container { padding-top:0; }
+  .filter-bar { display:none; }
+}
+</style>
 </head>
 <body>
   <nav>
@@ -125,78 +126,299 @@
     </div>
   </nav>
 
-  <div class="container">
-    <h1>個申戰情室</h1>
-    <div class="subtitle">115 學年度大學個人申請進度追蹤 · 2026.03.10</div>
+<div class="container">
+<header>
+<h1 id="title">個申戰情室</h1>
+<p class="subtitle">115 學年度個人申請進度追蹤 · 資料更新 2026.03.18</p>
+</header>
 
-    <div class="note">
-      <strong>⚠️ 重要提醒</strong>
-      要注意要不要簽 AI 聲明！
-    </div>
+<div class="stats-bar">
+<div class="stat"><div class="stat-num" id="totalSchools">0</div><div class="stat-label">校系</div></div>
+<div class="stat"><div class="stat-num" id="totalItems">0</div><div class="stat-label">項目</div></div>
+<div class="stat"><div class="stat-num" id="totalDone">0</div><div class="stat-label">完成</div></div>
+<div class="stat"><div class="stat-num" id="totalPct">0%</div><div class="stat-label">進度</div></div>
+</div>
 
-    <h2>志願戰情</h2>
-    <div class="target-list">
-      <a href="https://dee.site.nthu.edu.tw/p/405-1175-301947,c5156.php?Lang=zh-tw" target="_blank" class="target-item">
-        <div class="target-school">清大電機乙</div>
-        <div class="target-date">甄試日期：5/17</div>
-        <div class="target-exam">筆試佔比 30% (最高!)</div>
-        <div class="target-link-hint">🔗 查看指引</div>
-      </a>
-      
-      <a href="https://aa.nycu.edu.tw/userfiles/aach/files/20260109091255255.pdf" target="_blank" class="target-item">
-        <div class="target-school">交大資工乙</div>
-        <div class="target-date">甄試日期：5/16</div>
-        <div class="target-exam">筆試佔比 10%</div>
-        <div class="target-link-hint">🔗 查看指引 (PDF)</div>
-      </a>
+<div class="filter-bar">
+<button class="filter-btn active" data-filter="all">全部</button>
+<button class="filter-btn" data-filter="ee">電機</button>
+<button class="filter-btn" data-filter="cs">資工</button>
+<button class="filter-btn" data-filter="nthu">清大</button>
+<button class="filter-btn" data-filter="ncku">成大</button>
+<button class="filter-btn" data-filter="nycu">交大</button>
+<button class="filter-btn" data-filter="nsysu">中山</button>
+</div>
 
-      <a href="https://dece.nycu.edu.tw/news/index.php?index_id=30" target="_blank" class="target-item">
-        <div class="target-school">交大電機</div>
-        <div class="target-date">甄試日期：5/17 (日)</div>
-        <div class="target-exam">數理測驗 / 電機資訊常識</div>
-        <div class="target-link-hint">🔗 查看指引 (截圖內容)</div>
-      </a>
+<div class="schools-grid" id="grid"></div>
 
-      <a href="https://dcs.site.nthu.edu.tw/p/406-1174-298552,r668.php" target="_blank" class="target-item">
-        <div class="target-school">清大資工乙</div>
-        <div class="target-date">甄試日期：5/16</div>
-        <div class="target-exam">筆試佔比 10%</div>
-        <div class="target-link-hint">🔗 查看指引</div>
-      </a>
+<footer>
+115 學年度個人申請書審指引戰情室 · AB御用秘書竭誠服務
+<br><br><a href="#" onclick="clearProgress()" style="color:var(--muted); text-decoration:none;">清除紀錄</a>
+</footer>
+</div>
 
-      <a href="https://drive.google.com/file/d/1B78CdKj2zekewWJCHsoiOyOlFcTyn9S2/view" target="_blank" class="target-item">
-        <div class="target-school">成大資工</div>
-        <div class="target-date">甄試日期：5/22</div>
-        <div class="target-exam">筆試佔比 10%</div>
-        <div class="target-link-hint">🔗 查看指引 (Drive)</div>
-      </a>
+<script>
+const D=[
+{id:"nthu-ee",school:"清華大學",dept:"電機工程學系",abbr:"清電",tags:["ee","nthu"],accent:"#fb923c",
+r:"期待看到學習表現與能力、領導協調能力與成長型特質。精簡扼要如實撰寫，不需強調美編。",
+links:[{name:"書審指引 (PDF)",url:"https://drive.google.com/file/d/1rchB5_F-3B2txsfCYkZt7xyv5UYnPZ33/view"}],
+ss:[{t:"修課紀錄 & 課程學習成果",st:"A, B, C, D",items:["綜合評量數學、物理、英文、國文、資訊科技的選修與成績","自然科學領域相關課程之書面報告","自然科學領域探究活動成果"]},{t:"多元表現 & 其他",st:"F, G, J, M, N, R",items:["長期投入且有具體／傑出表現的活動（附具體事證）","重視參與歷程與反思","R：其他學習動機展示說明"]}],
+qs:[{l:"學習歷程反思",q:"高中學習歷程反思（學了什麼、怎麼成長的）"},{l:"就讀動機",q:"具體說明「為什麼想讀電機系」？"},{l:"準備歷程",q:"高中期間為了念電機系做了什麼準備？"},{l:"未來規劃",q:"畢業後的規劃（升學或就業）及相應準備"},{l:"印象深刻",q:"人生中遇到印象最深刻的事件或挑戰，及解決方式"}],
+cy:[{l:"大一",c:["微積分A","普通物理","邏輯設計","計算機程式設計"]},{l:"大二",c:["常微分方程","偏微分/複變","線性代數","電路學","電子學","電磁學","訊號與系統","電子電路實驗"]},{l:"大三",c:["機率","必選實驗×3","實作專題一","電機資訊選修"]},{l:"大四",c:["實作專題二","八大學程選修","跨領域自由選修"]}],
+hl:["必修濃縮＝彈性最大，選修空間極多","八大學程：半導體、通訊、光電、控制、電力、計算機、AI、生醫電子","必修實作專題兩學期＋每學期專題競賽","必修科目提供英語授課，培養國際力","生師比 6.4（全國電機系最優）","系友領航計畫＋創客空間＋美國交換"],
+an:"清大電機最大賣點是「少必修、多彈性」＋八大學程，適合還不確定要走哪個次領域的人。申請動機可以強調：你對電機多元面向的好奇心，想利用清大彈性選課深入探索（例如你對 AI + 硬體整合有興趣），再搭配實作專題把想法落地。",
+hf:["八大學程自由選","實作專題競賽","英語授課必修","生師比最優"],
+cp:"清大電機 vs 成大電機：清大必修少、學程自由度高，適合想自由探索的人；成大是大電機、三學群架構，先廣後深更穩扎。清大生師比全國最優，跟教授互動機會多。"
+},
+{id:"nthu-cs",school:"清華大學",dept:"資訊工程學系（乙組）",abbr:"清資",tags:["cs","nthu"],accent:"#a78bfa",
+links:[{name:"官方網頁",url:"https://dcs.site.nthu.edu.tw/p/406-1174-298552,r668.php"}],
+r:"培養前瞻資訊工程與應用人才，強調跨領域整合、理論與實務兼備。質比量更重要，不鼓勵積點。",
+ss:[{t:"修課紀錄",st:"A",items:["是否修習重點領域科目，說明修習動機與課後心得","審查重點：學業總成績"]},{t:"課程學習成果",st:"B, C, D",items:["重點領域課程專題或實作的學習歷程與成果","展現數學、邏輯推理、程式設計或自然科學能力"]},{t:"多元表現",st:"F, J, K, M, N",items:["高中自主學習計畫與執行成果","益智、數理及資訊科技類相關競賽表現","非修課紀錄之成果作品","特殊優良事蹟或作品（至少一項即可）"]}],
+qs:[{l:"申請動機",q:"具體說明為何想申請本系？"},{l:"就讀準備",q:"高中期間的準備，就讀後如何學習相關課程？"},{l:"畢業規劃",q:"畢業後的規劃（升學或就業）及相應準備方向"}],
+cy:[{l:"大一",c:["微積分","普通物理","離散數學","程式設計(一)(二)"]},{l:"大二",c:["資料結構","線性代數","機率","邏輯設計＋實驗","軟體設計與實驗"]},{l:"大三",c:["計算機結構","作業系統","計算方法設計","系統整合實作","專題"]},{l:"大四",c:["四大範圍選修","研究所課程可提前修"]}],
+hl:["專業必修52學分＋四大指定選修15學分","四大範圍：理論、電腦系統、網路、人工智慧","與電機系課程整合，軟硬體兼備","系統整合實作：從零打造完整系統","五年學碩士＋直攻博士管道","ICPC 金牌常客，競賽風氣極強"],
+an:"清大資工乙組課程非常紮實，四大指定範圍確保你不會偏食。申請動機可強調：對資工基礎理論有興趣＋想透過四大範圍廣泛探索後專精，或點名某個研究領域（如 AI / 系統 / 網路安全）。如果你有寫過程式，一定要提！清大很看重動手做的紀錄。",
+hf:["四大範圍指定選修","系統整合實作","軟硬體整合","ICPC 競賽強校"],
+cp:"清大資工 vs 交大資工：清大四大指定範圍確保基礎廣度＋電機系整合是獨家優勢；交大 19 個研究領域更多元，但必修較重. 清大 ICPC 金牌常客，適合愛競賽的你。"
+},
+{id:"nycu-cs",school:"陽明交通大學",dept:"資訊工程學系（乙組）",abbr:"交資",tags:["cs","nycu"],accent:"#38bdf8",
+links:[{name:"書審指引 (PDF)",url:"https://drive.google.com/file/d/1rS0g09PwLb3KJEgdvjo8kAPBDe3YaMk4/view"}],
+r:"希望透過筆試招收對資訊工程領域有興趣且數理能力較佳的學生。",
+ss:[{t:"修課紀錄",st:"語文、數學、自然、科技、總成績",items:["以學習歷程檔案修課紀錄為主","若自行上傳請附三年成績單"]},{t:"課程學習成果",st:"書面報告/實作作品/探究與實作",items:["高中課程所產出之學習成果及相關作品"]},{t:"多元表現",st:"競賽、成果作品、特殊優良、綜整心得",items:["國內外各類競賽等級與成績","外語競賽或檢定成績／心得","科技製作的作品或實驗成果","領導班級或社團經驗（若無免）"]}],
+qs:[{l:"專長培養",q:"在求學過程中，如何培養及運用你的專長能力？"},{l:"關聯與動機",q:"你的專長能力與資訊領域的關聯性？就讀時將如何發揮整合？"}],
+cy:[{l:"大一",c:["計算機概論與程式設計","物理","微積分","資訊系統基礎與實作"]},{l:"大二",c:["資料結構","離散數學","線性代數","機率","數位電路設計"]},{l:"大三",c:["演算法","作業系統","計算機組織","專題研究","資料庫/AI/網路選修"]},{l:"大四",c:["專題競賽發表","進階選修","研究所課程"]}],
+hl:["「一系一所多學程」架構，19大研究領域","必修專題在大三～大四，推甄超重要","業界實務課：OS設計與實作、Web系統與應用","雲端系統、物聯網等產業導向學程","與電子系跨域學程合作","第二階段有筆試，重視數理能力"],
+an:"交大資工的招牌是「研究型大學×產業接軌」，19個研究領域意味著選擇空間巨大。申請動機關鍵：展現你的數理基底（學測數學要夠強），再加上對某個資工子領域的初步興趣。提到專題或 side project 經驗會大加分。注意第二階段有筆試，數理能力是硬指標。",
+hf:["19大研究領域","筆試考數理","產業導向學程","專題推甄關鍵"],
+cp:"交大資工 vs 清大資工：交大研究領域數量壓倒性（19個），產業合作多，適合想早點接軌業界的人。但注意第二階段有筆試。vs 成大資工：交大偏研究型，成大選修彈性更大＋南部就業直通。"
+},
+{id:"ncku-cs",school:"成功大學",dept:"資訊工程學系",abbr:"成資",tags:["cs","ncku"],accent:"#34d399",
+links:[{name:"官方網頁",url:"https://drive.google.com/file/d/1B78CdKj2zekewWJCHsoiOyOlFcTyn9S2/view"}],
+r:"致力培育新一代資訊科技人才，涵蓋 AI、量子電腦、機器人、FinTech 等。筆試＋團體面試，未參加不予錄取。",
+ss:[{t:"修課紀錄",st:"A",items:["重點：數學、英語文及資訊科技選修與成績","綜合評量，不以修課數量為唯一指標","真實呈現：不擅長科目分數不理想也沒關係","數學和英文要認真學，建立正確學習態度"]},{t:"課程學習成果",st:"B, D",items:["書面報告（至多3件）","自然科學領域探究與實作成果"]},{t:"多元表現",st:"F, J, L, M, N（至多10件）",items:["有何專長？如何發覺、發展該專長？","成長過程中與資工領域有何連結？","最大困難或挑戰是什麼？如何解決？","須以文字說明參加原因、過程、心得","多多利用資訊科技課探索興趣","利用自主學習測試自學能力"]}],
+qs:[{l:"反思",q:"學習過程中，對學習動機及方法有無省思？"},{l:"就讀動機",q:"為什麼選擇資訊系？高中做了哪些相關準備？"},{l:"未來計畫",q:"就讀後如何學習資工課程？如何培養專業技能？"},{l:"生涯規劃",q:"畢業後初步規劃（升學與就業）與準備"},{l:"成果呈現",q:"課程學習成果建議以「學習過程」為主"}],
+cy:[{l:"大一",c:["微積分","普通物理","計算機概論","程式設計(一)(二)","線性代數"]},{l:"大二",c:["工程數學","機率與統計","資料結構","邏輯系統","計算機組織"]},{l:"大三",c:["演算法","作業系統","編譯系統","微算機（組裝＋寫程式）","網際網路程式設計"]},{l:"大四",c:["資訊專題（唯一必修）","選修：AI/雲端/5G/生醫/資安…"]}],
+hl:["畢業137學分，必修66學分，選修彈性大","一系三所：資工所＋醫學資訊所＋製造資訊所","微算機課程：實際組裝感光元件＋面板＋寫程式","跨領域選修幾乎全承認","研究涵蓋 AI、量子電腦、FinTech、5G、生醫","南部最強資工，企業愛用度高"],
+an:"成大資工特色是「選修彈性極大」＋「一系三所跨域」，筆試＋團體面試是硬門檻。申請動機可走：嚮往成大綜合大學的跨領域資源（如資工＋醫學資訊），或強調你對某個實務問題的熱情（成大很重視「動手做」精神）。別忘了提團隊合作經驗！",
+hf:["一系三所跨域","選修彈性超大","筆試＋團體面試","企業愛用No.1"],
+cp:"成大資工 vs 交大資工：成大選修幾乎全承認外系學分，跨領域自由度最高。一系三所（含醫學資訊）是獨家。但交大在純資工研究深度和競賽氛圍更強。"
+},
+{id:"ncku-ee",school:"成功大學",dept:"電機工程學系（乙組）",abbr:"成電",tags:["ee","ncku"],accent:"#f472b6",
+links:[{name:"官方網頁",url:"https://drive.google.com/file/d/1NzkZpNk1AHAfK4ng-BX5QNPIKVdsQLdL/view"}, {name:"普渡計畫 (PDF)", url: "https://drive.google.com/file/d/1ygXadHhQN5FAjEus4OvAnjJZhpR9WZYL/view"}],
+r:"甄選對半導體、晶片設計、AI、光電、控制、通訊、電力等有興趣之高中生。五年學碩士管道。",
+ss:[{t:"修課紀錄",st:"A",items:["高中在校總成績","數學、自然、生活科技、英語很重要","修課歷程可看出興趣，可於自述真實呈現","數學、自然、英語穩扎穩打","可選修加深加廣課程了解電機"]},{t:"課程學習成果",st:"B, D（至多3件）",items:["書面報告","自然科學領域探究與實作","或特殊類型班級學習成果"]},{t:"多元表現",st:"F, J, L, M, N（至多10件）",items:["有脈絡可循的自我探索紀錄","多元非多就好，要越來越清楚興趣","自主學習、競賽、證照與興趣潛力是相關聯的","描述經歷帶給你的影響，展現能力與熱忱","多探索與電機相關的興趣"]}],
+qs:[{l:"經歷連結",q:"將自己的經歷與本系特色做連結"},{l:"申請原因",q:"決定申請的原因，真實寫出來才與眾不同"},{l:"讀書計畫",q:"不宜流水帳或罐頭式，思考想追尋的技能與生涯"},{l:"作品呈現",q:"著重動機、過程、收穫、反思"},{l:"自我證明",q:"證明有想法、探索能力，把學習課題做好"},{l:"個人特質",q:"強調差異化與個人特質亮點，忠於自己就特別"}],
+cy:[{l:"大一",c:["微積分","普通物理","計算機概論","電機概論與實習"]},{l:"大二",c:["工程數學","電子學＋實習","電路學","電磁學","邏輯系統＋實習","訊號與系統"]},{l:"大三",c:["三大學群擇一主修","控制/半導體/電力等","專題研究(上)"]},{l:"大四",c:["專題研究(下)＋發表","學群進階選修","五年預研生可提前進實驗室"]}],
+hl:["大電機：大一不分組，大二起選三大學群","三學群：①電路與系統 ②電子與材料 ③電腦與通訊","八大研究組：電子材料/控制/電力/VLSI·CAD/儀器晶片/資訊/微電子/通訊網路","必修三電一工打底極扎實","大三跟教授做專題，銜接研究所","跨域合作：工設系、建築系、醫學系"],
+an:"成大電機是典型「大電機」＝先廣後深。申請動機可說：你對電機多面向有好奇（如半導體＋AI），想利用大一大二探索，大三選學群深入。成大很在乎「忠於自己」，用你真實故事連結電機，不要套模板。提到跨域合作（醫工、智慧能源）會加分。",
+hf:["大電機先廣後深","三大學群自選","八大研究組","跨域醫工合作"],
+cp:"成大電機 vs 清大電機：成大是大電機（八大組別），涵蓋面更廣；清大八大學程但必修更少更自由。成大跨域合作（醫學、建築）是特色。vs 中山電機：成大規模大、組別多，中山五年學碩CP值高。"
+},
+{id:"nsysu-ee",school:"中山大學",dept:"電機工程學系",abbr:"中電",tags:["ee","nsysu"],accent:"#facc15",
+links:[{name:"官方簡章 (PDF)",url:"https://rpa35.nsysu.edu.tw/static/file/78/1078/img/4776/410998425.pdf"}],
+r:"研究涵蓋電子、控制、AI與網路、電力、電波通訊、系統晶片及生醫儀器。鼓勵五年取得學碩士雙學位。",
+wt:[{l:"學科學習表現",p:50},{l:"特殊項目學習表現",p:30},{l:"多元學習能力與個人特質",p:20}],
+ss:[{t:"學科學習表現（50%）",st:"修課紀錄+課程學習成果",items:["學業總成績","修課：語文、數學、自然、科技","課程學習成果"]},{t:"特殊項目學習表現（30%）",st:"課程學習成果+多元表現",items:["競賽表現","數理、英語能力檢定","語文/數理傑出表現並佐證","非修課成果作品","自主學習及專題製作表現"]},{t:"多元學習能力與個人特質（20%）",st:"多元表現+學習歷程自述",items:["自主學習計畫與成果","競賽活動反思與收穫","非修課成果作品","檢定證照"]}],
+qs:[{l:"連結",q:"具體說明求學過程與本學系連結的人事物"},{l:"人格特質",q:"哪一點人格特質適合就讀？或做了哪些準備？"},{l:"申請動機",q:"具體說明申請動機（如背景或事件）"},{l:"困難挑戰",q:"遇過最大的困難或挑戰，及如何解決或面對？"}],
+cy:[{l:"大一",c:["微積分","普通物理","計算機概論","電機工程導論"]},{l:"大二",c:["工程數學","電子學","電路學","電磁學","邏輯設計"]},{l:"大三",c:["控制系統","通訊系統","半導體","電力工程","AI與網路選修"]},{l:"大四",c:["專題實作","進階選修","五年學碩可修研究所課程"]}],
+hl:["七大研究方向：電子、控制、AI與網路、電力、電波通訊、系統晶片、生醫儀器","五年學碩士雙學位制度＝CP值高","國際交換生管道","Bebras國際運算思維檢測可作多元表現","成績優異另提供獎學金","南部半導體產業鏈就近實習機會多"],
+an:"中山電機的優勢是「五年學碩」CP值和南部半導體產業鏈的地理位置。申請動機可從：你對某個電機領域的興趣（如電波通訊、系統晶片）＋想利用五年一貫高效取得碩士＋對南部科技產業的就業意願來串聯。中山特別問「人格特質」和「困難挑戰」，準備一個有深度的真實故事很重要。",
+hf:["五年學碩CP值高","南部半導體就近","七大研究方向","Bebras可加分"],
+cp:"中山電機 vs 成大電機：成大規模更大、研究組別更多，但中山五年學碩制度更快拿碩士。中山地處高雄，南科＋高雄半導體產業鏈實習機會多. vs 清大電機：清大排名＋資源更強，中山競爭壓力相對較小。"
+},
+{id:"nycu-ee",school:"陽明交通大學",dept:"電機工程學系",abbr:"交電",tags:["ee","nycu"],accent:"#38bdf8",
+links:[{name:"官方網頁",url:"https://dece.nycu.edu.tw/news/index.php?index_id=30"}],
+r:"甄試日期：5/17 (日)；測驗：數理測驗 / 電機資訊常識",
+ss:[], qs:[], cy:[], hl:[], hf:[], an:"", cp:""
+},
+{id:"nycu-me",school:"陽明交通大學",dept:"機械工程學系",abbr:"交機",tags:["me","nycu"],accent:"#38bdf8",
+links:[{name:"官方簡章 (PDF)",url:"https://aa.nycu.edu.tw/userfiles/aach/files/20260206174531774.pdf"}],
+r:"甄試日期：待確認；書審指引請參閱簡章。",
+ss:[], qs:[], cy:[], hl:[], hf:[], an:"", cp:""
+}
+];
 
-      <a href="https://drive.google.com/file/d/1NzkZpNk1AHAfK4ng-BX5QNPIKVdsQLdL/view" target="_blank" class="target-item">
-        <div class="target-school">成大電機乙</div>
-        <div class="target-date">甄試日期：待確認</div>
-        <div class="target-exam">免筆試</div>
-        <div class="target-link-hint">🔗 查看指引 (Drive)</div>
-      </a>
+const grid=document.getElementById('grid');
+let progress = JSON.parse(localStorage.getItem('admission_progress') || '{}');
 
-      <a href="https://rpa35.nsysu.edu.tw/static/file/78/1078/img/4776/410998425.pdf" target="_blank" class="target-item">
-        <div class="target-school">中山電機</div>
-        <div class="target-date">甄試日期：待確認</div>
-        <div class="target-exam">免筆試</div>
-        <div class="target-link-hint">🔗 查看簡章 (PDF)</div>
-      </a>
-      
-      <a href="https://aa.nycu.edu.tw/userfiles/aach/files/20260206174531774.pdf" target="_blank" class="target-item">
-        <div class="target-school">交大機械</div>
-        <div class="target-date">甄試日期：待確認</div>
-        <div class="target-exam">書審指引</div>
-        <div class="target-link-hint">🔗 查看簡章 (PDF)</div>
-      </a>
-    </div>
+function render(f){
+grid.innerHTML='';
+const list=f==='all'?D:D.filter(d=>d.tags.includes(f));
+list.forEach(d=>{
+const tc=d.ss.reduce((a,s)=>a+s.items.length,0)+d.qs.length;
+const c=document.createElement('div');
+c.className='school-card';c.dataset.expanded='false';c.dataset.id=d.id;
+const isEE=d.tags.includes('ee');
+const isCS=d.tags.includes('cs');
+const tagText = isEE ? '電機' : (isCS ? '資工' : '其他');
 
-    <footer>秘書竭誠為您服務</footer>
+c.innerHTML=`
+<div class="card-header" onclick="tog('${d.id}')">
+<div class="card-header-left">
+  <div class="school-icon" style="background:${d.accent}">${d.abbr[0]}</div>
+  <div>
+    <div class="school-name">${d.school}</div>
+    <div class="school-dept">${d.dept}</div>
   </div>
+</div>
+<div class="expand-icon">▼</div>
+</div>
+<div class="tag-row">
+  <span class="tag">${tagText}</span>
+  <span class="tag">${tc} 個準備項</span>
+</div>
+<div class="progress-row">
+  <div class="progress-track"><div class="progress-fill" id="bar-${d.id}" style="width:0%"></div></div>
+  <span class="progress-text" id="txt-${d.id}">0/${tc}</span>
+</div>
+<div class="card-detail">
+<div class="detail-inner">
+  <div class="detail-tabs">
+    <button class="detail-tab active" onclick="stab(event,'${d.id}','rv')">書審指引</button>
+    <button class="detail-tab" onclick="stab(event,'${d.id}','cu')">課程地圖</button>
+    <button class="detail-tab" onclick="stab(event,'${d.id}','an')">特色分析</button>
+  </div>
+  <div class="tab-content active" data-tab="${d.id}-rv">
+    <div class="info-note">💡 <strong>選才理念：</strong>${d.r}</div>
+    ${d.links? d.links.map(l=>`<a href="${l.url}" target="_blank" class="external-link">🔗 ${l.name}</a>`).join(' '):''}
+    
+    ${d.ss.map(s=>`
+      <div class="section-group">
+        <div class="section-title">${s.t}</div>
+        <ul class="checklist">
+          ${s.items.map((i,idx)=>`
+            <li>
+              <div class="check-icon" data-id="${d.id}" data-type="ss" data-idx="${idx}" onclick="event.stopPropagation();tck(this)">✓</div>
+              <span>${i}</span>
+            </li>`).join('')}
+        </ul>
+      </div>
+    `).join('')}
+    
+    ${d.qs.length? `
+      <div class="section-group">
+        <div class="section-title">學習歷程自述必答題</div>
+        ${d.qs.map((q,idx)=>`
+          <div class="question-item">
+            <div class="check-icon" data-id="${d.id}" data-type="qs" data-idx="${idx}" onclick="event.stopPropagation();tck(this)">✓</div>
+            <div>
+              <div class="q-label">Q${idx+1} — ${q.l}</div>
+              <div>${q.q}</div>
+            </div>
+          </div>
+        `).join('')}
+      </div>
+    `:''}
+  </div>
+  <div class="tab-content" data-tab="${d.id}-cu">
+    ${d.cy.length? `
+      <div class="section-group">
+        <div class="section-title">四年課程地圖</div>
+        <div class="curriculum-grid">
+          ${d.cy.map(y=>`
+            <div class="curr-year">
+              <div class="curr-year-label">${y.l}</div>
+              ${y.c.map(x=>`<div class="curr-item">${x}</div>`).join('')}
+            </div>
+          `).join('')}
+        </div>
+      </div>
+    `:''}
+    ${d.hl.length? `
+      <div class="section-group">
+        <div class="section-title">課程亮點 & 特色資源</div>
+        <ul class="checklist" style="border:none">
+          ${d.hl.map(h=>`<li style="border:none; padding:4px 0"><span style="color:var(--muted)">•</span> ${h}</li>`).join('')}
+        </ul>
+      </div>
+    `:''}
+  </div>
+  <div class="tab-content" data-tab="${d.id}-an">
+    ${d.an? `<div class="analysis-box"><h4>🎯 申請動機建議</h4><p>${d.an}</p></div>`:''}
+    ${d.hf.length? `<div class="analysis-box" style="margin-top:12px"><h4>⚡ 獨特賣點</h4><ul>${d.hf.map(f=>`<li>${f}</li>`).join('')}</ul></div>`:''}
+    ${d.cp? `<div class="analysis-box" style="margin-top:12px"><h4>📌 競爭分析</h4><p>${d.cp}</p></div>`:''}
+    ${!d.an && !d.hf.length && !d.cp ? '<div class="info-note">暫無分析資料</div>' : ''}
+  </div>
+</div>
+</div>`;
+grid.appendChild(c);
+});
+updateUI();
+}
 
-  <script src="../theme.js"></script>
-  <script src="../theme-effects.js"></script>
+function stab(e,id,t){
+  const c=document.querySelector(`.school-card[data-id="${id}"]`);
+  c.querySelectorAll('.detail-tab').forEach(x=>x.classList.remove('active'));
+  e.target.classList.add('active');
+  c.querySelectorAll('.tab-content').forEach(x=>x.classList.remove('active'));
+  c.querySelector(`[data-tab="${id}-${t}"]`).classList.add('active');
+}
+
+function tog(id){
+  const c=document.querySelector(`.school-card[data-id="${id}"]`);
+  const ex=c.dataset.expanded==='true';
+  document.querySelectorAll('.school-card').forEach(x=>x.dataset.expanded='false');
+  if(!ex)c.dataset.expanded='true';
+}
+
+function tck(el){
+  const id=el.dataset.id;
+  const type=el.dataset.type;
+  const idx=el.dataset.idx;
+  const key=`${id}-${type}-${idx}`;
+  
+  if(progress[key]) delete progress[key];
+  else progress[key]=true;
+  
+  localStorage.setItem('admission_progress', JSON.stringify(progress));
+  updateUI();
+}
+
+function updateUI(){
+  document.querySelectorAll('.check-icon').forEach(el=>{
+    const key=`${el.dataset.id}-${el.dataset.type}-${el.dataset.idx}`;
+    if(progress[key]) el.classList.add('checked');
+    else el.classList.remove('checked');
+  });
+  
+  let totalItems=0, doneItems=0;
+  
+  D.forEach(d=>{
+    const items = document.querySelectorAll(`.check-icon[data-id="${d.id}"]`);
+    const checked = document.querySelectorAll(`.check-icon.checked[data-id="${d.id}"]`);
+    totalItems += items.length;
+    doneItems += checked.length;
+    
+    const bar = document.getElementById(`bar-${d.id}`);
+    const txt = document.getElementById(`txt-${d.id}`);
+    const pct = items.length ? Math.round(checked.length/items.length*100) : 0;
+    if(bar) bar.style.width = pct+'%';
+    if(txt) txt.textContent = `${checked.length}/${items.length}`;
+  });
+  
+  document.getElementById('totalSchools').textContent = D.length;
+  document.getElementById('totalItems').textContent = totalItems;
+  document.getElementById('totalDone').textContent = doneItems;
+  document.getElementById('totalPct').textContent = (totalItems ? Math.round(doneItems/totalItems*100) : 0) + '%';
+}
+
+function clearProgress(){
+  if(confirm('確定要清除所有進度紀錄嗎？')){
+    progress={};
+    localStorage.removeItem('admission_progress');
+    updateUI();
+  }
+}
+
+document.querySelectorAll('.filter-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    document.querySelectorAll('.filter-btn').forEach(x=>x.classList.remove('active'));
+    b.classList.add('active');
+    render(b.dataset.filter);
+  })
+});
+
+render('all');
+</script>
 </body>
 </html>
