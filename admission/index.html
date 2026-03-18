@@ -177,11 +177,11 @@ cy:[{l:"大一",c:["微積分","普通物理","離散數學","程式設計(一)(
 hl:["專業必修52學分＋四大指定選修15學分","四大範圍：理論、電腦系統、網路、人工智慧","與電機系課程整合，軟硬體兼備","系統整合實作：從零打造完整系統","五年學碩士＋直攻博士管道","ICPC 金牌常客，競賽風氣極強"],
 an:"清大資工乙組課程非常紮實，四大指定範圍確保你不會偏食。申請動機可強調：對資工基礎理論有興趣＋想透過四大範圍廣泛探索後專精，或點名某個研究領域（如 AI / 系統 / 網路安全）。如果你有寫過程式，一定要提！清大很看重動手做的紀錄。",
 hf:["四大範圍指定選修","系統整合實作","軟硬體整合","ICPC 競賽強校"],
-cp:"清大資工 vs 交大資工：清大四大指定範圍確保基礎廣度＋電機系整合是獨家優勢；交大 19 個研究領域更多元，但必修較重。清大 ICPC 金牌常客，適合愛競賽的你。"
+cp:"清大資工 vs 交大資工：清大四大指定範圍確保基礎廣度＋電機系整合是獨家優勢；交大 19 個研究領域更多元，但必修較重. 清大 ICPC 金牌常客，適合愛競賽的你。"
 },
 {id:"nycu-cs",school:"陽明交通大學",dept:"資訊工程學系（乙組）",abbr:"交資",tags:["cs","nycu"],accent:"#38bdf8",
 r:"希望透過筆試招收對資訊工程領域有興趣且數理能力較佳的學生。",
-ss:[{t:"修課紀錄",st:"語文、數學、自然、科技、總成績",items:["以學習歷程檔案修課紀錄為主","若自行上傳請附三年成績單"]},{t:"課程學習成果",st:"書面報告/實作作品/探究與實作",items:["高中課程所產出之學習成果及相關作品"]},{t:"多元表現",st:"競賽、成果作品、特殊優良、綜整心得",items:["國內外各類競賽等級與成績","外語競賽或檢定成績／心得","科技製作的作品或實驗成果","領導班級或社團經驗（若無免）"]}],
+ss:[{t:"修課紀錄",st:"語文、數學、自然、科技、總成績",items:["以學習歷程檔案修課紀錄為主","若自行上傳請附三年成績單"]},{t:"課程學習成果",st:"書面報告/實作作品/探究與實作",items:["高中課程所產出之學習成果及相關作品"]},{t:"多元表現",st:"競賽、成果作品、特殊優良、綜整心得",items:["國內外各類競賽等級與成績","外語競賽或檢定成績／心得","科技製作的作品 or 實驗成果","領導班級或社團經驗（若無免）"]}],
 qs:[{l:"專長培養",q:"在求學過程中，如何培養及運用你的專長能力？"},{l:"關聯與動機",q:"你的專長能力與資訊領域的關聯性？就讀時將如何發揮整合？"}],
 cy:[{l:"大一",c:["計算機概論與程式設計","物理","微積分","資訊系統基礎與實作"]},{l:"大二",c:["資料結構","離散數學","線性代數","機率","數位電路設計"]},{l:"大三",c:["演算法","作業系統","計算機組織","專題研究","資料庫/AI/網路選修"]},{l:"大四",c:["專題競賽發表","進階選修","研究所課程"]}],
 hl:["「一系一所多學程」架構，19大研究領域","必修專題在大三～大四，推甄超重要","業界實務課：OS設計與實作、Web系統與應用","雲端系統、物聯網等產業導向學程","與電子系跨域學程合作","第二階段有筆試，重視數理能力"],
@@ -229,6 +229,7 @@ function render(f){
 grid.innerHTML='';
 const list=f==='all'?D:D.filter(d=>d.tags.includes(f));
 list.forEach(d=>{
+let currentSIdx = 0;
 const tc=d.ss.reduce((a,s)=>a+s.items.length,0)+d.qs.length;
 const c=document.createElement('div');
 c.className='school-card';c.dataset.expanded='false';c.dataset.id=d.id;
@@ -265,13 +266,13 @@ c.innerHTML=`
   <div class="tab-content active" data-tab="${d.id}-rv">
     <div class="info-note">💡 <strong>選才理念：</strong>${d.r}</div>
     
-    ${d.ss.map(s=>`
+    ${d.ss.map((s, s_grp_idx)=>`
       <div class="section-group">
         <div class="section-title">${s.t}</div>
         <ul class="checklist">
-          ${s.items.map((i,idx)=>`
+          ${s.items.map((i, item_idx)=>`
             <li>
-              <div class="check-icon" data-id="${d.id}" data-type="ss" data-idx="${idx}" onclick="event.stopPropagation();tck(this)">✓</div>
+              <div class="check-icon" data-id="${d.id}" data-type="ss" data-grp="${s_grp_idx}" data-idx="${item_idx}" onclick="event.stopPropagation();tck(this)">✓</div>
               <span>${i}</span>
             </li>`).join('')}
         </ul>
@@ -281,11 +282,11 @@ c.innerHTML=`
     ${d.qs.length? `
       <div class="section-group">
         <div class="section-title">學習歷程自述必答題</div>
-        ${d.qs.map((q,idx)=>`
+        ${d.qs.map((q, q_idx)=>`
           <div class="question-item">
-            <div class="check-icon" data-id="${d.id}" data-type="qs" data-idx="${idx}" onclick="event.stopPropagation();tck(this)">✓</div>
+            <div class="check-icon" data-id="${d.id}" data-type="qs" data-idx="${q_idx}" onclick="event.stopPropagation();tck(this)">✓</div>
             <div>
-              <div class="q-label">Q${idx+1} — ${q.l}</div>
+              <div class="q-label">Q${q_idx+1} — ${q.l}</div>
               <div>${q.q}</div>
             </div>
           </div>
@@ -350,8 +351,9 @@ function tog(id){
 function tck(el){
   const id=el.dataset.id;
   const type=el.dataset.type;
+  const grp=el.dataset.grp || '0';
   const idx=el.dataset.idx;
-  const key=`${id}-${type}-${idx}`;
+  const key=`${id}-${type}-${grp}-${idx}`;
   
   if(progress[key]) delete progress[key];
   else progress[key]=true;
@@ -362,7 +364,11 @@ function tck(el){
 
 function updateUI(){
   document.querySelectorAll('.check-icon').forEach(el=>{
-    const key=`${el.dataset.id}-${el.dataset.type}-${el.dataset.idx}`;
+    const id=el.dataset.id;
+    const type=el.dataset.type;
+    const grp=el.dataset.grp || '0';
+    const idx=el.dataset.idx;
+    const key=`${id}-${type}-${grp}-${idx}`;
     if(progress[key]) el.classList.add('checked');
     else el.classList.remove('checked');
   });
