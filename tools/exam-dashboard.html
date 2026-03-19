@@ -43,11 +43,12 @@
     h1 {
       font-family: 'Noto Serif TC', serif;
       font-weight: 600;
-      font-size: 1.8rem;
+      font-size: 2rem;
       letter-spacing: 2px;
-      margin-bottom: 4px;
+      text-align: center;
+      margin-bottom: 8px;
     }
-    .subtitle { color: var(--muted); font-size: 13px; margin-bottom: 32px; }
+    .subtitle { color: var(--muted); font-size: 13px; margin-bottom: 40px; text-align: center; }
 
     .exam-row {
       display: flex;
@@ -119,11 +120,12 @@
 
     .chart-section { margin-bottom: 24px; }
     .chart-title { font-size: 12px; text-transform: uppercase; letter-spacing: 2px; color: var(--muted); margin-bottom: 16px; }
-    .bar-chart { display: flex; gap: 6px; height: 140px; align-items: stretch; overflow-x: auto; }
-    .bar-col { flex: 1; min-width: 32px; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; }
+    .bar-chart { display: flex; gap: 4px; overflow-x: auto; }
+    .bar-col { flex: 1; min-width: 28px; display: flex; flex-direction: column; align-items: center; }
+    .bar-area { height: 110px; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; }
     .bar-val { font-size: 10px; color: var(--muted); margin-bottom: 4px; }
-    .bar { width: 100%; max-width: 40px; border-radius: 4px 4px 0 0; min-height: 3px; background: var(--accent); opacity: 0.6; transition: height 0.5s ease; }
-    .bar-lbl { font-size: 9px; color: var(--muted); text-align: center; margin-top: 6px; line-height: 1.2; height: 24px; display: flex; align-items: flex-start; justify-content: center; }
+    .bar { width: 70%; max-width: 32px; border-radius: 3px 3px 0 0; min-height: 2px; background: var(--accent); opacity: 0.6; transition: height 0.5s ease; }
+    .bar-lbl { font-size: 8px; color: var(--muted); text-align: center; margin-top: 6px; line-height: 1.15; height: 26px; overflow: hidden; word-break: break-all; }
 
     .section-title { font-size: 12px; text-transform: uppercase; letter-spacing: 2px; color: var(--muted); margin-bottom: 12px; margin-top: 28px; }
 
@@ -179,7 +181,7 @@
       .tab { padding: 6px 14px; font-size: 12px; }
       .stats-row { gap: 8px; }
       .stat-num { font-size: 1.1rem; }
-      .bar-chart { height: 120px; }
+      .bar-area { height: 90px; }
       .plan-grid { grid-template-columns: 1fr; }
     }
   </style>
@@ -233,7 +235,7 @@ function renderSubject(k){const s=subjects[k];const el=document.getElementById('
 
 function renderOverview(){const el=document.getElementById('tab-overview');let tt=0,td=0,tw=0,ts=0;for(const k of Object.keys(subjects))for(const c of subjects[k].chapters)for(const t of c.topics){tt++;if(state.checked[t.id])td++;if(state.confidence[t.id]===1)tw++;if(state.confidence[t.id]===3)ts++;}
 let h=`<div class="stats-row"><div class="stat-item"><div class="stat-num">${tt}</div><div class="stat-label">總主題</div></div><div class="stat-item"><div class="stat-num">${td}</div><div class="stat-label">已完成</div></div><div class="stat-item"><div class="stat-num">${tw}</div><div class="stat-label">不熟</div></div><div class="stat-item"><div class="stat-num">${ts}</div><div class="stat-label">熟練</div></div><div class="stat-item"><div class="stat-num">${tt-td}</div><div class="stat-label">待完成</div></div></div>`;
-h+='<div class="chart-section"><div class="chart-title">各章節完成度</div><div class="bar-chart">';for(const[k,s]of Object.entries(subjects))for(const c of s.chapters){const d=c.topics.filter(t=>state.checked[t.id]).length,t=c.topics.length,p=t?Math.round(d/t*100):0,nm=c.title.replace(/[：:]/g,'\n').split('\n')[0].replace(/（.*?）/,'').trim().slice(0,5);h+=`<div class="bar-col"><div class="bar-val">${p}%</div><div class="bar" style="height:${Math.max(p*1.1,3)}px"></div><div class="bar-lbl">${nm}</div></div>`;}h+='</div></div>';
+h+='<div class="chart-section"><div class="chart-title">各章節完成度</div><div class="bar-chart">';for(const[k,s]of Object.entries(subjects))for(const c of s.chapters){const d=c.topics.filter(t=>state.checked[t.id]).length,t=c.topics.length,p=t?Math.round(d/t*100):0,nm=c.title.replace(/[：:]/g,'\n').split('\n')[0].replace(/（.*?）/,'').trim().slice(0,5);h+=`<div class="bar-col"><div class="bar-area"><div class="bar-val">${p}%</div><div class="bar" style="height:${Math.max(p*1,2)}px"></div></div><div class="bar-lbl">${nm}</div></div>`;}h+='</div></div>';
 const weak=[];for(const[k,s]of Object.entries(subjects))for(const c of s.chapters)for(const t of c.topics)if(state.confidence[t.id]===1)weak.push({...t,subj:s.name});
 if(weak.length){h+='<div class="section-title">需加強</div>';for(const w of weak)h+=`<div class="weak-item"><span class="weak-dot"></span><div><div>${w.name}</div><div class="weak-sub">${w.subj}</div></div></div>`;}el.innerHTML=h;}
 
