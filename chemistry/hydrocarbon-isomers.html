@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <script src="../theme.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>烴類取代基同分異構物</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600&family=Noto+Sans+TC:wght@300;400;500&display=swap');
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Noto Sans TC', sans-serif;
+      font-weight: 300;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 2;
+      font-size: 16px;
+      transition: all 0.3s ease;
+    }
+
+    .container {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 60px 24px 80px;
+    }
+
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+      padding: 16px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 100;
+      font-size: 14px;
+    }
+    nav a { color: var(--muted); text-decoration: none; }
+    nav a:hover { color: var(--text); }
+
+    h1 {
+      font-family: 'Noto Serif TC', serif;
+      font-weight: 600;
+      font-size: 2.2rem;
+      margin: 40px 0 16px;
+      letter-spacing: 2px;
+    }
+    .subtitle { color: var(--muted); margin-bottom: 48px; font-size: 14px; }
+
+    h2 {
+      font-family: 'Noto Serif TC', serif;
+      font-weight: 600;
+      font-size: 1.25rem;
+      margin: 48px 0 20px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    p { margin-bottom: 16px; }
+
+    mark {
+      background: var(--highlight);
+      color: var(--text);
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+
+    .note {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--accent);
+      border-radius: 8px;
+      padding: 16px 20px;
+      margin: 20px 0;
+      font-size: 14px;
+      line-height: 1.8;
+    }
+
+    /* Table */
+    .table-wrap {
+      overflow-x: auto;
+      margin: 20px 0;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+
+    thead th {
+      background: var(--card);
+      font-weight: 500;
+      text-align: center;
+      padding: 12px 10px;
+      border-bottom: 2px solid var(--border);
+      white-space: nowrap;
+      font-size: 13px;
+      color: var(--muted);
+      letter-spacing: 1px;
+    }
+
+    tbody td {
+      padding: 10px 12px;
+      text-align: center;
+      border-bottom: 1px solid var(--border);
+      vertical-align: middle;
+    }
+
+    tbody tr:last-child td { border-bottom: none; }
+
+    tbody tr:hover { background: var(--card); }
+
+    .mol-name {
+      text-align: left;
+      font-weight: 400;
+    }
+
+    .formula {
+      font-family: 'Noto Sans TC', monospace;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .highlight-cell {
+      background: var(--highlight);
+      font-weight: 500;
+      border-radius: 4px;
+    }
+
+    .section-label {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--muted);
+      margin: 40px 0 12px;
+    }
+
+    .tip {
+      display: inline-block;
+      background: var(--accent);
+      color: var(--bg);
+      font-size: 11px;
+      padding: 2px 8px;
+      border-radius: 4px;
+      margin-left: 6px;
+      font-weight: 400;
+      vertical-align: middle;
+    }
+
+    footer {
+      text-align: center;
+      padding: 40px 0;
+      color: var(--muted);
+      font-size: 12px;
+      border-top: 1px solid var(--border);
+      margin-top: 40px;
+    }
+
+    @media (max-width: 480px) {
+      .container { padding: 56px 14px 60px; }
+      h1 { font-size: 1.6rem; }
+      table { font-size: 13px; }
+      thead th { padding: 10px 6px; font-size: 12px; }
+      tbody td { padding: 8px 6px; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="../">← 返回</a>
+</nav>
+
+<div class="container">
+  <h1>烴類同分異構物</h1>
+  <p class="subtitle">各烴類取代基的同分異構物種類數整理</p>
+
+  <h2>烷類 Alkanes</h2>
+
+  <p>一取代物的種類數 = <mark>不等價氫的種數</mark>（對稱性越高，種數越少）</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>名稱</th>
+          <th>分子式</th>
+          <th>結構異構物數</th>
+          <th>一氯取代物數</th>
+          <th>說明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="mol-name">甲烷</td>
+          <td class="formula">CH₄</td>
+          <td>1</td>
+          <td class="highlight-cell">1</td>
+          <td>只有一種 H</td>
+        </tr>
+        <tr>
+          <td class="mol-name">乙烷</td>
+          <td class="formula">C₂H₆</td>
+          <td>1</td>
+          <td class="highlight-cell">1</td>
+          <td>所有 H 等價</td>
+        </tr>
+        <tr>
+          <td class="mol-name">丙烷</td>
+          <td class="formula">C₃H₈</td>
+          <td>1</td>
+          <td class="highlight-cell">2</td>
+          <td>CH₃ 端 H、中間 CH₂ H</td>
+        </tr>
+        <tr>
+          <td class="mol-name">丁烷</td>
+          <td class="formula">C₄H₁₀</td>
+          <td>2</td>
+          <td class="highlight-cell">4</td>
+          <td>正丁烷 2 種 + 異丁烷 2 種</td>
+        </tr>
+        <tr>
+          <td class="mol-name">　正丁烷</td>
+          <td class="formula">n-C₄H₁₀</td>
+          <td>—</td>
+          <td>2</td>
+          <td>C1=C4 端、C2=C3 內</td>
+        </tr>
+        <tr>
+          <td class="mol-name">　異丁烷</td>
+          <td class="formula">i-C₄H₁₀</td>
+          <td>—</td>
+          <td>2</td>
+          <td>CH₃ 端 H、中心 CH H</td>
+        </tr>
+        <tr>
+          <td class="mol-name">戊烷</td>
+          <td class="formula">C₅H₁₂</td>
+          <td>3</td>
+          <td class="highlight-cell">8</td>
+          <td>正戊烷 3 + 異戊烷 4 + 新戊烷 1</td>
+        </tr>
+        <tr>
+          <td class="mol-name">　正戊烷</td>
+          <td class="formula">n-C₅H₁₂</td>
+          <td>—</td>
+          <td>3</td>
+          <td>C1、C2、C3（對稱）</td>
+        </tr>
+        <tr>
+          <td class="mol-name">　異戊烷</td>
+          <td class="formula">i-C₅H₁₂</td>
+          <td>—</td>
+          <td>4</td>
+          <td>4 種不等價 H</td>
+        </tr>
+        <tr>
+          <td class="mol-name">　新戊烷</td>
+          <td class="formula">neo-C₅H₁₂</td>
+          <td>—</td>
+          <td>1</td>
+          <td>高度對稱，所有 H 等價</td>
+        </tr>
+        <tr>
+          <td class="mol-name">己烷</td>
+          <td class="formula">C₆H₁₄</td>
+          <td>5</td>
+          <td class="highlight-cell">17</td>
+          <td>5 種結構共 17 種不等價 H</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="note">
+    <strong>判斷技巧：</strong>找不等價氫時，先看分子的<mark>對稱面</mark>。對稱面兩側等價的 H 只算一種。新戊烷 C(CH₃)₄ 因為完全對稱，12 個 H 都等價，一氯取代物只有 1 種。
+  </div>
+
+  <h2>烯類 Alkenes</h2>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>名稱</th>
+          <th>分子式</th>
+          <th>結構異構物數</th>
+          <th>含幾何異構</th>
+          <th>說明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="mol-name">乙烯</td>
+          <td class="formula">C₂H₄</td>
+          <td>1</td>
+          <td>—</td>
+          <td>唯一結構</td>
+        </tr>
+        <tr>
+          <td class="mol-name">丙烯</td>
+          <td class="formula">C₃H₆</td>
+          <td>1</td>
+          <td>—</td>
+          <td>CH₂=CH-CH₃</td>
+        </tr>
+        <tr>
+          <td class="mol-name">丁烯</td>
+          <td class="formula">C₄H₈</td>
+          <td class="highlight-cell">4</td>
+          <td>含 cis/trans</td>
+          <td>1-丁烯、cis-2-丁烯、trans-2-丁烯、異丁烯</td>
+        </tr>
+        <tr>
+          <td class="mol-name">戊烯</td>
+          <td class="formula">C₅H₁₀</td>
+          <td class="highlight-cell">6</td>
+          <td>含 cis/trans</td>
+          <td>1-戊烯、cis/trans-2-戊烯、2-甲基-1-丁烯、3-甲基-1-丁烯、2-甲基-2-丁烯</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="note">
+    <strong>幾何異構判斷：</strong>C=C 兩端的碳若各自連接<mark>兩個不同基團</mark>，就有 cis/trans 異構。例如 2-丁烯 CH₃-CH=CH-CH₃ 有 cis 和 trans 兩種。
+  </div>
+
+  <h2>炔類 Alkynes</h2>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>名稱</th>
+          <th>分子式</th>
+          <th>結構異構物數</th>
+          <th>說明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="mol-name">乙炔</td>
+          <td class="formula">C₂H₂</td>
+          <td>1</td>
+          <td>HC≡CH</td>
+        </tr>
+        <tr>
+          <td class="mol-name">丙炔</td>
+          <td class="formula">C₃H₄</td>
+          <td>1</td>
+          <td>CH₃-C≡CH</td>
+        </tr>
+        <tr>
+          <td class="mol-name">丁炔</td>
+          <td class="formula">C₄H₆</td>
+          <td class="highlight-cell">2</td>
+          <td>1-丁炔、2-丁炔</td>
+        </tr>
+        <tr>
+          <td class="mol-name">戊炔</td>
+          <td class="formula">C₅H₈</td>
+          <td class="highlight-cell">3</td>
+          <td>1-戊炔、2-戊炔、3-甲基-1-丁炔</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="note">
+    炔類<mark>沒有幾何異構</mark>（cis/trans），因為三鍵是線性的，C≡C 兩端無法形成不同的空間排列。
+  </div>
+
+  <h2>環烷類 Cycloalkanes</h2>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>名稱</th>
+          <th>分子式</th>
+          <th>一氯取代物數</th>
+          <th>說明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="mol-name">環丙烷</td>
+          <td class="formula">C₃H₆</td>
+          <td class="highlight-cell">1</td>
+          <td>全等價</td>
+        </tr>
+        <tr>
+          <td class="mol-name">環丁烷</td>
+          <td class="formula">C₄H₈</td>
+          <td class="highlight-cell">1</td>
+          <td>全等價</td>
+        </tr>
+        <tr>
+          <td class="mol-name">環戊烷</td>
+          <td class="formula">C₅H₁₀</td>
+          <td class="highlight-cell">1</td>
+          <td>全等價</td>
+        </tr>
+        <tr>
+          <td class="mol-name">環己烷</td>
+          <td class="formula">C₆H₁₂</td>
+          <td class="highlight-cell">1</td>
+          <td>全等價</td>
+        </tr>
+        <tr>
+          <td class="mol-name">甲基環己烷</td>
+          <td class="formula">C₇H₁₄</td>
+          <td class="highlight-cell">4</td>
+          <td>CH₃ 上、鄰位、間位、對位</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>快速記憶總表</h2>
+
+  <div class="section-label">烷類 CₙH₂ₙ₊₂ 結構異構物數</div>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>碳數</th>
+          <th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>結構異構物</strong></td>
+          <td>1</td><td>1</td><td>1</td><td>2</td><td class="highlight-cell">3</td><td class="highlight-cell">5</td><td class="highlight-cell">9</td><td class="highlight-cell">18</td>
+        </tr>
+        <tr>
+          <td><strong>一氯取代物</strong></td>
+          <td>1</td><td>1</td><td>2</td><td>4</td><td class="highlight-cell">8</td><td class="highlight-cell">17</td><td>—</td><td>—</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="note">
+    <strong>考試常考：</strong>C₄ 以後開始出現異構物。碳數越多，異構物數量<mark>急遽增加</mark>。記住 C₅ = 3 種、C₆ = 5 種、C₇ = 9 種 即可應付大部分題目。
+  </div>
+
+  <footer>
+    made with care
+  </footer>
+</div>
+
+</body>
+</html>
