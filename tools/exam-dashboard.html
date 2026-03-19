@@ -1,0 +1,884 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>考試範圍讀書儀表板</title>
+<style>
+  :root {
+    --bg: #0f1117;
+    --card: #1a1d27;
+    --card-hover: #222633;
+    --border: #2a2e3d;
+    --text: #e4e6ef;
+    --text-dim: #8b8fa3;
+    --math: #6c5ce7;
+    --math-light: #a29bfe;
+    --physics: #00b894;
+    --physics-light: #55efc4;
+    --chem: #e17055;
+    --chem-light: #fab1a0;
+    --accent: #0984e3;
+    --success: #00b894;
+    --warning: #fdcb6e;
+    --danger: #d63031;
+    --radius: 12px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans TC', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding: 24px;
+  }
+
+  .header {
+    text-align: center;
+    margin-bottom: 32px;
+  }
+  .header h1 {
+    font-size: 28px;
+    font-weight: 700;
+    background: linear-gradient(135deg, var(--math-light), var(--physics-light), var(--chem-light));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 8px;
+  }
+  .header p { color: var(--text-dim); font-size: 14px; }
+
+  /* Tab Navigation */
+  .tabs {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    margin-bottom: 28px;
+    flex-wrap: wrap;
+  }
+  .tab-btn {
+    padding: 10px 24px;
+    border: 1px solid var(--border);
+    background: var(--card);
+    color: var(--text-dim);
+    border-radius: 999px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.2s;
+  }
+  .tab-btn:hover { background: var(--card-hover); color: var(--text); }
+  .tab-btn.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+
+  /* Summary Cards */
+  .summary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 16px;
+    margin-bottom: 28px;
+  }
+  .summary-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+    position: relative;
+    overflow: hidden;
+  }
+  .summary-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+  }
+  .summary-card.math::before { background: linear-gradient(90deg, var(--math), var(--math-light)); }
+  .summary-card.physics::before { background: linear-gradient(90deg, var(--physics), var(--physics-light)); }
+  .summary-card.chem::before { background: linear-gradient(90deg, var(--chem), var(--chem-light)); }
+
+  .summary-card .label { font-size: 13px; color: var(--text-dim); margin-bottom: 4px; }
+  .summary-card .value { font-size: 32px; font-weight: 700; }
+  .summary-card.math .value { color: var(--math-light); }
+  .summary-card.physics .value { color: var(--physics-light); }
+  .summary-card.chem .value { color: var(--chem-light); }
+  .summary-card .sub { font-size: 12px; color: var(--text-dim); margin-top: 4px; }
+
+  .progress-bar-bg {
+    width: 100%;
+    height: 6px;
+    background: var(--border);
+    border-radius: 3px;
+    margin-top: 12px;
+    overflow: hidden;
+  }
+  .progress-bar-fill {
+    height: 100%;
+    border-radius: 3px;
+    transition: width 0.5s ease;
+  }
+  .math .progress-bar-fill { background: linear-gradient(90deg, var(--math), var(--math-light)); }
+  .physics .progress-bar-fill { background: linear-gradient(90deg, var(--physics), var(--physics-light)); }
+  .chem .progress-bar-fill { background: linear-gradient(90deg, var(--chem), var(--chem-light)); }
+
+  /* Overall progress card */
+  .overall-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+    text-align: center;
+  }
+  .overall-card .value { font-size: 48px; font-weight: 800; color: var(--accent); }
+
+  /* Topic Section */
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+
+  .subject-section {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    margin-bottom: 16px;
+    overflow: hidden;
+  }
+  .section-header {
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    user-select: none;
+    transition: background 0.15s;
+  }
+  .section-header:hover { background: var(--card-hover); }
+  .section-header h3 { font-size: 16px; font-weight: 600; display: flex; align-items: center; gap: 10px; }
+  .section-header .badge {
+    font-size: 11px;
+    padding: 2px 10px;
+    border-radius: 999px;
+    font-weight: 600;
+  }
+  .math-badge { background: rgba(108,92,231,0.15); color: var(--math-light); }
+  .physics-badge { background: rgba(0,184,148,0.15); color: var(--physics-light); }
+  .chem-badge { background: rgba(225,112,85,0.15); color: var(--chem-light); }
+
+  .section-header .arrow {
+    transition: transform 0.2s;
+    color: var(--text-dim);
+    font-size: 18px;
+  }
+  .section-header.open .arrow { transform: rotate(180deg); }
+
+  .section-body { padding: 0 20px 16px; }
+  .section-body.collapsed { display: none; }
+
+  .topic-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+  }
+  .topic-item:last-child { border-bottom: none; }
+
+  .topic-check {
+    width: 20px; height: 20px;
+    border: 2px solid var(--border);
+    border-radius: 6px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: all 0.2s;
+    background: transparent;
+  }
+  .topic-check:hover { border-color: var(--accent); }
+  .topic-check.checked {
+    background: var(--success);
+    border-color: var(--success);
+  }
+  .topic-check.checked::after {
+    content: '✓';
+    color: #fff;
+    font-size: 13px;
+    font-weight: 700;
+  }
+
+  .topic-info { flex: 1; }
+  .topic-name { font-size: 14px; font-weight: 500; }
+  .topic-name.done { text-decoration: line-through; color: var(--text-dim); }
+  .topic-detail { font-size: 12px; color: var(--text-dim); margin-top: 2px; }
+
+  .confidence-btns {
+    display: flex;
+    gap: 4px;
+  }
+  .conf-btn {
+    width: 28px; height: 28px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: transparent;
+    color: var(--text-dim);
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.15s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .conf-btn:hover { background: var(--card-hover); }
+  .conf-btn.selected-1 { background: rgba(214,48,49,0.2); border-color: var(--danger); color: var(--danger); }
+  .conf-btn.selected-2 { background: rgba(253,203,110,0.2); border-color: var(--warning); color: var(--warning); }
+  .conf-btn.selected-3 { background: rgba(0,184,148,0.2); border-color: var(--success); color: var(--success); }
+
+  /* Planner */
+  .planner-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 12px;
+  }
+  .plan-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px;
+  }
+  .plan-card h4 { font-size: 14px; margin-bottom: 12px; color: var(--text-dim); }
+  .plan-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 0;
+    font-size: 13px;
+  }
+  .plan-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .plan-dot.math { background: var(--math); }
+  .plan-dot.physics { background: var(--physics); }
+  .plan-dot.chem { background: var(--chem); }
+
+  /* Stats */
+  .stats-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+  .stat-box {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px;
+    text-align: center;
+  }
+  .stat-box .stat-num { font-size: 24px; font-weight: 700; }
+  .stat-box .stat-label { font-size: 11px; color: var(--text-dim); margin-top: 4px; }
+
+  /* Chart area */
+  .chart-container {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+    margin-bottom: 16px;
+  }
+  .chart-container h3 { font-size: 16px; margin-bottom: 16px; }
+  .bar-chart {
+    display: flex;
+    gap: 6px;
+    height: 200px;
+    align-items: stretch;
+    overflow-x: auto;
+    padding-bottom: 4px;
+  }
+  .bar-col {
+    flex: 1;
+    min-width: 36px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+  }
+  .bar-value {
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 4px;
+    white-space: nowrap;
+  }
+  .bar {
+    width: 100%;
+    max-width: 48px;
+    border-radius: 6px 6px 0 0;
+    min-height: 4px;
+    transition: height 0.5s ease;
+  }
+  .bar-label {
+    font-size: 9px;
+    color: var(--text-dim);
+    text-align: center;
+    margin-top: 6px;
+    line-height: 1.2;
+    word-break: keep-all;
+    height: 28px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+  }
+
+  /* Exam date */
+  .exam-date-section {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .exam-date-section label { font-size: 14px; font-weight: 500; }
+  .exam-date-section input {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-size: 14px;
+  }
+  .countdown { font-size: 20px; font-weight: 700; color: var(--warning); }
+
+  /* Reset button */
+  .reset-btn {
+    background: rgba(214,48,49,0.1);
+    border: 1px solid rgba(214,48,49,0.3);
+    color: var(--danger);
+    padding: 8px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 13px;
+    transition: all 0.15s;
+  }
+  .reset-btn:hover { background: rgba(214,48,49,0.2); }
+
+  .back-btn {
+    position: fixed;
+    top: 16px;
+    left: 16px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--card);
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-size: 18px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+    transition: all 0.15s;
+    text-decoration: none;
+  }
+  .back-btn:hover { background: var(--card-hover); }
+
+  .actions-row {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    margin-top: 24px;
+    flex-wrap: wrap;
+  }
+
+  @media (max-width: 600px) {
+    body { padding: 10px; }
+    .header h1 { font-size: 20px; }
+    .header p { font-size: 12px; }
+    .summary-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
+    .summary-card { padding: 14px; }
+    .summary-card .value { font-size: 24px; }
+    .summary-card .label { font-size: 11px; }
+    .overall-card .value { font-size: 36px; }
+    .tabs { gap: 6px; margin-bottom: 20px; }
+    .tab-btn { padding: 8px 14px; font-size: 12px; }
+    .exam-date-section { padding: 14px; gap: 10px; }
+    .exam-date-section label { font-size: 13px; }
+    .countdown { font-size: 16px; }
+    .chart-container { padding: 14px; }
+    .bar-chart { gap: 4px; height: 180px; }
+    .bar-col { min-width: 30px; }
+    .bar-value { font-size: 9px; }
+    .bar-label { font-size: 8px; height: 32px; }
+    .bar { max-width: 36px; }
+    .section-header { padding: 12px 14px; }
+    .section-header h3 { font-size: 14px; gap: 6px; }
+    .section-body { padding: 0 14px 12px; }
+    .topic-item { gap: 8px; padding: 8px 0; }
+    .topic-name { font-size: 13px; }
+    .topic-detail { font-size: 11px; }
+    .conf-btn { width: 26px; height: 26px; font-size: 12px; }
+    .stats-row { grid-template-columns: repeat(3, 1fr); gap: 8px; }
+    .stat-box { padding: 10px; }
+    .stat-box .stat-num { font-size: 20px; }
+    .stat-box .stat-label { font-size: 10px; }
+    .planner-grid { grid-template-columns: 1fr; }
+    .plan-card { padding: 12px; }
+    .plan-card h4 { font-size: 13px; }
+    .plan-item { font-size: 12px; }
+  }
+
+  @media (max-width: 380px) {
+    .summary-grid { grid-template-columns: 1fr; }
+    .stats-row { grid-template-columns: repeat(2, 1fr); }
+    .tabs { gap: 4px; }
+    .tab-btn { padding: 6px 10px; font-size: 11px; }
+  }
+</style>
+</head>
+<body>
+
+<a class="back-btn" href="../" title="返回 MONO">←</a>
+
+<div class="header">
+  <h1>📚 考試範圍讀書儀表板</h1>
+  <p>選修數學甲（下）｜ 選修物理IV ｜ 選修化學IV & V</p>
+</div>
+
+<!-- Exam Date -->
+<div class="exam-date-section">
+  <label>🎯 考試日期：</label>
+  <input type="date" id="examDate" />
+  <span class="countdown" id="countdown"></span>
+</div>
+
+<!-- Summary Cards -->
+<div class="summary-grid" id="summaryCards"></div>
+
+<!-- Tabs -->
+<div class="tabs">
+  <button class="tab-btn active" onclick="switchTab('overview')">📊 總覽</button>
+  <button class="tab-btn" onclick="switchTab('math')">📐 數學甲</button>
+  <button class="tab-btn" onclick="switchTab('physics')">⚡ 物理IV</button>
+  <button class="tab-btn" onclick="switchTab('chem')">🧪 化學IV & V</button>
+  <button class="tab-btn" onclick="switchTab('planner')">📅 讀書計畫</button>
+</div>
+
+<!-- Tab Contents -->
+<div id="tab-overview" class="tab-content active"></div>
+<div id="tab-math" class="tab-content"></div>
+<div id="tab-physics" class="tab-content"></div>
+<div id="tab-chem" class="tab-content"></div>
+<div id="tab-planner" class="tab-content"></div>
+
+<div class="actions-row">
+  <button class="reset-btn" onclick="resetAll()">🔄 重設所有進度</button>
+</div>
+
+<script>
+// === DATA ===
+const subjects = {
+  math: {
+    name: '選修數學甲（下）',
+    color: 'math',
+    chapters: [
+      {
+        title: '單元1：隨機變數',
+        topics: [
+          { id: 'm1', name: '1-1 隨機變數與機率分布', detail: '離散型隨機變數、機率分布表' },
+          { id: 'm2', name: '1-2 期望值與變異數', detail: '期望值計算、變異數與標準差' },
+          { id: 'm3', name: '1-3 二項分布', detail: '伯努利試驗、二項分布公式與應用' },
+        ]
+      },
+      {
+        title: '單元2：統計',
+        topics: [
+          { id: 'm4', name: '2-1 抽樣與統計推論', detail: '母體與樣本、抽樣分布' },
+          { id: 'm5', name: '2-2 信賴區間', detail: '點估計、區間估計、信心水準' },
+          { id: 'm6', name: '2-3 假設檢定', detail: '虛無假設、對立假設、顯著水準' },
+        ]
+      },
+      {
+        title: '單元3：複數',
+        topics: [
+          { id: 'm7', name: '3-1 複數的定義與運算', detail: '虛數單位 i、複數四則運算' },
+          { id: 'm8', name: '3-2 複數平面', detail: '高斯平面、複數的絕對值與共軛' },
+          { id: 'm9', name: '3-3 複數的極式', detail: '極坐標表示、棣美弗定理' },
+        ]
+      },
+      {
+        title: '單元4：複數的應用',
+        topics: [
+          { id: 'm10', name: '4-1 複數與方程式', detail: '代數基本定理、多項式的複數根' },
+          { id: 'm11', name: '4-2 複數的幾何應用', detail: '旋轉、伸縮變換、幾何問題' },
+        ]
+      }
+    ]
+  },
+  physics: {
+    name: '選修物理IV',
+    color: 'physics',
+    chapters: [
+      {
+        title: '第1章：靜電學（1-3起）',
+        topics: [
+          { id: 'p1', name: '1-3 電位', detail: '電位定義、電位差、等位面' },
+        ]
+      },
+      {
+        title: '第2章：電流',
+        topics: [
+          { id: 'p3', name: '2-1 電流', detail: '電流定義、電荷流動' },
+          { id: 'p4', name: '2-2 電阻與歐姆定律', detail: '電阻、歐姆定律、電阻率' },
+          { id: 'p5', name: '2-3 電功率與電能', detail: '功率計算、焦耳熱' },
+          { id: 'p6', name: '2-4 克希荷夫定律', detail: '節點定律、迴路定律、電路分析' },
+        ]
+      },
+      {
+        title: '第3章：電磁感應（到3-3）',
+        topics: [
+          { id: 'p7', name: '3-1 磁場對載流導線的作用力', detail: '安培力、磁力矩' },
+          { id: 'p8', name: '3-2 感應電動勢', detail: '磁通量變化、冷次定律' },
+          { id: 'p9', name: '3-3 法拉第定律', detail: '法拉第電磁感應定律、應用' },
+        ]
+      }
+    ]
+  },
+  chem: {
+    name: '選修化學IV & V',
+    color: 'chem',
+    chapters: [
+      {
+        title: '化學IV 第2章（2-4）：電化學',
+        topics: [
+          { id: 'c1', name: '2-4 電解與電鍍', detail: '電解原理、法拉第電解定律、電鍍應用' },
+        ]
+      },
+      {
+        title: '化學IV 第3章：金屬與非金屬',
+        topics: [
+          { id: 'c2', name: '3-1 非金屬元素及其化合物', detail: '鹵素、氧族、氮族元素的性質與反應' },
+          { id: 'c3', name: '3-2 主族金屬元素及其化合物', detail: '鹼金屬、鹼土金屬、鋁的性質' },
+          { id: 'c4', name: '3-3 過渡金屬元素及其化合物', detail: '鐵、銅、鋅等過渡金屬的性質' },
+          { id: 'c5', name: '3-4 配位化合物', detail: '配位鍵、錯合物命名與結構' },
+          { id: 'c6', name: '3-5 先進材料', detail: '奈米材料、半導體、超導體' },
+        ]
+      },
+      {
+        title: '化學V 第1章：有機化合物（1-1～1-3）',
+        topics: [
+          { id: 'c7', name: '1-1 有機物鍵結、組成、分類', detail: '碳的鍵結特性、有機物分類、官能基概論' },
+          { id: 'c8', name: '1-2 飽和烴', detail: '烷類的命名、結構、性質與反應' },
+          { id: 'c9', name: '1-3 不飽和烴', detail: '烯類、炔類的命名、結構、加成反應' },
+        ]
+      }
+    ]
+  }
+};
+
+// === STATE ===
+let state = JSON.parse(localStorage.getItem('studyDashboard') || '{}');
+if (!state.checked) state.checked = {};
+if (!state.confidence) state.confidence = {};
+if (!state.examDate) state.examDate = '';
+
+function saveState() {
+  localStorage.setItem('studyDashboard', JSON.stringify(state));
+}
+
+// === HELPERS ===
+function getAllTopics(subjectKey) {
+  return subjects[subjectKey].chapters.flatMap(ch => ch.topics);
+}
+function getCheckedCount(subjectKey) {
+  return getAllTopics(subjectKey).filter(t => state.checked[t.id]).length;
+}
+function getTotalCount(subjectKey) {
+  return getAllTopics(subjectKey).length;
+}
+function getPercent(subjectKey) {
+  const total = getTotalCount(subjectKey);
+  return total ? Math.round((getCheckedCount(subjectKey) / total) * 100) : 0;
+}
+function getOverallPercent() {
+  let checked = 0, total = 0;
+  for (const key of Object.keys(subjects)) {
+    checked += getCheckedCount(key);
+    total += getTotalCount(key);
+  }
+  return total ? Math.round((checked / total) * 100) : 0;
+}
+
+// === RENDER ===
+function renderSummary() {
+  const container = document.getElementById('summaryCards');
+  let html = '';
+  for (const [key, subj] of Object.entries(subjects)) {
+    const pct = getPercent(key);
+    const done = getCheckedCount(key);
+    const total = getTotalCount(key);
+    html += `
+      <div class="summary-card ${subj.color}">
+        <div class="label">${subj.name}</div>
+        <div class="value">${pct}%</div>
+        <div class="sub">${done} / ${total} 個主題已完成</div>
+        <div class="progress-bar-bg"><div class="progress-bar-fill" style="width:${pct}%"></div></div>
+      </div>`;
+  }
+  const overall = getOverallPercent();
+  html += `
+    <div class="summary-card overall-card">
+      <div class="label">總進度</div>
+      <div class="value" style="color:var(--accent)">${overall}%</div>
+      <div class="sub">全部科目</div>
+      <div class="progress-bar-bg"><div class="progress-bar-fill" style="width:${overall}%;background:var(--accent)"></div></div>
+    </div>`;
+  container.innerHTML = html;
+}
+
+function renderSubject(subjectKey) {
+  const subj = subjects[subjectKey];
+  const container = document.getElementById(`tab-${subjectKey}`);
+  let html = '';
+  for (const chapter of subj.chapters) {
+    const chDone = chapter.topics.filter(t => state.checked[t.id]).length;
+    const chTotal = chapter.topics.length;
+    html += `
+      <div class="subject-section">
+        <div class="section-header open" onclick="toggleSection(this)">
+          <h3>
+            <span class="badge ${subj.color}-badge">${chDone}/${chTotal}</span>
+            ${chapter.title}
+          </h3>
+          <span class="arrow">▾</span>
+        </div>
+        <div class="section-body">`;
+    for (const topic of chapter.topics) {
+      const checked = state.checked[topic.id];
+      const conf = state.confidence[topic.id] || 0;
+      html += `
+          <div class="topic-item">
+            <div class="topic-check ${checked ? 'checked' : ''}" onclick="toggleCheck('${topic.id}')"></div>
+            <div class="topic-info">
+              <div class="topic-name ${checked ? 'done' : ''}">${topic.name}</div>
+              <div class="topic-detail">${topic.detail}</div>
+            </div>
+            <div class="confidence-btns">
+              <button class="conf-btn ${conf===1?'selected-1':''}" onclick="setConf('${topic.id}',1)" title="不熟">😰</button>
+              <button class="conf-btn ${conf===2?'selected-2':''}" onclick="setConf('${topic.id}',2)" title="普通">😐</button>
+              <button class="conf-btn ${conf===3?'selected-3':''}" onclick="setConf('${topic.id}',3)" title="熟練">😎</button>
+            </div>
+          </div>`;
+    }
+    html += `</div></div>`;
+  }
+  container.innerHTML = html;
+}
+
+function renderOverview() {
+  const container = document.getElementById('tab-overview');
+
+  // Stats row
+  let totalTopics = 0, totalDone = 0, totalWeak = 0, totalStrong = 0;
+  for (const key of Object.keys(subjects)) {
+    for (const ch of subjects[key].chapters) {
+      for (const t of ch.topics) {
+        totalTopics++;
+        if (state.checked[t.id]) totalDone++;
+        if (state.confidence[t.id] === 1) totalWeak++;
+        if (state.confidence[t.id] === 3) totalStrong++;
+      }
+    }
+  }
+
+  let html = `
+    <div class="stats-row">
+      <div class="stat-box"><div class="stat-num">${totalTopics}</div><div class="stat-label">總主題數</div></div>
+      <div class="stat-box"><div class="stat-num" style="color:var(--success)">${totalDone}</div><div class="stat-label">已完成</div></div>
+      <div class="stat-box"><div class="stat-num" style="color:var(--danger)">${totalWeak}</div><div class="stat-label">不熟 😰</div></div>
+      <div class="stat-box"><div class="stat-num" style="color:var(--success)">${totalStrong}</div><div class="stat-label">熟練 😎</div></div>
+      <div class="stat-box"><div class="stat-num" style="color:var(--warning)">${totalTopics - totalDone}</div><div class="stat-label">待完成</div></div>
+    </div>`;
+
+  // Bar chart per chapter
+  html += `<div class="chart-container"><h3>各章節完成度</h3><div class="bar-chart">`;
+  const allChapters = [];
+  for (const [key, subj] of Object.entries(subjects)) {
+    for (const ch of subj.chapters) {
+      const done = ch.topics.filter(t => state.checked[t.id]).length;
+      const total = ch.topics.length;
+      const pct = total ? Math.round((done/total)*100) : 0;
+      const shortName = ch.title.replace(/[：:]/g, '\n').split('\n')[0].replace(/（.*?）/, '').trim();
+      allChapters.push({ name: shortName.slice(0,6), pct, color: subj.color, done, total });
+    }
+  }
+  for (const ch of allChapters) {
+    const colorVar = ch.color === 'math' ? 'var(--math)' : ch.color === 'physics' ? 'var(--physics)' : 'var(--chem)';
+    html += `
+      <div class="bar-col">
+        <div class="bar-value">${ch.pct}%</div>
+        <div class="bar" style="height:${Math.max(ch.pct * 1.4, 4)}px;background:${colorVar}"></div>
+        <div class="bar-label">${ch.name}</div>
+      </div>`;
+  }
+  html += `</div></div>`;
+
+  // Weak topics list
+  const weakTopics = [];
+  for (const [key, subj] of Object.entries(subjects)) {
+    for (const ch of subj.chapters) {
+      for (const t of ch.topics) {
+        if (state.confidence[t.id] === 1) {
+          weakTopics.push({ ...t, subject: subj.name, color: subj.color });
+        }
+      }
+    }
+  }
+  if (weakTopics.length > 0) {
+    html += `<div class="chart-container"><h3>⚠️ 需加強的主題</h3>`;
+    for (const t of weakTopics) {
+      html += `<div class="topic-item"><span class="plan-dot ${t.color}"></span><div class="topic-info"><div class="topic-name">${t.name}</div><div class="topic-detail">${t.subject}</div></div></div>`;
+    }
+    html += `</div>`;
+  }
+
+  container.innerHTML = html;
+}
+
+function renderPlanner() {
+  const container = document.getElementById('tab-planner');
+  const remaining = [];
+  for (const [key, subj] of Object.entries(subjects)) {
+    for (const ch of subj.chapters) {
+      for (const t of ch.topics) {
+        if (!state.checked[t.id]) {
+          remaining.push({ ...t, color: subj.color, subjectName: subj.name });
+        }
+      }
+    }
+  }
+
+  // Sort: weak first
+  remaining.sort((a, b) => {
+    const ca = state.confidence[a.id] || 0;
+    const cb = state.confidence[b.id] || 0;
+    if (ca === 1 && cb !== 1) return -1;
+    if (cb === 1 && ca !== 1) return 1;
+    return 0;
+  });
+
+  if (remaining.length === 0) {
+    container.innerHTML = `<div class="chart-container" style="text-align:center;padding:40px"><h3>🎉 恭喜！所有主題都已完成！</h3></div>`;
+    return;
+  }
+
+  // Split into days
+  const examDateStr = state.examDate;
+  let daysLeft = 14;
+  if (examDateStr) {
+    const diff = Math.ceil((new Date(examDateStr) - new Date()) / (1000*60*60*24));
+    if (diff > 0) daysLeft = diff;
+  }
+  const perDay = Math.ceil(remaining.length / Math.min(daysLeft, remaining.length));
+
+  let html = `<div class="chart-container"><h3>📅 建議讀書計畫（${remaining.length} 個主題待完成，${daysLeft} 天）</h3><p style="color:var(--text-dim);font-size:13px;margin-bottom:16px">優先排列不熟的主題 😰，每天約 ${perDay} 個主題</p></div>`;
+  html += `<div class="planner-grid">`;
+
+  let dayNum = 1;
+  for (let i = 0; i < remaining.length; i += perDay) {
+    const dayTopics = remaining.slice(i, i + perDay);
+    const today = new Date();
+    today.setDate(today.getDate() + dayNum - 1);
+    const dateStr = `${today.getMonth()+1}/${today.getDate()}`;
+    html += `<div class="plan-card"><h4>第 ${dayNum} 天（${dateStr}）</h4>`;
+    for (const t of dayTopics) {
+      html += `<div class="plan-item"><span class="plan-dot ${t.color}"></span><span>${t.name}</span></div>`;
+    }
+    html += `</div>`;
+    dayNum++;
+  }
+  html += `</div>`;
+  container.innerHTML = html;
+}
+
+// === INTERACTIONS ===
+function toggleCheck(id) {
+  state.checked[id] = !state.checked[id];
+  saveState();
+  renderAll();
+}
+
+function setConf(id, level) {
+  state.confidence[id] = state.confidence[id] === level ? 0 : level;
+  saveState();
+  renderAll();
+}
+
+function toggleSection(el) {
+  el.classList.toggle('open');
+  const body = el.nextElementSibling;
+  body.classList.toggle('collapsed');
+}
+
+function switchTab(tabName) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+  event.target.classList.add('active');
+  document.getElementById(`tab-${tabName}`).classList.add('active');
+  renderAll();
+}
+
+function resetAll() {
+  if (confirm('確定要重設所有進度嗎？')) {
+    state.checked = {};
+    state.confidence = {};
+    saveState();
+    renderAll();
+  }
+}
+
+function updateCountdown() {
+  const dateInput = document.getElementById('examDate');
+  const el = document.getElementById('countdown');
+  if (!state.examDate) { el.textContent = ''; return; }
+  dateInput.value = state.examDate;
+  const diff = Math.ceil((new Date(state.examDate) - new Date()) / (1000*60*60*24));
+  if (diff > 0) {
+    el.textContent = `⏳ 還剩 ${diff} 天`;
+    el.style.color = diff <= 7 ? 'var(--danger)' : diff <= 14 ? 'var(--warning)' : 'var(--success)';
+  } else if (diff === 0) {
+    el.textContent = '🔥 今天考試！加油！';
+    el.style.color = 'var(--danger)';
+  } else {
+    el.textContent = '✅ 考試已結束';
+    el.style.color = 'var(--text-dim)';
+  }
+}
+
+document.getElementById('examDate').addEventListener('change', (e) => {
+  state.examDate = e.target.value;
+  saveState();
+  updateCountdown();
+  renderPlanner();
+});
+
+function renderAll() {
+  renderSummary();
+  renderOverview();
+  renderSubject('math');
+  renderSubject('physics');
+  renderSubject('chem');
+  renderPlanner();
+  updateCountdown();
+}
+
+// Init
+renderAll();
+
+</script>
+</body>
+</html>

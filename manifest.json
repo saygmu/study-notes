@@ -4,7 +4,7 @@
   "description": "Focus on one thing at a time",
   "start_url": "/study-notes/",
   "scope": "/study-notes/",
-  "display": "standalone",
+  "display": "fullscreen",
   "background_color": "#fefefe",
   "theme_color": "#fefefe",
   "icons": [
