@@ -15,7 +15,7 @@
       line-height: 1.8;
       min-height: 100vh;
     }
-    
+
     /* Lock Screen */
     #lock-screen {
       display: flex;
@@ -50,7 +50,7 @@
       cursor: pointer;
     }
     #lock-screen .error { color: #ef4444; margin-top: 16px; }
-    
+
     /* Main Content */
     #main-content {
       display: none;
@@ -82,7 +82,7 @@
       cursor: pointer;
       text-decoration: none;
     }
-    
+
     .file-list {
       display: grid;
       gap: 8px;
@@ -101,8 +101,7 @@
     .file-item:hover { border-color: var(--accent); }
     .file-item.active { border-color: var(--accent); background: var(--bg); }
     .file-name { font-weight: 400; }
-    .file-size { font-size: 0.8rem; color: var(--muted); }
-    
+
     .section-title {
       font-size: 12px;
       text-transform: uppercase;
@@ -110,7 +109,48 @@
       color: var(--muted);
       margin: 24px 0 12px;
     }
-    
+
+    /* Daily Navigator */
+    .daily-nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    .daily-nav-btn {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      border: 1px solid var(--border);
+      background: var(--card);
+      color: var(--text);
+      font-size: 1.2rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: border-color 0.2s, opacity 0.2s;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .daily-nav-btn:hover:not(:disabled) { border-color: var(--accent); }
+    .daily-nav-btn:disabled { opacity: 0.3; cursor: default; }
+    .daily-nav-title {
+      font-family: 'Noto Serif TC', serif;
+      font-weight: 600;
+      font-size: 1.1rem;
+      text-align: center;
+      flex: 1;
+      min-width: 0;
+    }
+    .daily-nav-sub {
+      font-size: 0.75rem;
+      color: var(--muted);
+      font-family: 'Noto Sans TC', sans-serif;
+      font-weight: 300;
+    }
+
     #file-content {
       background: var(--card);
       border: 1px solid var(--border);
@@ -123,8 +163,7 @@
       overflow-x: auto;
       display: none;
     }
-    
-    .loading { color: var(--muted); text-align: center; padding: 40px; }
+
     .last-sync {
       text-align: center;
       color: var(--muted);
@@ -145,7 +184,7 @@
     <button onclick="unlock()">進入</button>
     <p class="error" id="error-msg" style="display:none">密碼錯誤</p>
   </div>
-  
+
   <!-- Main Content -->
   <div id="main-content">
     <header>
@@ -155,21 +194,28 @@
         <button onclick="logout()">登出</button>
       </div>
     </header>
-    
+
     <div class="section-title">📁 核心檔案</div>
     <div class="file-list" id="core-files"></div>
-    
+
     <div class="section-title">📋 其他</div>
     <div class="file-list" id="other-files"></div>
-    
+
     <div class="section-title">📅 每日筆記</div>
-    <div class="file-list" id="daily-files"></div>
-    
+    <div class="daily-nav" id="daily-nav" style="display:none">
+      <button class="daily-nav-btn" id="btn-prev" onclick="navDaily(-1)">‹</button>
+      <div style="text-align:center">
+        <div class="daily-nav-title" id="daily-title"></div>
+        <div class="daily-nav-sub" id="daily-sub"></div>
+      </div>
+      <button class="daily-nav-btn" id="btn-next" onclick="navDaily(1)">›</button>
+    </div>
+
     <div id="file-content"></div>
-    
+
     <p class="last-sync">最後同步：<span id="last-sync">-</span></p>
   </div>
-  
+
   <script>
     function hash(str) {
       let h = 0;
@@ -179,17 +225,20 @@
       }
       return h.toString();
     }
-    
+
     const PASS_HASH = hash('0828');
     const STORAGE_KEY = 'memory_auth';
     const BASE_URL = './raw/';
-    
+
     const CORE_FILES = ['MEMORY.md', 'AGENTS.md', 'TOOLS.md'];
     const OTHER_FILES = ['troubleshooting-log.md', 'item-locations.md', 'openclaw-update-log.md'];
     const DAILY_FILES = [
-      '2026-03-18.md', '2026-03-17.md', '2026-03-16.md', '2026-03-13.md', '2026-03-12.md', '2026-03-11.md', '2026-03-10.md', '2026-03-10-connection-test.md', '2026-03-09.md', '2026-03-08.md', '2026-03-07.md', '2026-03-06.md', '2026-03-05.md', '2026-03-04.md', '2026-03-03.md', '2026-02-28.md', '2026-02-27.md', '2026-02-24.md', '2026-02-23.md', '2026-02-21.md', '2026-02-19.md', '2026-02-14.md', '2026-02-12.md', '2026-02-08.md', '2026-01-31.md', '2025-02-19.md'
+      '2026-03-20.md', '2026-03-18.md', '2026-03-17.md', '2026-03-16.md', '2026-03-13.md', '2026-03-12.md', '2026-03-11.md', '2026-03-10.md', '2026-03-10-connection-test.md', '2026-03-09.md', '2026-03-08.md', '2026-03-07.md', '2026-03-06.md', '2026-03-05.md', '2026-03-04.md', '2026-03-03.md', '2026-02-28.md', '2026-02-27.md', '2026-02-24.md', '2026-02-23.md', '2026-02-21.md', '2026-02-19.md', '2026-02-14.md', '2026-02-12.md', '2026-02-08.md', '2026-01-31.md', '2025-02-19.md'
     ];
-    
+
+    let dailyIndex = 0;
+    let currentMode = null; // 'core', 'other', 'daily'
+
     function init() {
       if (localStorage.getItem(STORAGE_KEY) === PASS_HASH) {
         showContent();
@@ -200,14 +249,30 @@
           if (e.key === 'Enter') unlock();
         });
       }
+      document.addEventListener('keydown', (e) => {
+        if (currentMode !== 'daily') return;
+        if (e.key === 'ArrowLeft') navDaily(-1);
+        if (e.key === 'ArrowRight') navDaily(1);
+      });
     }
-    
+
     if (document.readyState === 'loading') {
       document.addEventListener('DOMContentLoaded', init);
     } else {
       init();
     }
-    
+
+    // Swipe support
+    let touchStartX = 0;
+    document.addEventListener('touchstart', (e) => { touchStartX = e.touches[0].clientX; }, { passive: true });
+    document.addEventListener('touchend', (e) => {
+      if (currentMode !== 'daily') return;
+      const diff = e.changedTouches[0].clientX - touchStartX;
+      if (Math.abs(diff) > 60) {
+        navDaily(diff > 0 ? 1 : -1); // swipe right = older, swipe left = newer
+      }
+    }, { passive: true });
+
     function unlock() {
       const input = document.getElementById('password-input').value;
       if (hash(input) === PASS_HASH) {
@@ -218,57 +283,88 @@
         document.getElementById('password-input').value = '';
       }
     }
-    
+
     function logout() {
       localStorage.removeItem(STORAGE_KEY);
       location.reload();
     }
-    
+
     function showContent() {
       document.getElementById('lock-screen').style.display = 'none';
       document.getElementById('main-content').style.display = 'block';
       renderFileList();
       document.getElementById('last-sync').textContent = new Date().toLocaleString('zh-TW');
     }
-    
+
     function renderFileList() {
       const coreContainer = document.getElementById('core-files');
       const otherContainer = document.getElementById('other-files');
-      const dailyContainer = document.getElementById('daily-files');
-      
+
       coreContainer.innerHTML = CORE_FILES.map(f => `
-        <div class="file-item" onclick="loadFile('${f}', this)">
+        <div class="file-item" onclick="loadCoreFile('${f}', this)">
           <span class="file-name">${f}</span>
         </div>
       `).join('');
-      
+
       otherContainer.innerHTML = OTHER_FILES.map(f => `
-        <div class="file-item" onclick="loadFile('${f}', this)">
+        <div class="file-item" onclick="loadCoreFile('${f}', this)">
           <span class="file-name">${f.replace('.md', '')}</span>
         </div>
       `).join('');
-      
-      dailyContainer.innerHTML = DAILY_FILES.map(f => `
-        <div class="file-item" onclick="loadFile('${f}', this)">
-          <span class="file-name">${f.replace('.md', '')}</span>
-        </div>
-      `).join('');
+
+      // Show latest daily note by default
+      showDailyNav();
+      loadDailyByIndex(0);
     }
-    
-    async function loadFile(filename, el) {
-      // Update active state
+
+    function loadCoreFile(filename, el) {
+      currentMode = 'core';
       document.querySelectorAll('.file-item').forEach(i => i.classList.remove('active'));
-      el.classList.add('active');
-      
+      if (el) el.classList.add('active');
+      document.getElementById('daily-nav').style.display = 'none';
+      loadFileContent(filename);
+    }
+
+    function showDailyNav() {
+      document.getElementById('daily-nav').style.display = 'flex';
+    }
+
+    function navDaily(dir) {
+      // dir: -1 = newer (left), +1 = older (right)
+      const newIndex = dailyIndex + dir;
+      if (newIndex < 0 || newIndex >= DAILY_FILES.length) return;
+      loadDailyByIndex(newIndex);
+    }
+
+    function loadDailyByIndex(idx) {
+      dailyIndex = idx;
+      currentMode = 'daily';
+      document.querySelectorAll('.file-item').forEach(i => i.classList.remove('active'));
+
+      const file = DAILY_FILES[idx];
+      const name = file.replace('.md', '');
+
+      document.getElementById('daily-nav').style.display = 'flex';
+      document.getElementById('daily-title').textContent = name;
+      document.getElementById('daily-sub').textContent = `${idx + 1} / ${DAILY_FILES.length}`;
+
+      document.getElementById('btn-prev').disabled = (idx <= 0);
+      document.getElementById('btn-next').disabled = (idx >= DAILY_FILES.length - 1);
+
+      loadFileContent(file);
+    }
+
+    async function loadFileContent(filename) {
       const contentEl = document.getElementById('file-content');
       contentEl.style.display = 'block';
       contentEl.textContent = '載入中...';
-      
+
       try {
         const res = await fetch(BASE_URL + filename + '?t=' + Date.now());
         if (!res.ok) throw new Error('找不到檔案');
         const text = await res.text();
         contentEl.textContent = text;
+        contentEl.scrollTop = 0;
       } catch (e) {
         contentEl.textContent = '❌ ' + e.message;
       }
