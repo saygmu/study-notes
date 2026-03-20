@@ -244,12 +244,6 @@
   margin-bottom: 16px;
  }
 
- ul, ol {
-  margin: 16px 0;
-  padding-left: 24px;
- }
- li { margin: 8px 0; }
-
  footer {
   text-align: center;
   padding: 40px 0;
@@ -282,291 +276,347 @@
 <div class="container">
 
 <h1>合理性檢定解題技巧</h1>
-<p class="subtitle">Reasonableness Check · 數學解題的最後防線</p>
+<p class="subtitle">Hypothesis Testing · 統計推論的核心工具</p>
 
 <h2>什麼是合理性檢定？</h2>
 
-<p>合理性檢定是在解完題目之後，<mark>快速驗證答案是否「合理」</mark>的方法。它不是嚴格的證明，而是一種直覺性的檢查——幫助你在考試中抓出明顯的計算錯誤，避免不必要的失分。</p>
+<p>合理性檢定（假設檢定）是統計推論的方法之一。核心想法是：<mark>先假設某個命題成立（虛無假設 H₀）</mark>，然後用抽樣資料來判斷這個假設是否「不合理」。如果資料所呈現的結果在 H₀ 之下非常不可能發生，就有理由拒絕 H₀。</p>
 
 <div class="note">
- <strong>💡 核心觀念</strong>：合理性檢定的目標不是「重新算一遍」，而是用<mark>不同的角度</mark>快速確認答案有沒有問題。花 10 秒檢查，可能救回 5 分。
+ <strong>💡 直覺理解</strong>：就像法庭上的「無罪推定」——先假設被告無罪（H₀），除非證據強到「超越合理懷疑」，才判定有罪（拒絕 H₀）。
 </div>
 
-<h2>技巧一：代入特殊值</h2>
+<h2>基本架構</h2>
 
-<p>把簡單的數字代入原式，看看答案是否成立。常用的特殊值包括 0、1、−1。</p>
-
-<div class="card">
- <div class="card-title">例題 1：因式分解驗證</div>
- <p>將 <span class="math">x² + 5x + 6</span> 因式分解。</p>
- <p>你的答案：<span class="math">(x + 2)(x + 3)</span></p>
-
- <div class="step">
-  <strong>合理性檢定：</strong>代入 <span class="math">x = 1</span><br><br>
-  左式：<span class="math">1 + 5 + 6 = 12</span><br>
-  右式：<span class="math">(1+2)(1+3) = 3 × 4 = 12</span> ✓<br><br>
-  再代入 <span class="math">x = 0</span><br>
-  左式：<span class="math">0 + 0 + 6 = 6</span><br>
-  右式：<span class="math">(0+2)(0+3) = 2 × 3 = 6</span> ✓
- </div>
-
- <div class="answer">兩個特殊值都吻合 → 答案很可能正確</div>
+<div class="formula">
+ <div class="formula-main">H₀：虛無假設（Null Hypothesis）</div>
+ <div class="formula-note">想要推翻的假設，通常是「沒有差異」「沒有效果」「符合原本的分布」</div>
 </div>
 
-<div class="card">
- <div class="card-title">例題 2：方程式求解驗證</div>
- <p>解方程式 <span class="math">2x − 7 = 3</span>。</p>
- <p>你的答案：<span class="math">x = 5</span></p>
-
- <div class="step">
-  <strong>合理性檢定：</strong>代回原式<br><br>
-  左式：<span class="math">2(5) − 7 = 10 − 7 = 3</span><br>
-  右式：<span class="math">3</span> ✓
- </div>
-
- <div class="answer">直接代回原式是最基本也最有效的檢定方式</div>
+<div class="formula">
+ <div class="formula-main">H₁：對立假設（Alternative Hypothesis）</div>
+ <div class="formula-note">研究者想要支持的假設，與 H₀ 互斥</div>
 </div>
-
-<h2>技巧二：估算數量級</h2>
-
-<p>不用精確計算，只要<mark>粗略估計答案的大小</mark>，看看有沒有差太多。</p>
-
-<div class="card">
- <div class="card-title">例題 3：估算驗證</div>
- <p>計算 <span class="math">48 × 52</span>。</p>
- <p>你的答案：<span class="math">2496</span></p>
-
- <div class="step">
-  <strong>合理性檢定：</strong>估算<br><br>
-  <span class="math">48 × 52 ≈ 50 × 50 = 2500</span><br><br>
-  更精確地：利用平方差 <span class="math">(50−2)(50+2) = 50² − 4 = 2496</span> ✓
- </div>
-
- <div class="answer">估算值 2500 與答案 2496 非常接近 → 合理</div>
-</div>
-
-<div class="card">
- <div class="card-title">例題 4：根號估算</div>
- <p>計算 <span class="math">√50</span> 的近似值。</p>
- <p>你的答案：<span class="math">7.07</span></p>
-
- <div class="step">
-  <strong>合理性檢定：</strong><br><br>
-  <span class="math">7² = 49</span>，<span class="math">8² = 64</span><br>
-  所以 <span class="math">√50</span> 應在 7 與 8 之間，且非常靠近 7<br><br>
-  <span class="math">7.07² = 49.98</span> ≈ 50 ✓
- </div>
-
- <div class="answer">答案落在合理範圍內 → 正確</div>
-</div>
-
-<h2>技巧三：檢查邊界與極端情況</h2>
-
-<p>把 <span class="math">x</span> 推到極端值（趨近 0、趨近無窮大、趨近邊界），看看函數行為是否合理。</p>
-
-<div class="card">
- <div class="card-title">例題 5：函數行為檢查</div>
- <p>求 <span class="math">f(x) = (x² − 1)/(x − 1)</span> 在 <span class="math">x ≠ 1</span> 時的化簡結果。</p>
- <p>你的答案：<span class="math">f(x) = x + 1</span></p>
-
- <div class="step">
-  <strong>合理性檢定：</strong>代入極端值<br><br>
-  當 <span class="math">x = 100</span>：<br>
-  原式 = <span class="math">(10000 − 1)/(100 − 1) = 9999/99 ≈ 101</span><br>
-  化簡式 = <span class="math">100 + 1 = 101</span> ✓<br><br>
-  當 <span class="math">x = 0</span>：<br>
-  原式 = <span class="math">(0 − 1)/(0 − 1) = 1</span><br>
-  化簡式 = <span class="math">0 + 1 = 1</span> ✓
- </div>
-
- <div class="answer">極端值與普通值都一致 → 化簡正確</div>
-</div>
-
-<h2>技巧四：維度與單位分析</h2>
-
-<p>在應用題中，檢查答案的<mark>單位是否正確</mark>，數量級是否合理。</p>
-
-<div class="card">
- <div class="card-title">例題 6：應用題單位檢查</div>
- <p>一輛車以時速 60 公里行駛 2.5 小時，求行駛距離。</p>
- <p>你的答案：<span class="math">150</span> 公里</p>
-
- <div class="step">
-  <strong>合理性檢定：</strong><br><br>
-  ① 單位分析：(公里/小時) × 小時 = 公里 ✓<br>
-  ② 數量級：60 × 2.5 → 60 × 2 = 120，60 × 3 = 180<br>
-  　 150 在 120 和 180 之間 ✓<br>
-  ③ 生活經驗：開車 2.5 小時走 150 公里，大概是台北到新竹的距離 → 合理 ✓
- </div>
-
- <div class="answer">單位正確、數量級合理、符合生活經驗 → 答案可信</div>
-</div>
-
-<h2>技巧五：奇偶性與正負號</h2>
-
-<p>快速判斷答案的<mark>正負號</mark>和<mark>奇偶性</mark>是否合理。</p>
-
-<div class="card">
- <div class="card-title">例題 7：正負號判斷</div>
- <p>計算 <span class="math">(−3)⁴ × (−2)³</span>。</p>
- <p>你的答案：<span class="math">−648</span></p>
-
- <div class="step">
-  <strong>合理性檢定：</strong><br><br>
-  <span class="math">(−3)⁴</span>：偶數次方 → 正數 → <span class="math">81</span><br>
-  <span class="math">(−2)³</span>：奇數次方 → 負數 → <span class="math">−8</span><br>
-  正 × 負 = 負 ✓<br><br>
-  數量級：<span class="math">81 × 8 = 648</span> ✓
- </div>
-
- <div class="answer">符號正確、數值正確 → 答案為 −648</div>
-</div>
-
-<h2>技巧六：圖形直覺</h2>
-
-<p>在腦中（或草稿紙上）快速畫出大致的圖形，看看答案是否與圖形一致。</p>
-
-<div class="card">
- <div class="card-title">例題 8：交點問題</div>
- <p>求 <span class="math">y = x²</span> 與 <span class="math">y = 2x + 3</span> 的交點。</p>
- <p>你的答案：<span class="math">(3, 9)</span> 和 <span class="math">(−1, 1)</span></p>
-
- <div class="step">
-  <strong>合理性檢定：</strong><br><br>
-  ① 代入 <span class="math">(3, 9)</span>：<br>
-  　 拋物線：<span class="math">3² = 9</span> ✓<br>
-  　 直線：<span class="math">2(3)+3 = 9</span> ✓<br><br>
-  ② 代入 <span class="math">(−1, 1)</span>：<br>
-  　 拋物線：<span class="math">(−1)² = 1</span> ✓<br>
-  　 直線：<span class="math">2(−1)+3 = 1</span> ✓<br><br>
-  ③ 圖形直覺：拋物線開口向上，直線斜率為正且截距為 3，應該有兩個交點，一個在右上方、一個在左邊 → 符合 ✓
- </div>
-
- <div class="answer">代入驗證 + 圖形直覺都吻合 → 答案正確</div>
-</div>
-
-<h2>技巧七：反向運算</h2>
-
-<p>用<mark>逆運算</mark>來檢驗：做完乘法就用除法驗算、解完微分就積分回去。</p>
-
-<div class="card">
- <div class="card-title">例題 9：除法反驗</div>
- <p>計算 <span class="math">372 ÷ 12</span>。</p>
- <p>你的答案：<span class="math">31</span></p>
-
- <div class="step">
-  <strong>合理性檢定：</strong>反向運算<br><br>
-  <span class="math">31 × 12 = 31 × 10 + 31 × 2 = 310 + 62 = 372</span> ✓
- </div>
-
- <div class="answer">逆運算結果一致 → 答案正確</div>
-</div>
-
-<h2>常見錯誤類型速查</h2>
 
 <table>
  <tr>
-  <th>錯誤類型</th>
-  <th>快速檢查法</th>
+  <th>名詞</th>
+  <th>意義</th>
  </tr>
  <tr>
-  <td>正負號算錯</td>
-  <td>只追蹤符號，不管數值</td>
+  <td>顯著水準 <span class="math">α</span></td>
+  <td>拒絕 H₀ 所容許的最大犯錯機率，常取 0.05 或 0.01</td>
  </tr>
  <tr>
-  <td>小數點位移</td>
-  <td>估算數量級是否合理</td>
+  <td>檢定統計量</td>
+  <td>從樣本資料計算出來的數值，用來衡量資料偏離 H₀ 的程度</td>
  </tr>
  <tr>
-  <td>因式分解錯誤</td>
-  <td>代入 <span class="math">x = 0, 1, −1</span> 驗證</td>
+  <td>拒絕域</td>
+  <td>當檢定統計量落在此範圍時，拒絕 H₀</td>
  </tr>
  <tr>
-  <td>方程式解錯</td>
-  <td>代回原式左右比較</td>
+  <td><span class="math">p</span> 值</td>
+  <td>在 H₀ 為真的前提下，觀察到「目前資料或更極端結果」的機率</td>
  </tr>
  <tr>
-  <td>化簡出錯</td>
-  <td>代入大數或特殊值比較</td>
+  <td>型一錯誤（α 錯誤）</td>
+  <td>H₀ 為真，卻拒絕了 H₀（冤枉好人）</td>
  </tr>
  <tr>
-  <td>單位搞混</td>
-  <td>維度分析：追蹤單位的運算</td>
- </tr>
- <tr>
-  <td>漏解或增根</td>
-  <td>每個解都代回去，檢查定義域</td>
+  <td>型二錯誤（β 錯誤）</td>
+  <td>H₀ 為假，卻沒有拒絕 H₀（放走壞人）</td>
  </tr>
 </table>
+
+<h2>解題五步驟</h2>
+
+<div class="card">
+ <div class="card-title">標準流程</div>
+ <div class="step">
+  <strong>Step 1：建立假設</strong><br>
+  寫出 H₀ 和 H₁，確定是單尾還是雙尾檢定。
+ </div>
+ <div class="step">
+  <strong>Step 2：決定顯著水準 α</strong><br>
+  題目通常會給（如 α = 0.05），沒給就用 0.05。
+ </div>
+ <div class="step">
+  <strong>Step 3：計算檢定統計量</strong><br>
+  根據題型選用適當公式（Z 檢定、t 檢定、χ² 檢定等）。
+ </div>
+ <div class="step">
+  <strong>Step 4：做出決策</strong><br>
+  比較檢定統計量與臨界值（或比較 <span class="math">p</span> 值與 α）。<br>
+  · 若 |統計量| > 臨界值 → 拒絕 H₀<br>
+  · 若 <span class="math">p</span> 值 < α → 拒絕 H₀
+ </div>
+ <div class="step">
+  <strong>Step 5：寫結論</strong><br>
+  用日常語言解釋結果。「在顯著水準 α = 0.05 下，有充分證據拒絕 H₀，即⋯⋯」
+ </div>
+</div>
+
+<h2>母體比例的 Z 檢定</h2>
+
+<p>適用於：檢定母體比例 <span class="math">p</span> 是否等於（或大於/小於）某個值 <span class="math">p₀</span>。</p>
+
+<div class="formula">
+ <div class="formula-main">Z = (p̂ − p₀) / √(p₀(1−p₀)/n)</div>
+ <div class="formula-note">p̂ = 樣本比例，p₀ = H₀ 假設的比例，n = 樣本數</div>
+</div>
+
+<div class="card">
+ <div class="card-title">例題 1：硬幣是否公正？</div>
+ <p>擲一枚硬幣 200 次，出現正面 118 次。在 α = 0.05 下，能否認為這枚硬幣不公正？</p>
+
+ <div class="step">
+  <strong>Step 1：</strong>H₀：<span class="math">p = 0.5</span>（硬幣公正），H₁：<span class="math">p ≠ 0.5</span>（雙尾）<br><br>
+  <strong>Step 2：</strong><span class="math">α = 0.05</span>，雙尾臨界值 <span class="math">Z* = ±1.96</span><br><br>
+  <strong>Step 3：</strong><br>
+  <span class="math">p̂ = 118/200 = 0.59</span><br>
+  <span class="math">Z = (0.59 − 0.5) / √(0.5×0.5/200)</span><br>
+  <span class="math">= 0.09 / √(0.00125)</span><br>
+  <span class="math">= 0.09 / 0.03536</span><br>
+  <span class="math">≈ 2.546</span><br><br>
+  <strong>Step 4：</strong><span class="math">|Z| = 2.546 > 1.96</span> → 落在拒絕域
+ </div>
+
+ <div class="answer">結論：在 α = 0.05 下，拒絕 H₀，有充分證據認為這枚硬幣不公正。</div>
+</div>
+
+<h2>母體平均數的檢定</h2>
+
+<p>已知母體標準差 σ 時用 <mark>Z 檢定</mark>，未知 σ 時用 <mark>t 檢定</mark>。</p>
+
+<div class="formula">
+ <div class="formula-main">Z = (X̄ − μ₀) / (σ/√n)</div>
+ <div class="formula-note">已知 σ 時使用</div>
+</div>
+
+<div class="formula">
+ <div class="formula-main">t = (X̄ − μ₀) / (s/√n)</div>
+ <div class="formula-note">未知 σ 時使用，自由度 df = n − 1</div>
+</div>
+
+<div class="card">
+ <div class="card-title">例題 2：燈泡壽命是否達標？</div>
+ <p>某廠商宣稱燈泡平均壽命 1000 小時（σ = 50）。隨機抽 36 個，平均壽命 985 小時。在 α = 0.05 下，是否有理由懷疑燈泡壽命未達標？</p>
+
+ <div class="step">
+  <strong>Step 1：</strong>H₀：<span class="math">μ = 1000</span>，H₁：<span class="math">μ < 1000</span>（左尾）<br><br>
+  <strong>Step 2：</strong><span class="math">α = 0.05</span>，左尾臨界值 <span class="math">Z* = −1.645</span><br><br>
+  <strong>Step 3：</strong><br>
+  <span class="math">Z = (985 − 1000) / (50/√36)</span><br>
+  <span class="math">= −15 / (50/6)</span><br>
+  <span class="math">= −15 / 8.333</span><br>
+  <span class="math">≈ −1.80</span><br><br>
+  <strong>Step 4：</strong><span class="math">Z = −1.80 < −1.645</span> → 落在拒絕域
+ </div>
+
+ <div class="answer">結論：在 α = 0.05 下，拒絕 H₀，有充分證據認為燈泡平均壽命低於 1000 小時。</div>
+</div>
+
+<h2>卡方適合度檢定（χ² Goodness-of-Fit）</h2>
+
+<p>用於檢定觀察到的次數分布是否符合期望的理論分布。</p>
+
+<div class="formula">
+ <div class="formula-main">χ² = Σ (Oᵢ − Eᵢ)² / Eᵢ</div>
+ <div class="formula-note">Oᵢ = 第 i 類的觀察次數，Eᵢ = 第 i 類的期望次數，df = k − 1</div>
+</div>
+
+<div class="card">
+ <div class="card-title">例題 3：骰子是否公正？</div>
+ <p>擲骰子 120 次，各點數出現次數如下。在 α = 0.05 下，骰子是否公正？</p>
+
+ <table>
+  <tr><th>點數</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th></tr>
+  <tr><td>觀察次數 O</td><td>25</td><td>17</td><td>15</td><td>23</td><td>24</td><td>16</td></tr>
+  <tr><td>期望次數 E</td><td>20</td><td>20</td><td>20</td><td>20</td><td>20</td><td>20</td></tr>
+ </table>
+
+ <div class="step">
+  <strong>Step 1：</strong>H₀：骰子公正（各點數機率 = 1/6），H₁：骰子不公正<br><br>
+  <strong>Step 2：</strong><span class="math">α = 0.05</span>，<span class="math">df = 6 − 1 = 5</span>，臨界值 <span class="math">χ²* = 11.07</span><br><br>
+  <strong>Step 3：</strong><br>
+  <span class="math">χ² = (25−20)²/20 + (17−20)²/20 + (15−20)²/20 + (23−20)²/20 + (24−20)²/20 + (16−20)²/20</span><br>
+  <span class="math">= 25/20 + 9/20 + 25/20 + 9/20 + 16/20 + 16/20</span><br>
+  <span class="math">= 1.25 + 0.45 + 1.25 + 0.45 + 0.80 + 0.80</span><br>
+  <span class="math">= 5.00</span><br><br>
+  <strong>Step 4：</strong><span class="math">χ² = 5.00 < 11.07</span> → 沒有落在拒絕域
+ </div>
+
+ <div class="answer">結論：在 α = 0.05 下，不拒絕 H₀，沒有充分證據認為骰子不公正。</div>
+</div>
+
+<div class="note">
+ <strong>⚠️ 注意</strong>：「不拒絕 H₀」不等於「接受 H₀」！只是目前的證據不足以推翻它而已。
+</div>
+
+<h2>卡方獨立性檢定</h2>
+
+<p>用於檢定兩個類別變數之間是否獨立（有無關聯）。</p>
+
+<div class="formula">
+ <div class="formula-main">Eᵢⱼ = (列合計 × 行合計) / 總合計</div>
+ <div class="formula-note">期望次數的計算方式，df = (r−1)(c−1)</div>
+</div>
+
+<div class="card">
+ <div class="card-title">例題 4：性別與選課偏好是否獨立？</div>
+ <p>調查 200 名學生的性別與選修科目，在 α = 0.05 下檢定兩者是否獨立。</p>
+
+ <table>
+  <tr><th></th><th>文科</th><th>理科</th><th>合計</th></tr>
+  <tr><td>男生</td><td>30</td><td>70</td><td>100</td></tr>
+  <tr><td>女生</td><td>50</td><td>50</td><td>100</td></tr>
+  <tr><td>合計</td><td>80</td><td>120</td><td>200</td></tr>
+ </table>
+
+ <div class="step">
+  <strong>Step 1：</strong>H₀：性別與選課偏好獨立，H₁：兩者有關聯<br><br>
+  <strong>Step 2：</strong><span class="math">α = 0.05</span>，<span class="math">df = (2−1)(2−1) = 1</span>，臨界值 <span class="math">χ²* = 3.841</span><br><br>
+  <strong>Step 3：</strong>先算期望次數<br>
+  <span class="math">E₁₁ = 100×80/200 = 40</span>，<span class="math">E₁₂ = 100×120/200 = 60</span><br>
+  <span class="math">E₂₁ = 100×80/200 = 40</span>，<span class="math">E₂₂ = 100×120/200 = 60</span><br><br>
+  <span class="math">χ² = (30−40)²/40 + (70−60)²/60 + (50−40)²/40 + (50−60)²/60</span><br>
+  <span class="math">= 100/40 + 100/60 + 100/40 + 100/60</span><br>
+  <span class="math">= 2.5 + 1.667 + 2.5 + 1.667</span><br>
+  <span class="math">≈ 8.334</span><br><br>
+  <strong>Step 4：</strong><span class="math">χ² = 8.334 > 3.841</span> → 落在拒絕域
+ </div>
+
+ <div class="answer">結論：在 α = 0.05 下，拒絕 H₀，有充分證據認為性別與選課偏好之間存在關聯。</div>
+</div>
+
+<h2>常用臨界值速查</h2>
+
+<h3>Z 檢定臨界值</h3>
+
+<table>
+ <tr><th>α</th><th>雙尾 Z*</th><th>單尾 Z*</th></tr>
+ <tr><td>0.10</td><td>±1.645</td><td>1.282</td></tr>
+ <tr><td>0.05</td><td>±1.96</td><td>1.645</td></tr>
+ <tr><td>0.01</td><td>±2.576</td><td>2.326</td></tr>
+</table>
+
+<h3>χ² 檢定臨界值（α = 0.05）</h3>
+
+<table>
+ <tr><th>df</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th></tr>
+ <tr><td>χ²*</td><td>3.841</td><td>5.991</td><td>7.815</td><td>9.488</td><td>11.07</td></tr>
+</table>
+
+<h2>解題技巧與陷阱</h2>
+
+<div class="card">
+ <div class="card-title">技巧 1：判斷單尾 vs 雙尾</div>
+ <p>看題目關鍵字：</p>
+ <div class="step">
+  · 「是否不同」「是否改變」「是否不等於」→ <mark>雙尾</mark>（H₁：μ ≠ μ₀）<br>
+  · 「是否大於」「是否提高」「是否增加」→ <mark>右尾</mark>（H₁：μ > μ₀）<br>
+  · 「是否小於」「是否降低」「是否減少」→ <mark>左尾</mark>（H₁：μ < μ₀）
+ </div>
+</div>
+
+<div class="card">
+ <div class="card-title">技巧 2：p 值法 vs 臨界值法</div>
+ <div class="step">
+  <strong>臨界值法：</strong>比較統計量和臨界值的大小<br>
+  → 適合考試，臨界值通常會給<br><br>
+  <strong>p 值法：</strong>比較 p 值和 α 的大小<br>
+  → 若 <span class="math">p < α</span>，拒絕 H₀<br>
+  → <span class="math">p</span> 值越小，拒絕 H₀ 的理由越充分
+ </div>
+</div>
+
+<div class="card">
+ <div class="card-title">技巧 3：χ² 檢定的前提條件</div>
+ <div class="step">
+  · 每一格的<mark>期望次數 E ≥ 5</mark>（不是觀察次數！）<br>
+  · 若有 E < 5 的格子，需合併類別<br>
+  · χ² 值永遠 ≥ 0，且 χ² 檢定都是<mark>右尾</mark>檢定
+ </div>
+</div>
+
+<div class="note">
+ <strong>⚠️ 常見陷阱</strong>：<br>
+ ① 拒絕域搞反：χ² 檢定永遠看右尾，不會有「左尾拒絕」的情況<br>
+ ② 混淆 O 和 E：公式是 (O−E)²/E，分母是 <mark>E</mark> 不是 O<br>
+ ③ 結論用詞不當：只能說「拒絕 H₀」或「不拒絕 H₀」，不能說「接受 H₀」<br>
+ ④ 忘記算自由度：適合度 df = k−1，獨立性 df = (r−1)(c−1)
+</div>
 
 <h2>綜合練習</h2>
 
 <div class="practice">
  <div class="practice-num">練習 1</div>
- <p>小明算出 <span class="math">√(144 + 25) = √144 + √25 = 12 + 5 = 17</span>。請用合理性檢定找出他的錯誤。</p>
+ <p>某校聲稱其畢業生起薪平均為 35000 元。隨機抽樣 25 名畢業生，得平均薪資 33800 元，樣本標準差 3000 元。在 α = 0.05 下，檢定該校的聲稱是否合理。</p>
 
  <button class="answer-btn" onclick="toggleAnswer(this)">顯示答案</button>
  <div class="answer-content">
-  <strong>合理性檢定：</strong><br><br>
-  <span class="math">√(144 + 25) = √169 = 13</span><br><br>
-  小明的錯誤：<mark>根號不能分配到加法上</mark>！<br>
-  <span class="math">√(a + b) ≠ √a + √b</span><br><br>
-  快速檢查：如果 <span class="math">√(a+b) = √a + √b</span>，那代入 <span class="math">a = b = 1</span>：<br>
-  左式 = <span class="math">√2 ≈ 1.41</span>，右式 = <span class="math">1 + 1 = 2</span> → 明顯不等 ✗<br><br>
-  <strong>正確答案：13</strong>
+  <strong>Step 1：</strong>H₀：<span class="math">μ = 35000</span>，H₁：<span class="math">μ ≠ 35000</span>（雙尾）<br><br>
+  <strong>Step 2：</strong>未知 σ，用 t 檢定，<span class="math">df = 24</span>，<span class="math">α = 0.05</span>，臨界值 <span class="math">t* ≈ ±2.064</span><br><br>
+  <strong>Step 3：</strong><br>
+  <span class="math">t = (33800 − 35000) / (3000/√25)</span><br>
+  <span class="math">= −1200 / 600 = −2.00</span><br><br>
+  <strong>Step 4：</strong><span class="math">|t| = 2.00 < 2.064</span> → 沒有落在拒絕域<br><br>
+  <strong>結論：在 α = 0.05 下，不拒絕 H₀，沒有充分證據否定起薪平均 35000 元的聲稱。</strong>
  </div>
 </div>
 
 <div class="practice">
  <div class="practice-num">練習 2</div>
- <p>解方程式 <span class="math">x² − 5x + 6 = 0</span>，某同學得到 <span class="math">x = 1</span> 和 <span class="math">x = 6</span>。用合理性檢定判斷是否正確。</p>
+ <p>某商店記錄一週各天的顧客數如下，在 α = 0.05 下檢定顧客數是否平均分布。</p>
+ <table>
+  <tr><th>星期</th><th>一</th><th>二</th><th>三</th><th>四</th><th>五</th><th>六</th><th>日</th></tr>
+  <tr><td>顧客數</td><td>50</td><td>45</td><td>38</td><td>42</td><td>56</td><td>72</td><td>67</td></tr>
+ </table>
 
  <button class="answer-btn" onclick="toggleAnswer(this)">顯示答案</button>
  <div class="answer-content">
-  <strong>合理性檢定 1：代入驗證</strong><br><br>
-  代入 <span class="math">x = 1</span>：<span class="math">1 − 5 + 6 = 2 ≠ 0</span> ✗ → 馬上知道不對！<br><br>
-
-  <strong>合理性檢定 2：韋達定理</strong><br><br>
-  兩根之和 = <span class="math">−(−5)/1 = 5</span><br>
-  同學的答案：<span class="math">1 + 6 = 7 ≠ 5</span> ✗<br><br>
-  兩根之積 = <span class="math">6/1 = 6</span><br>
-  同學的答案：<span class="math">1 × 6 = 6</span> ✓ （積湊巧對了，但和不對）<br><br>
-
-  <strong>正確答案：<span class="math">x = 2</span> 和 <span class="math">x = 3</span></strong><br>
-  驗證：<span class="math">2 + 3 = 5</span> ✓，<span class="math">2 × 3 = 6</span> ✓
+  <strong>Step 1：</strong>H₀：顧客數平均分布（每天機率 = 1/7），H₁：不是平均分布<br><br>
+  <strong>Step 2：</strong><span class="math">α = 0.05</span>，<span class="math">df = 7−1 = 6</span>，臨界值 <span class="math">χ²* = 12.59</span><br><br>
+  <strong>Step 3：</strong><br>
+  總顧客數 = 50+45+38+42+56+72+67 = 370<br>
+  每天期望 E = 370/7 ≈ 52.86<br><br>
+  <span class="math">χ² = (50−52.86)²/52.86 + (45−52.86)²/52.86 + (38−52.86)²/52.86 + (42−52.86)²/52.86 + (56−52.86)²/52.86 + (72−52.86)²/52.86 + (67−52.86)²/52.86</span><br><br>
+  <span class="math">= 0.155 + 1.169 + 4.176 + 2.230 + 0.187 + 6.935 + 3.784</span><br>
+  <span class="math">≈ 18.636</span><br><br>
+  <strong>Step 4：</strong><span class="math">χ² = 18.636 > 12.59</span> → 落在拒絕域<br><br>
+  <strong>結論：在 α = 0.05 下，拒絕 H₀，有充分證據認為各天的顧客數並非平均分布。</strong>（週末明顯較多）
  </div>
 </div>
 
 <div class="practice">
  <div class="practice-num">練習 3</div>
- <p>計算 <span class="math">log₁₀(500)</span> 的值。某同學得到 <span class="math">3.7</span>。請判斷是否合理。</p>
+ <p>某藥廠聲稱新藥的有效率為 80%。臨床試驗中 100 人有 72 人有效。在 α = 0.05 下，能否認為有效率低於 80%？</p>
 
  <button class="answer-btn" onclick="toggleAnswer(this)">顯示答案</button>
  <div class="answer-content">
-  <strong>合理性檢定：邊界估算</strong><br><br>
-  <span class="math">log₁₀(100) = 2</span><br>
-  <span class="math">log₁₀(1000) = 3</span><br><br>
-  因為 <span class="math">100 < 500 < 1000</span><br>
-  所以 <span class="math">2 < log₁₀(500) < 3</span><br><br>
-  但同學的答案 <span class="math">3.7 > 3</span> → <mark>不合理！</mark><br><br>
-  <strong>正確答案：<span class="math">log₁₀(500) ≈ 2.699</span></strong>
+  <strong>Step 1：</strong>H₀：<span class="math">p = 0.80</span>，H₁：<span class="math">p < 0.80</span>（左尾）<br><br>
+  <strong>Step 2：</strong><span class="math">α = 0.05</span>，左尾臨界值 <span class="math">Z* = −1.645</span><br><br>
+  <strong>Step 3：</strong><br>
+  <span class="math">p̂ = 72/100 = 0.72</span><br>
+  <span class="math">Z = (0.72 − 0.80) / √(0.80×0.20/100)</span><br>
+  <span class="math">= −0.08 / √(0.0016)</span><br>
+  <span class="math">= −0.08 / 0.04 = −2.00</span><br><br>
+  <strong>Step 4：</strong><span class="math">Z = −2.00 < −1.645</span> → 落在拒絕域<br><br>
+  <strong>結論：在 α = 0.05 下，拒絕 H₀，有充分證據認為新藥的有效率低於 80%。</strong>
  </div>
 </div>
 
-<h2>考試實戰建議</h2>
+<h2>解題口訣</h2>
 
 <div class="mnemonic">
- <div class="mnemonic-title">合理性檢定三步口訣</div>
- <p>算完先停一下想，<br>代個數字看看像不像，<br>符號單位別搞忘！</p>
+ <div class="mnemonic-title">假設檢定五步訣</div>
+ <p>假設先立虛無說，<br>顯著水準別忘設，<br>統計量值算出來，<br>臨界比較做決策，<br>結論用白話來寫！</p>
 </div>
 
-<div class="note">
- <strong>⏱️ 時間分配建議</strong>：選擇題每題留 <mark>10～15 秒</mark> 做合理性檢定。計算題在交卷前統一用 <mark>5 分鐘</mark> 掃一遍關鍵步驟。養成習慣後，很多檢查幾乎是自動完成的。
-</div>
-
-<div class="note">
- <strong>🎯 最高效的檢查優先順序</strong>：<br>
- ① 代回原式（最直接）→ ② 正負號與奇偶性（最快）→ ③ 估算數量級（最實用）→ ④ 特殊值代入（最萬用）
+<div class="mnemonic">
+ <div class="mnemonic-title">χ² 檢定記憶法</div>
+ <p>O 減 E 平方除以 E，<br>加總起來就是 chi，<br>自由度別算錯了，<br>期望值要大於五！</p>
 </div>
 
 <footer>
