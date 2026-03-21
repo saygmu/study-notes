@@ -112,6 +112,18 @@
       overflow-x: auto;
     }
 
+    .formula.left-align {
+      text-align: left;
+    }
+
+    .formula.left-align .katex-display {
+      text-align: left !important;
+    }
+
+    .formula.left-align .katex-display > .katex {
+      text-align: left !important;
+    }
+
     .formula-note {
       font-size: 0.85rem;
       color: var(--muted);
@@ -384,7 +396,7 @@
     <h3>2. 硝酸 ($\text{HNO}_3$) 的性質與製備</h3>
 
     <p><strong>奧斯華法（工業製硝酸）</strong>：</p>
-    <div class="formula" style="text-align:left">
+    <div class="formula left-align">
       $$\text{(1)}\ 4\text{NH}_3 + 5\text{O}_2 \rightarrow 4\text{NO} + 6\text{H}_2\text{O}$$
       <div class="formula-note">Pt 催化，高溫</div>
       $$\text{(2)}\ 2\text{NO} + \text{O}_2 \rightarrow 2\text{NO}_2$$
