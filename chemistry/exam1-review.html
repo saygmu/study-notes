@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <script src="../theme.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>段考複習講義</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600&family=Noto+Sans+TC:wght@300;400;500&display=swap');
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Noto Sans TC', sans-serif;
+      font-weight: 300;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 2;
+      font-size: 16px;
+      transition: all 0.3s ease;
+    }
+
+    .container {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 60px 24px;
+    }
+
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+      padding: 16px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 100;
+      font-size: 14px;
+    }
+
+    nav a {
+      color: var(--muted);
+      text-decoration: none;
+    }
+
+    nav a:hover { color: var(--text); }
+
+    .nav-actions {
+      display: flex;
+      gap: 20px;
+    }
+
+    .nav-actions button {
+      background: none;
+      border: none;
+      color: var(--muted);
+      cursor: pointer;
+      font-size: 14px;
+      font-family: inherit;
+    }
+
+    .nav-actions button:hover { color: var(--text); }
+
+    h1 {
+      font-family: 'Noto Serif TC', serif;
+      font-weight: 600;
+      font-size: 2.2rem;
+      margin: 40px 0 16px;
+      letter-spacing: 2px;
+    }
+
+    .subtitle {
+      color: var(--muted);
+      margin-bottom: 60px;
+      font-size: 14px;
+    }
+
+    h2 {
+      font-family: 'Noto Serif TC', serif;
+      font-weight: 600;
+      font-size: 1.25rem;
+      margin: 60px 0 24px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    h3 {
+      font-weight: 500;
+      font-size: 1rem;
+      margin: 32px 0 16px;
+      color: var(--muted);
+    }
+
+    p { margin-bottom: 16px; }
+
+    .formula {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 24px;
+      text-align: center;
+      background: var(--card);
+      margin: 24px 0;
+    }
+
+    .formula-note {
+      font-size: 0.85rem;
+      color: var(--muted);
+      margin-top: 12px;
+    }
+
+    .note {
+      border-left: 2px solid var(--accent);
+      padding: 16px 20px;
+      margin: 24px 0;
+      background: var(--card);
+    }
+
+    .note-title {
+      font-weight: 500;
+      margin-bottom: 8px;
+      color: var(--accent);
+    }
+
+    .summary {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 32px;
+      margin: 40px 0;
+      background: var(--card);
+    }
+
+    .summary h3 {
+      margin-top: 0;
+      color: var(--text);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 24px 0;
+      font-size: 15px;
+    }
+
+    th, td {
+      padding: 12px 16px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+
+    th {
+      font-weight: 400;
+      color: var(--muted);
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    ul, ol {
+      margin: 16px 0 16px 24px;
+    }
+
+    li { margin-bottom: 8px; }
+
+    .comparison {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin: 24px 0;
+    }
+
+    .comparison-item {
+      padding: 20px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--card);
+    }
+
+    .comparison-item h4 {
+      font-weight: 500;
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .highlight {
+      background: var(--highlight);
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+
+    .example {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 20px;
+      margin: 20px 0;
+    }
+
+    .example-title {
+      font-weight: 500;
+      color: var(--accent);
+      margin-bottom: 12px;
+    }
+
+    details {
+      margin: 16px 0;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--card);
+    }
+
+    details summary {
+      padding: 12px 16px;
+      cursor: pointer;
+      font-weight: 400;
+      color: var(--accent);
+    }
+
+    details summary:hover {
+      color: var(--text);
+    }
+
+    details[open] summary {
+      border-bottom: 1px solid var(--border);
+    }
+
+    details .detail-content {
+      padding: 16px;
+    }
+
+    footer {
+      margin-top: 80px;
+      padding-top: 24px;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    @media (max-width: 600px) {
+      h1 { font-size: 1.75rem; }
+      .container { padding: 60px 16px; }
+      .comparison { grid-template-columns: 1fr; }
+    }
+
+    @media print {
+      nav, .theme-toggle-btn { display: none; }
+      .container { padding: 20px; }
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="../index.html">&larr; 返回</a>
+    <div class="nav-actions">
+      <button onclick="window.print()">列印</button>
+    </div>
+  </nav>
+
+  <div class="container">
+    <h1>段考複習講義</h1>
+    <p class="subtitle">高三化學 &middot; 第一次段考小考知識點整理</p>
+
+    <!-- ====== 一、有機化學 ====== -->
+    <h2>一、有機化學 &mdash; 官能基與反應</h2>
+
+    <p>有機化合物依<strong>官能基</strong>分類，官能基決定化合物的化學性質。辨識官能基是解題的第一步。</p>
+
+    <h3>常見官能基</h3>
+    <table>
+      <tr><th>官能基</th><th>結構</th><th>代表物</th></tr>
+      <tr><td>醇</td><td>$-\text{OH}$</td><td>$\text{CH}_3\text{OH}$（甲醇）</td></tr>
+      <tr><td>醛</td><td>$-\text{CHO}$</td><td>$\text{HCHO}$（甲醛）</td></tr>
+      <tr><td>酮</td><td>$\text{C}=\text{O}$（兩側接碳）</td><td>$\text{CH}_3\text{COCH}_3$（丙酮）</td></tr>
+      <tr><td>羧酸</td><td>$-\text{COOH}$</td><td>$\text{CH}_3\text{COOH}$（醋酸）</td></tr>
+      <tr><td>酯</td><td>$-\text{COO}-$</td><td>$\text{CH}_3\text{COOCH}_3$</td></tr>
+      <tr><td>胺</td><td>$-\text{NH}_2$</td><td>$\text{CH}_3\text{NH}_2$（甲胺）</td></tr>
+    </table>
+
+    <h3>重要反應</h3>
+    <div class="formula">
+      <strong>酯化反應</strong><br>
+      $\text{CH}_3\text{COOH} + \text{C}_2\text{H}_5\text{OH} \xrightarrow{\text{H}^+} \text{CH}_3\text{COOC}_2\text{H}_5 + \text{H}_2\text{O}$
+      <div class="formula-note">羧酸 + 醇 → 酯 + 水（可逆反應，需酸催化）</div>
+    </div>
+
+    <div class="formula">
+      <strong>皂化反應</strong><br>
+      $\text{酯} + \text{NaOH} \rightarrow \text{羧酸鈉} + \text{醇}$
+      <div class="formula-note">酯的鹼性水解，不可逆。肥皂製造的原理。</div>
+    </div>
+
+    <div class="note">
+      <div class="note-title">考試重點：甲酸的特殊性</div>
+      <p>$\text{HCOOH}$（甲酸）同時具有<strong>醛基</strong>（$-\text{CHO}$）和<strong>羧酸</strong>（$-\text{COOH}$）的性質，因此能發生<strong>銀鏡反應</strong>（醛的特性）和<strong>酸的反應</strong>。這是考試常見陷阱。</p>
+    </div>
+
+    <details>
+      <summary>範例：判斷下列哪些物質可發生銀鏡反應？</summary>
+      <div class="detail-content">
+        <p>$\text{HCHO}$、$\text{CH}_3\text{CHO}$、$\text{HCOOH}$、$\text{CH}_3\text{COOH}$、$\text{CH}_3\text{COCH}_3$</p>
+        <p><strong>答：</strong>$\text{HCHO}$（醛）、$\text{CH}_3\text{CHO}$（醛）、$\text{HCOOH}$（含醛基的羧酸）。<br>
+        酮和一般羧酸不能發生銀鏡反應。</p>
+      </div>
+    </details>
+
+    <!-- ====== 二、酸鹼鹽 ====== -->
+    <h2>二、酸鹼鹽的性質與反應</h2>
+
+    <p>掌握常見酸鹼鹽的名稱、化學式與用途是基本功。注意區分碳酸氫鈉與碳酸鈉的不同反應性。</p>
+
+    <h3>常見鹼與鹽的比較</h3>
+    <table>
+      <tr><th>物質</th><th>化學式</th><th>俗名</th><th>性質/用途</th></tr>
+      <tr><td>碳酸氫鈉</td><td>$\text{NaHCO}_3$</td><td>小蘇打</td><td>弱鹼性，烘焙、制酸劑</td></tr>
+      <tr><td>碳酸鈉</td><td>$\text{Na}_2\text{CO}_3$</td><td>蘇打/純鹼</td><td>較強鹼性，清潔劑</td></tr>
+      <tr><td>氫氧化鈉</td><td>$\text{NaOH}$</td><td>苛性鈉/燒鹼</td><td>強鹼，具腐蝕性</td></tr>
+      <tr><td>氫氧化鈣</td><td>$\text{Ca(OH)}_2$</td><td>熟石灰</td><td>微溶於水，建築材料</td></tr>
+      <tr><td>氧化鈣</td><td>$\text{CaO}$</td><td>生石灰</td><td>乾燥劑，放熱反應</td></tr>
+    </table>
+
+    <div class="formula">
+      <strong>生石灰遇水</strong><br>
+      $\text{CaO} + \text{H}_2\text{O} \rightarrow \text{Ca(OH)}_2$
+      <div class="formula-note">放熱反應，暖暖包原理之一</div>
+    </div>
+
+    <div class="formula">
+      <strong>酸鹼中和</strong><br>
+      $\text{NaOH} + \text{HCl} \rightarrow \text{NaCl} + \text{H}_2\text{O}$
+      <div class="formula-note">強酸 + 強鹼 → 鹽 + 水</div>
+    </div>
+
+    <div class="note">
+      <div class="note-title">考試重點：小蘇打 vs 蘇打</div>
+      <p>$\text{NaHCO}_3$ 加熱會分解：$2\text{NaHCO}_3 \xrightarrow{\Delta} \text{Na}_2\text{CO}_3 + \text{H}_2\text{O} + \text{CO}_2\uparrow$<br>
+      $\text{Na}_2\text{CO}_3$ 加熱<strong>不分解</strong>。兩者都能與酸反應產生 $\text{CO}_2$，但鹼性強弱不同。</p>
+    </div>
+
+    <details>
+      <summary>範例：$\text{NH}_3$ 為何呈鹼性？</summary>
+      <div class="detail-content">
+        <p>$\text{NH}_3 + \text{H}_2\text{O} \rightleftharpoons \text{NH}_4^+ + \text{OH}^-$</p>
+        <p>氨的氮上有一對孤對電子，可接受質子（布忍斯特鹼）或提供電子對（路易士鹼），使水溶液呈鹼性。</p>
+      </div>
+    </details>
+
+    <!-- ====== 三、氧化還原 ====== -->
+    <h2>三、氧化還原反應</h2>
+
+    <p>氧化還原的核心是<strong>電子轉移</strong>。氧化數升高者被氧化（失去電子），氧化數降低者被還原（得到電子）。</p>
+
+    <h3>氧化數計算規則</h3>
+    <ul>
+      <li>單質中所有元素的氧化數為 $0$</li>
+      <li>$\text{H}$ 通常 $+1$；$\text{O}$ 通常 $-2$</li>
+      <li>化合物中各元素氧化數總和 $= 0$；多原子離子中總和 $=$ 離子電荷</li>
+      <li>鹼金族 $+1$，鹼土族 $+2$</li>
+    </ul>
+
+    <div class="formula">
+      <strong>$\text{KMnO}_4$ 中 Mn 的氧化數</strong><br>
+      $(+1) + x + 4(-2) = 0 \Rightarrow x = +7$
+      <div class="formula-note">$\text{KMnO}_4$ 為強氧化劑，Mn 氧化數 +7</div>
+    </div>
+
+    <div class="note">
+      <div class="note-title">考試重點：氧化劑與還原劑</div>
+      <p><strong>氧化劑</strong>：使對方氧化，自身被還原（氧化數下降），如 $\text{KMnO}_4$<br>
+      <strong>還原劑</strong>：使對方還原，自身被氧化（氧化數上升）<br>
+      口訣：<strong>「氧升還降」</strong>&mdash; 氧化數上升的是被氧化（還原劑），下降的是被還原（氧化劑）</p>
+    </div>
+
+    <h3>常見 Mn 化合物的氧化數</h3>
+    <table>
+      <tr><th>化合物</th><th>Mn 氧化數</th></tr>
+      <tr><td>$\text{KMnO}_4$</td><td>$+7$</td></tr>
+      <tr><td>$\text{NaMnO}_4$</td><td>$+7$</td></tr>
+      <tr><td>$\text{Na}_2\text{MnO}_4$</td><td>$+6$</td></tr>
+      <tr><td>$\text{MnO}_2$</td><td>$+4$</td></tr>
+      <tr><td>$\text{Mn}^{2+}$</td><td>$+2$</td></tr>
+    </table>
+
+    <details>
+      <summary>範例：寫出 $\text{MnO}_4^-$ 在酸性溶液中的還原半反應</summary>
+      <div class="detail-content">
+        <p>$\text{MnO}_4^- + 8\text{H}^+ + 5e^- \rightarrow \text{Mn}^{2+} + 4\text{H}_2\text{O}$</p>
+        <p>Mn 從 $+7 \to +2$，得到 5 個電子。用 $\text{H}^+$ 平衡氫，用 $\text{H}_2\text{O}$ 平衡氧。</p>
+      </div>
+    </details>
+
+    <!-- ====== 四、電化學 ====== -->
+    <h2>四、電化學 &mdash; 電解</h2>
+
+    <p>電解利用外加電源強制進行非自發反應。陽極發生<strong>氧化</strong>，陰極發生<strong>還原</strong>。記住：「陽氧陰還」。</p>
+
+    <h3>電解裝置要點</h3>
+    <ul>
+      <li><strong>陽極（+）</strong>：連接電源正極，發生氧化反應</li>
+      <li><strong>陰極（-）</strong>：連接電源負極，發生還原反應</li>
+      <li>電解液提供可移動離子，形成通路</li>
+    </ul>
+
+    <div class="formula">
+      <strong>電解 $\text{NaCl}$ 水溶液</strong><br>
+      陽極：$2\text{Cl}^- \rightarrow \text{Cl}_2\uparrow + 2e^-$<br>
+      陰極：$2\text{H}_2\text{O} + 2e^- \rightarrow \text{H}_2\uparrow + 2\text{OH}^-$
+      <div class="formula-note">產物：陽極出 $\text{Cl}_2$，陰極出 $\text{H}_2$，溶液變鹼性（$\text{NaOH}$）</div>
+    </div>
+
+    <div class="formula">
+      <strong>法拉第電解定律</strong><br>
+      $m = \dfrac{M \cdot I \cdot t}{n \cdot F}$
+      <div class="formula-note">$m$：析出質量、$M$：莫耳質量、$I$：電流(A)、$t$：時間(s)、$n$：轉移電子數、$F = 96500\;\text{C/mol}$</div>
+    </div>
+
+    <div class="note">
+      <div class="note-title">考試重點：陽極產物判斷</div>
+      <p>電解含鹵素離子的水溶液時，陽極優先氧化<strong>鹵素離子</strong>（而非水）。但若陽極為活性金屬（如 Cu），則金屬本身會被氧化溶解。</p>
+    </div>
+
+    <details>
+      <summary>範例：以 2A 電流電解 $\text{CuSO}_4$ 水溶液 965 秒，陰極析出多少克 Cu？</summary>
+      <div class="detail-content">
+        <p>陰極反應：$\text{Cu}^{2+} + 2e^- \rightarrow \text{Cu}$（$n = 2$）</p>
+        <p>$m = \dfrac{64 \times 2 \times 965}{2 \times 96500} = \dfrac{123520}{193000} \approx 0.64\;\text{g}$</p>
+      </div>
+    </details>
+
+    <!-- ====== 五、化學鍵結 ====== -->
+    <h2>五、化學鍵結與分子結構</h2>
+
+    <p>化學鍵分為<strong>離子鍵</strong>（金屬與非金屬間的電子轉移）和<strong>共價鍵</strong>（非金屬間的電子共享）。分子的形狀由中心原子周圍的電子對決定。</p>
+
+    <h3>Lewis 電子點式</h3>
+    <p>畫出所有價電子，使每個原子盡量達到八隅體。注意<strong>孤對電子</strong>也會影響分子形狀。</p>
+
+    <h3>常見分子形狀（VSEPR）</h3>
+    <table>
+      <tr><th>電子對數</th><th>孤對電子</th><th>形狀</th><th>範例</th></tr>
+      <tr><td>2</td><td>0</td><td>線形</td><td>$\text{CO}_2$, $\text{BeCl}_2$</td></tr>
+      <tr><td>3</td><td>0</td><td>平面三角</td><td>$\text{BF}_3$</td></tr>
+      <tr><td>3</td><td>1</td><td>V 形</td><td>$\text{SO}_2$</td></tr>
+      <tr><td>4</td><td>0</td><td>正四面體</td><td>$\text{CH}_4$</td></tr>
+      <tr><td>4</td><td>1</td><td>三角錐</td><td>$\text{NH}_3$</td></tr>
+      <tr><td>4</td><td>2</td><td>V 形</td><td>$\text{H}_2\text{O}$</td></tr>
+    </table>
+
+    <div class="note">
+      <div class="note-title">考試重點：離子 vs 共價的判斷</div>
+      <p><strong>離子化合物</strong>：通常由金屬 + 非金屬組成，熔點高，固態不導電但水溶液或熔融態導電。<br>
+      <strong>共價化合物</strong>：非金屬 + 非金屬，熔點較低。<br>
+      例外：$\text{NH}_4\text{Cl}$ 雖無金屬但為離子化合物。</p>
+    </div>
+
+    <div class="formula">
+      <strong>鍵能與反應熱</strong><br>
+      $\Delta H = \sum E_{\text{斷鍵}} - \sum E_{\text{成鍵}}$
+      <div class="formula-note">反應熱 = 反應物斷鍵能量總和 - 生成物成鍵能量總和</div>
+    </div>
+
+    <details>
+      <summary>範例：為什麼 $\text{H}_2\text{O}$ 是 V 形而非線形？</summary>
+      <div class="detail-content">
+        <p>O 的價電子有 6 個，與 2 個 H 各形成 1 個共價鍵後，O 上還剩<strong>2 對孤對電子</strong>。</p>
+        <p>4 個電子對排成四面體，但 2 對孤對不含原子，分子形狀看起來是<strong>V 形（彎曲形）</strong>，鍵角約 104.5&deg;。</p>
+      </div>
+    </details>
+
+    <!-- ====== 六、化學計量 ====== -->
+    <h2>六、化學計量</h2>
+
+    <p>莫耳（mol）是連接微觀粒子數與巨觀質量的橋樑。$1\;\text{mol} = 6.02 \times 10^{23}$ 個粒子，質量等於該物質的分子量（以克計）。</p>
+
+    <div class="formula">
+      <strong>基本換算</strong><br>
+      $n = \dfrac{m}{M} = \dfrac{N}{N_A} = \dfrac{V}{22.4}\;(\text{STP 氣體})$
+      <div class="formula-note">$n$：莫耳數、$m$：質量(g)、$M$：分子量(g/mol)、$N_A = 6.02\times10^{23}$</div>
+    </div>
+
+    <div class="formula">
+      <strong>溶液濃度</strong><br>
+      $C_M = \dfrac{n}{V_{\text{溶液(L)}}}$ ，$\quad w\% = \dfrac{m_{\text{溶質}}}{m_{\text{溶液}}} \times 100\%$
+      <div class="formula-note">$C_M$：體積莫耳濃度 (M)、$w\%$：重量百分濃度</div>
+    </div>
+
+    <h3>係數平衡步驟</h3>
+    <ol>
+      <li>列出反應物與生成物</li>
+      <li>從最複雜的化合物開始平衡</li>
+      <li>逐一調整係數，使兩邊各元素原子數相等</li>
+      <li>檢查：原子數守恆、電荷守恆</li>
+    </ol>
+
+    <div class="note">
+      <div class="note-title">考試重點：質量守恆</div>
+      <p>化學反應前後，<strong>總質量不變</strong>。這是平衡方程式和計算反應量的基礎。若題目涉及氣體逸出或沉澱，記得將其納入計算。</p>
+    </div>
+
+    <details>
+      <summary>範例：$0.5\;\text{M}$ 的 $\text{NaOH}$ 溶液 $200\;\text{mL}$ 含多少莫耳 $\text{NaOH}$？</summary>
+      <div class="detail-content">
+        <p>$n = C_M \times V = 0.5 \times 0.2 = 0.1\;\text{mol}$</p>
+        <p>質量 $= 0.1 \times 40 = 4\;\text{g}$</p>
+      </div>
+    </details>
+
+    <details>
+      <summary>範例：平衡 $\text{Fe}_2\text{O}_3 + \text{CO} \rightarrow \text{Fe} + \text{CO}_2$</summary>
+      <div class="detail-content">
+        <p>$\text{Fe}_2\text{O}_3 + 3\text{CO} \rightarrow 2\text{Fe} + 3\text{CO}_2$</p>
+        <p>檢查：Fe 左右各 2、O 左 $3+3=6$ 右 $6$、C 左右各 3。</p>
+      </div>
+    </details>
+
+    <!-- ====== 總整理 ====== -->
+    <h2>總整理</h2>
+
+    <div class="summary">
+      <h3>快速複習清單</h3>
+      <ol>
+        <li><strong>有機官能基</strong>：能辨識六大官能基，熟記酯化與皂化反應，注意甲酸的雙重性質</li>
+        <li><strong>酸鹼鹽</strong>：區分 $\text{NaHCO}_3$/$\text{Na}_2\text{CO}_3$/$\text{NaOH}$，熟記 $\text{CaO} + \text{H}_2\text{O}$ 放熱</li>
+        <li><strong>氧化還原</strong>：熟練氧化數計算，能判斷氧化劑/還原劑，會寫半反應</li>
+        <li><strong>電化學</strong>：「陽氧陰還」，電解 $\text{NaCl(aq)}$ 的產物，法拉第定律公式</li>
+        <li><strong>化學鍵</strong>：Lewis 結構、VSEPR 判斷分子形狀、離子與共價的區別</li>
+        <li><strong>化學計量</strong>：莫耳換算、濃度計算、質量守恆</li>
+      </ol>
+    </div>
+
+    <footer>
+      2026.03.21
+    </footer>
+  </div>
+</body>
+</html>
