@@ -242,6 +242,8 @@
       h1 { font-size: 1.75rem; }
       .container { padding: 60px 16px; }
       .comparison { grid-template-columns: 1fr; }
+      .formula { padding: 16px 12px; font-size: 14px; }
+      .katex { font-size: 0.9em; }
     }
 
     @media print {
@@ -382,18 +384,21 @@
     <h3>2. 硝酸 ($\text{HNO}_3$) 的性質與製備</h3>
 
     <p><strong>奧斯華法（工業製硝酸）</strong>：</p>
-    <div class="formula">
-      $$\text{(1)}\quad 4\text{NH}_3 + 5\text{O}_2 \rightarrow 4\text{NO} + 6\text{H}_2\text{O} \quad (\text{Pt 催化，高溫})$$
-      $$\text{(2)}\quad 2\text{NO} + \text{O}_2 \rightarrow 2\text{NO}_2$$
-      $$\text{(3)}\quad 3\text{NO}_2 + \text{H}_2\text{O} \rightarrow 2\text{HNO}_3 + \text{NO}$$
+    <div class="formula" style="text-align:left">
+      $$\text{(1)}\ 4\text{NH}_3 + 5\text{O}_2 \rightarrow 4\text{NO} + 6\text{H}_2\text{O}$$
+      <div class="formula-note">Pt 催化，高溫</div>
+      $$\text{(2)}\ 2\text{NO} + \text{O}_2 \rightarrow 2\text{NO}_2$$
+      $$\text{(3)}\ 3\text{NO}_2 + \text{H}_2\text{O} \rightarrow 2\text{HNO}_3 + \text{NO}$$
     </div>
 
     <p><strong>銅與硝酸反應（常考！）</strong>：</p>
     <div class="formula">
-      $$\text{Cu} + 4\text{HNO}_3(\text{濃}) \rightarrow \text{Cu(NO}_3\text{)}_2 + 2\text{NO}_2 \uparrow \;(\text{紅棕色氣體}) + 2\text{H}_2\text{O}$$
+      $$\text{Cu} + 4\text{HNO}_3(\text{濃}) \rightarrow \text{Cu(NO}_3\text{)}_2 + 2\text{NO}_2\!\uparrow + 2\text{H}_2\text{O}$$
+      <div class="formula-note">NO₂ 為紅棕色氣體</div>
     </div>
     <div class="formula">
-      $$3\text{Cu} + 8\text{HNO}_3(\text{稀}) \rightarrow 3\text{Cu(NO}_3\text{)}_2 + 2\text{NO} \uparrow \;(\text{無色氣體}) + 4\text{H}_2\text{O}$$
+      $$3\text{Cu} + 8\text{HNO}_3(\text{稀}) \rightarrow 3\text{Cu(NO}_3\text{)}_2 + 2\text{NO}\!\uparrow + 4\text{H}_2\text{O}$$
+      <div class="formula-note">NO 為無色氣體</div>
     </div>
 
     <div class="note">
