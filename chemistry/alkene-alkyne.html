@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <script src="../theme.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>烯類與炔類</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600&family=Noto+Sans+TC:wght@300;400;500&display=swap');
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body { overflow-x: hidden; }
+
+    body {
+      font-family: 'Noto Sans TC', sans-serif;
+      font-weight: 300;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 2;
+      font-size: 16px;
+      transition: all 0.3s ease;
+    }
+
+    .container {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 60px 24px;
+    }
+
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+      padding: 16px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 100;
+      font-size: 14px;
+    }
+
+    nav a {
+      color: var(--muted);
+      text-decoration: none;
+    }
+
+    nav a:hover { color: var(--text); }
+
+    .nav-actions {
+      display: flex;
+      gap: 20px;
+    }
+
+    .nav-actions button {
+      background: none;
+      border: none;
+      color: var(--muted);
+      cursor: pointer;
+      font-size: 14px;
+      font-family: inherit;
+    }
+
+    .nav-actions button:hover { color: var(--text); }
+
+    h1 {
+      font-family: 'Noto Serif TC', serif;
+      font-weight: 600;
+      font-size: 2.2rem;
+      margin: 40px 0 16px;
+      letter-spacing: 2px;
+    }
+
+    .subtitle {
+      color: var(--muted);
+      margin-bottom: 60px;
+      font-size: 14px;
+    }
+
+    h2 {
+      font-family: 'Noto Serif TC', serif;
+      font-weight: 600;
+      font-size: 1.25rem;
+      margin: 60px 0 24px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    h3 {
+      font-weight: 500;
+      font-size: 1rem;
+      margin: 32px 0 16px;
+      color: var(--muted);
+    }
+
+    p { margin-bottom: 16px; }
+
+    .formula {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 24px;
+      text-align: center;
+      background: var(--card);
+      margin: 24px 0;
+      overflow-x: auto;
+    }
+
+    .formula.left-align {
+      text-align: left;
+    }
+
+    .formula.left-align .katex-display {
+      text-align: left !important;
+    }
+
+    .formula.left-align .katex-display > .katex {
+      text-align: left !important;
+    }
+
+    .formula-note {
+      font-size: 0.85rem;
+      color: var(--muted);
+      margin-top: 12px;
+    }
+
+    .note {
+      border-left: 2px solid var(--accent);
+      padding: 16px 20px;
+      margin: 24px 0;
+      background: var(--card);
+    }
+
+    .note-title {
+      font-weight: 500;
+      margin-bottom: 8px;
+      color: var(--accent);
+    }
+
+    .summary {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 32px;
+      margin: 40px 0;
+      background: var(--card);
+    }
+
+    .summary h3 {
+      margin-top: 0;
+      color: var(--text);
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 24px 0;
+      font-size: 15px;
+      min-width: 400px;
+    }
+
+    th, td {
+      padding: 12px 16px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+
+    th {
+      font-weight: 400;
+      color: var(--muted);
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    ul, ol {
+      margin: 16px 0 16px 24px;
+    }
+
+    li { margin-bottom: 8px; }
+
+    .diagram {
+      text-align: center;
+      margin: 32px 0;
+      padding: 24px;
+      background: var(--card);
+      border-radius: 8px;
+    }
+
+    .diagram svg {
+      max-width: 100%;
+    }
+
+    .comparison {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin: 24px 0;
+    }
+
+    .comparison-item {
+      padding: 20px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--card);
+    }
+
+    .comparison-item h4 {
+      font-weight: 500;
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .highlight {
+      background: var(--highlight);
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+
+    .example {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 20px;
+      margin: 20px 0;
+    }
+
+    .example-title {
+      font-weight: 500;
+      color: var(--accent);
+      margin-bottom: 12px;
+    }
+
+    footer {
+      margin-top: 80px;
+      padding-top: 24px;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    @media (max-width: 600px) {
+      h1 { font-size: 1.75rem; }
+      .container { padding: 60px 16px; }
+      .comparison { grid-template-columns: 1fr; }
+      .formula { padding: 16px 12px; font-size: 14px; }
+      .katex { font-size: 0.9em; }
+    }
+
+    @media print {
+      nav, .theme-toggle-btn { display: none; }
+      .container { padding: 20px; }
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="../index.html">&larr; 返回</a>
+    <div class="nav-actions">
+      <button onclick="window.print()">列印</button>
+    </div>
+  </nav>
+
+  <div class="container">
+    <h1>烯類與炔類</h1>
+    <p class="subtitle">有機化學 &middot; 反應與性質整理</p>
+
+    <!-- ======================== 一、製備方法 ======================== -->
+    <h2>一、製備方法</h2>
+
+    <h3>烯類</h3>
+
+    <p><strong>石油裂煉（工業法）</strong>：大分子烷烴高溫斷裂。</p>
+    <div class="formula">
+      $$\text{CH}_3\text{CH}_2\text{CH}_3 \xrightarrow{\Delta} \text{CH}_3\text{CH}{=}\text{CH}_2 + \text{H}_2$$
+    </div>
+
+    <p><strong>醇類脫水（實驗室法）</strong>：加入濃 $\text{H}_2\text{SO}_4$ 加熱至約 180°C，發生分子內脫水。</p>
+    <div class="formula">
+      $$\text{CH}_3\text{CH}_2\text{OH} \xrightarrow[\sim 180°\text{C}]{\text{conc. H}_2\text{SO}_4} \text{CH}_2{=}\text{CH}_2 + \text{H}_2\text{O}$$
+    </div>
+
+    <p><strong>鹵代烷脫去鹵化氫（實驗室法）</strong>：鹵代烷與 KOH 的乙醇溶液共熱。</p>
+    <div class="formula">
+      $$\text{CH}_3\text{CH}_2\text{Br} + \text{KOH}(\text{alc}) \xrightarrow{\Delta} \text{CH}_2{=}\text{CH}_2 + \text{KBr} + \text{H}_2\text{O}$$
+    </div>
+
+    <h3>炔類（以乙炔為例）</h3>
+
+    <p><strong>電石（碳化鈣 $\text{CaC}_2$）加水</strong>：</p>
+    <div class="formula left-align">
+      $$\text{(1)}\ \text{CaCO}_3 \xrightarrow{\Delta} \text{CaO} + \text{CO}_2$$
+      $$\text{(2)}\ \text{CaO} + 3\text{C} \xrightarrow{3000°\text{C}} \text{CaC}_2 + \text{CO}$$
+      $$\text{(3)}\ \text{CaC}_2 + 2\text{H}_2\text{O} \rightarrow \text{HC}{\equiv}\text{CH} + \text{Ca(OH)}_2$$
+    </div>
+
+    <!-- ======================== 二、加成反應比較 ======================== -->
+    <h2>二、化學性質 &mdash; 加成反應</h2>
+
+    <div class="table-wrap"><table>
+      <tr>
+        <th>反應類型</th>
+        <th>烯類</th>
+        <th>炔類</th>
+      </tr>
+      <tr>
+        <td><strong>加氫</strong></td>
+        <td>
+          ${>}\text{C}{=}\text{C}{<} + \text{H}_2 \rightarrow \text{-CH-CH-}$<br>
+          催化劑：Pt / Ni / Pd
+        </td>
+        <td>
+          $\text{-C}{\equiv}\text{C-} + 2\text{H}_2 \rightarrow \text{-CH}_2\text{-CH}_2\text{-}$<br>
+          催化劑：Pt / Ni / Pd
+        </td>
+      </tr>
+      <tr>
+        <td><strong>加鹵素</strong></td>
+        <td>
+          ${>}\text{C}{=}\text{C}{<} + \text{X}_2 \rightarrow \text{-CX-CX-}$<br>
+          使 $\text{Br}_2/\text{CCl}_4$ 褪色（可檢驗雙鍵）
+        </td>
+        <td>
+          $\text{-C}{\equiv}\text{C-} + 2\text{X}_2 \rightarrow \text{-CX}_2\text{-CX}_2\text{-}$<br>
+          使 $\text{Br}_2/\text{CCl}_4$ 褪色
+        </td>
+      </tr>
+      <tr>
+        <td><strong>加 HX</strong></td>
+        <td>
+          ${>}\text{C}{=}\text{C}{<} + \text{HX} \rightarrow \text{-CH-CX-}$<br>
+          遵循馬可尼可夫法則
+        </td>
+        <td>
+          $\text{-C}{\equiv}\text{C-} + 2\text{HX} \rightarrow \text{-CH}_2\text{-CX}_2\text{-}$<br>
+          遵循馬可尼可夫法則
+        </td>
+      </tr>
+      <tr>
+        <td><strong>加水</strong></td>
+        <td>
+          ${>}\text{C}{=}\text{C}{<} + \text{H}_2\text{O} \xrightarrow{\text{H}^+} \text{-CH-C(OH)-}$<br>
+          遵循馬可尼可夫法則，產物為<strong>醇類</strong>
+        </td>
+        <td>
+          $\text{HC}{\equiv}\text{CH} + \text{H}_2\text{O} \rightarrow [\text{CH}_2{=}\text{CHOH}] \rightarrow \text{CH}_3\text{CHO}$（乙醛）<br>
+          其他炔：$\text{R-C}{\equiv}\text{CH} + \text{H}_2\text{O} \rightarrow \text{R-CO-CH}_3$（<strong>酮類</strong>）<br>
+          需 $\text{H}_2\text{SO}_4 / \text{HgSO}_4$ 催化
+        </td>
+      </tr>
+      <tr>
+        <td><strong>加成聚合</strong></td>
+        <td>
+          $n\;\text{CH}_2{=}\text{CH}_2 \rightarrow \text{-(CH}_2\text{-CH}_2\text{)}_n\text{-}$<br>
+          聚乙烯（PE），高溫高壓催化
+        </td>
+        <td>
+          三分子聚合：$3\;\text{HC}{\equiv}\text{CH} \xrightarrow{500°\text{C}} \text{C}_6\text{H}_6$（苯）<br>
+          催化聚合產生<strong>聚乙炔</strong>（可導電）
+        </td>
+      </tr>
+    </table></div>
+
+    <div class="note">
+      <div class="note-title">考試重點：馬可尼可夫法則 (Markovnikov's Rule)</div>
+      <p><strong>H 加在含 H 較多的碳上</strong>，亦即 X 或 OH 加在含 H 較少的碳上。不對稱烯或炔進行加 HX、加水反應時，皆適用此法則。</p>
+    </div>
+
+    <!-- ======================== 三、氧化反應比較 ======================== -->
+    <h2>三、氧化反應</h2>
+
+    <div class="table-wrap"><table>
+      <tr>
+        <th>反應類型</th>
+        <th>烯類</th>
+        <th>炔類</th>
+      </tr>
+      <tr>
+        <td><strong>燃燒</strong></td>
+        <td>
+          完全燃燒產生 $\text{CO}_2$ 與 $\text{H}_2\text{O}$
+        </td>
+        <td>
+          氧炔焰溫度達 3000°C，用於金屬銲接切割<br>
+          $2\text{C}_2\text{H}_2 + 5\text{O}_2 \rightarrow 4\text{CO}_2 + 2\text{H}_2\text{O}$
+        </td>
+      </tr>
+      <tr>
+        <td><strong>拜耳試驗</strong><br>（冷、稀、微鹼性 $\text{KMnO}_4$）</td>
+        <td>
+          紫紅色褪去，產生褐色 $\text{MnO}_2$ 沉澱<br>
+          $3\text{CH}_2{=}\text{CH}_2 + 2\text{KMnO}_4 + 4\text{H}_2\text{O}$<br>
+          $\rightarrow 3\text{HOCH}_2\text{CH}_2\text{OH} + 2\text{MnO}_2{\downarrow} + 2\text{KOH}$
+        </td>
+        <td>
+          同樣使 $\text{KMnO}_4$ 褪色
+        </td>
+      </tr>
+      <tr>
+        <td><strong>強烈氧化</strong><br>（酸性 $\text{KMnO}_4$，高溫）</td>
+        <td>
+          雙鍵斷裂：<br>
+          ${=}\text{CH}_2 \rightarrow \text{CO}_2$<br>
+          ${=}\text{CH-} \rightarrow \text{-COOH}$<br>
+          ${=}\text{C}{<} \rightarrow {>}\text{C}{=}\text{O}$
+        </td>
+        <td>
+          &mdash;
+        </td>
+      </tr>
+    </table></div>
+
+    <!-- ======================== 四、末端炔專屬 ======================== -->
+    <h2>四、末端炔專屬 &mdash; 金屬取代反應</h2>
+
+    <p>末端炔 ($\text{R-C}{\equiv}\text{C-H}$) 的氫具有<strong>微酸性</strong>，可被金屬取代。</p>
+
+    <p><strong>加硝酸銀氨溶液</strong>（妥倫試劑）：</p>
+    <div class="formula">
+      $$\text{HC}{\equiv}\text{CH} + 2\text{Ag(NH}_3\text{)}_2\text{NO}_3 \rightarrow \text{AgC}{\equiv}\text{CAg}{\downarrow}\;(\text{白色沉澱}) + 2\text{NH}_4\text{NO}_3 + 2\text{NH}_3$$
+      <div class="formula-note">白色沉澱為乙炔銀</div>
+    </div>
+
+    <p><strong>加氯化亞銅氨溶液</strong>：</p>
+    <div class="formula">
+      $$\text{HC}{\equiv}\text{CH} + 2\text{Cu(NH}_3\text{)}_2\text{Cl} \rightarrow \text{CuC}{\equiv}\text{CCu}{\downarrow}\;(\text{紅色沉澱}) + 2\text{NH}_4\text{Cl} + 2\text{NH}_3$$
+      <div class="formula-note">紅色沉澱為乙炔亞銅</div>
+    </div>
+
+    <div class="note">
+      <div class="note-title">考試重點</div>
+      <p>乙炔銀（白色）與乙炔亞銅（紅色）皆為<strong>末端炔的專屬檢驗</strong>。非末端炔（如 $\text{CH}_3\text{C}{\equiv}\text{CCH}_3$）不會產生沉澱。此外，乙炔銀與乙炔亞銅乾燥後易爆炸，需妥善處理。</p>
+    </div>
+
+    <!-- ======================== 五、檢驗法總結 ======================== -->
+    <h2>五、檢驗法總結</h2>
+
+    <div class="table-wrap"><table>
+      <tr>
+        <th>檢驗目的</th>
+        <th>試劑</th>
+        <th>現象</th>
+        <th>適用對象</th>
+      </tr>
+      <tr>
+        <td>不飽和烴（烯、炔）</td>
+        <td>$\text{Br}_2 / \text{CCl}_4$</td>
+        <td>紅棕色迅速褪色（加成反應）</td>
+        <td>烯、炔皆可；苯、環己烷無反應</td>
+      </tr>
+      <tr>
+        <td>不飽和烴（烯、炔）</td>
+        <td>微鹼性 $\text{KMnO}_4(\text{aq})$<br>（拜耳試驗）</td>
+        <td>紫紅色褪色，褐色 $\text{MnO}_2$ 沉澱（氧化反應）</td>
+        <td>烯、炔皆可；苯、環己烷無反應</td>
+      </tr>
+      <tr>
+        <td>末端炔</td>
+        <td>硝酸銀氨溶液</td>
+        <td><strong>白色沉澱</strong>（乙炔銀）</td>
+        <td>僅末端炔</td>
+      </tr>
+      <tr>
+        <td>末端炔</td>
+        <td>氯化亞銅氨溶液</td>
+        <td><strong>紅色沉澱</strong>（乙炔亞銅）</td>
+        <td>僅末端炔</td>
+      </tr>
+    </table></div>
+
+    <footer>
+      2026.03.22
+    </footer>
+  </div>
+</body>
+</html>
