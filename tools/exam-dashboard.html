@@ -217,7 +217,7 @@ const subjects={physics:{name:'選修物理',color:'physics',chapters:[{title:'I
 
 const STORAGE_KEY='studyDashboard-114-2-3';
 let state=JSON.parse(localStorage.getItem(STORAGE_KEY)||'{}');
-if(!state.checked)state.checked={};if(!state.confidence)state.confidence={};if(!state.examDate)state.examDate='';
+if(!state.checked)state.checked={};if(!state.confidence)state.confidence={};if(!state.examDate)state.examDate='2026-04-27';
 function saveState(){localStorage.setItem(STORAGE_KEY,JSON.stringify(state));}
 function allTopics(k){return subjects[k].chapters.flatMap(c=>c.topics);}
 function checkedN(k){return allTopics(k).filter(t=>state.checked[t.id]).length;}
