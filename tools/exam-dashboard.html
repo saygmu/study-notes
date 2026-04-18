@@ -195,7 +195,7 @@
 
 <div class="container">
   <h1>讀書儀表板</h1>
-  <p class="subtitle">選修數學甲（下）｜ 選修物理IV ｜ 選修化學IV & V</p>
+  <p class="subtitle">選修物理 IV & V ｜ 選修化學（有機化合物 & 有機聚合物）</p>
 
   <div class="exam-row">
     <label>考試日期</label>
@@ -206,7 +206,6 @@
   <div class="summary-grid" id="summaryCards"></div>
   <div class="tabs" id="tabBar"></div>
   <div id="tab-overview" class="tab-content active"></div>
-  <div id="tab-math" class="tab-content"></div>
   <div id="tab-physics" class="tab-content"></div>
   <div id="tab-chem" class="tab-content"></div>
   <div id="tab-planner" class="tab-content"></div>
@@ -214,18 +213,19 @@
 </div>
 
 <script>
-const subjects={math:{name:'選修數學甲（下）',color:'math',chapters:[{title:'單元1：隨機變數',topics:[{id:'m1',name:'1-1 隨機變數與機率分布',detail:'離散型隨機變數、機率分布表'},{id:'m2',name:'1-2 期望值與變異數',detail:'期望值計算、變異數與標準差'},{id:'m3',name:'1-3 二項分布',detail:'伯努利試驗、二項分布公式與應用'},{id:'m3b',name:'1-4 幾何分布',detail:'首次成功的等待次數、期望值與變異數'},{id:'m6',name:'1-5 合理性檢定',detail:'虛無假設、對立假設、顯著水準'}]},{title:'單元3：複數',topics:[{id:'m7',name:'3-1 複數的定義與運算',detail:'虛數單位 i、複數四則運算'},{id:'m8',name:'3-2 複數平面',detail:'高斯平面、複數的絕對值與共軛'},{id:'m9',name:'3-3 複數的極式',detail:'極坐標表示、棣美弗定理'}]},{title:'單元4：複數的應用',topics:[{id:'m10',name:'4-1 複數與方程式',detail:'代數基本定理、多項式的複數根'},{id:'m11',name:'4-2 複數的幾何應用',detail:'旋轉、伸縮變換、幾何問題'}]}]},physics:{name:'選修物理IV',color:'physics',chapters:[{title:'第1章：靜電學（1-3起）',topics:[{id:'p1',name:'1-3 電位',detail:'電位定義、電位差、等位面'}]},{title:'第2章：電流',topics:[{id:'p3',name:'2-1 電流',detail:'電流定義、電荷流動'},{id:'p4',name:'2-2 電阻與歐姆定律',detail:'電阻、歐姆定律、電阻率'},{id:'p5',name:'2-3 電功率與電能',detail:'功率計算、焦耳熱'}]},{title:'第3章：電磁感應（到3-3）',topics:[{id:'p7',name:'3-1 磁場對載流導線的作用力',detail:'安培力、磁力矩'},{id:'p8',name:'3-2 感應電動勢',detail:'磁通量變化、冷次定律'},{id:'p9',name:'3-3 法拉第定律',detail:'法拉第電磁感應定律、應用'}]}]},chem:{name:'選修化學IV & V',color:'chem',chapters:[{title:'化學IV 第2章（2-4）：電化學',topics:[{id:'c1',name:'2-4 電解與電鍍',detail:'電解原理、法拉第電解定律、電鍍應用'}]},{title:'化學IV 第3章：金屬與非金屬',topics:[{id:'c2',name:'3-1 非金屬元素及其化合物',detail:'鹵素、氧族、氮族元素的性質與反應'},{id:'c3',name:'3-2 主族金屬元素及其化合物',detail:'鹼金屬、鹼土金屬、鋁的性質'},{id:'c4',name:'3-3 過渡金屬元素及其化合物',detail:'鐵、銅、鋅等過渡金屬的性質'},{id:'c5',name:'3-4 配位化合物',detail:'配位鍵、錯合物命名與結構'}]},{title:'化學V 第1章：有機化合物（1-1～1-3）',topics:[{id:'c7',name:'1-1 有機物鍵結、組成、分類',detail:'碳的鍵結特性、有機物分類、官能基概論'},{id:'c8',name:'1-2 飽和烴',detail:'烷類的命名、結構、性質與反應'},{id:'c9',name:'1-3 不飽和烴',detail:'烯類、炔類的命名、結構、加成反應'}]}]}};
+const subjects={physics:{name:'選修物理',color:'physics',chapters:[{title:'IV 第3章：電磁感應（3-3起）',topics:[{id:'p1',name:'3-3 法拉第定律',detail:'法拉第電磁感應定律、應用'},{id:'p2',name:'3-4 電磁感應現象的應用',detail:'發電機、變壓器、電磁煞車'},{id:'p3',name:'3-5 電磁波',detail:'電磁波的產生、性質與頻譜'},{id:'p4',name:'補充：渦電流',detail:'渦電流原理與應用'}]},{title:'V 第1章：電路',topics:[{id:'p5',name:'1-1 電流和電動勢',detail:'電流定義、電動勢、內電阻'},{id:'p6',name:'1-2 電阻和歐姆定律',detail:'電阻、歐姆定律、電阻率'},{id:'p7',name:'1-3 電流的熱效應與電功率',detail:'焦耳熱、電功率計算'}]},{title:'V 第2章：量子現象（到2-4）',topics:[{id:'p8',name:'2-1 電子的發現',detail:'陰極射線、湯姆森實驗、密立坎油滴實驗'},{id:'p9',name:'2-2 X射線',detail:'X射線的產生、性質與應用'},{id:'p10',name:'2-3 黑體輻射—能量的不連續性',detail:'黑體輻射、普朗克量子假說'},{id:'p11',name:'2-4 光電效應',detail:'光電效應實驗、愛因斯坦光量子論'}]}]},chem:{name:'選修化學',color:'chem',chapters:[{title:'第1章：有機化合物（1-5起）',topics:[{id:'c1',name:'1-5 烴（III）芳香烴',detail:'苯的結構與性質、取代反應'},{id:'c2',name:'1-6 官能基與有機鹵化烴',detail:'官能基分類、鹵化烴性質與反應'},{id:'c3',name:'1-7 醇、醚與酚',detail:'醇的分類與反應、醚、酚的性質'},{id:'c4',name:'1-8 醛與酮',detail:'醛酮的結構、性質與鑑別'},{id:'c5',name:'1-9 羧酸與酯',detail:'羧酸性質、酯化反應、皂化'},{id:'c6',name:'1-10 胺與醯胺',detail:'胺的分類與鹼性、醯胺鍵'}]},{title:'第2章：有機聚合物',topics:[{id:'c7',name:'2-1 聚合物的分類與性質',detail:'加成聚合、縮合聚合、熱塑性與熱固性'},{id:'c8',name:'2-2 天然聚合物',detail:'醣類、蛋白質、核酸'},{id:'c9',name:'2-3 人工合成聚合物',detail:'塑膠、合成纖維、合成橡膠'}]}]}};
 
-let state=JSON.parse(localStorage.getItem('studyDashboard')||'{}');
+const STORAGE_KEY='studyDashboard-114-2-3';
+let state=JSON.parse(localStorage.getItem(STORAGE_KEY)||'{}');
 if(!state.checked)state.checked={};if(!state.confidence)state.confidence={};if(!state.examDate)state.examDate='';
-function saveState(){localStorage.setItem('studyDashboard',JSON.stringify(state));}
+function saveState(){localStorage.setItem(STORAGE_KEY,JSON.stringify(state));}
 function allTopics(k){return subjects[k].chapters.flatMap(c=>c.topics);}
 function checkedN(k){return allTopics(k).filter(t=>state.checked[t.id]).length;}
 function totalN(k){return allTopics(k).length;}
 function pct(k){const t=totalN(k);return t?Math.round(checkedN(k)/t*100):0;}
 function overallPct(){let c=0,t=0;for(const k of Object.keys(subjects)){c+=checkedN(k);t+=totalN(k);}return t?Math.round(c/t*100):0;}
 
-const tabDefs=[{id:'overview',label:'總覽'},{id:'math',label:'數學'},{id:'physics',label:'物理'},{id:'chem',label:'化學'},{id:'planner',label:'計畫'}];
+const tabDefs=[{id:'overview',label:'總覽'},{id:'physics',label:'物理'},{id:'chem',label:'化學'},{id:'planner',label:'計畫'}];
 function renderTabs(){document.getElementById('tabBar').innerHTML=tabDefs.map(t=>`<button class="tab ${t.id==='overview'?'active':''}" onclick="switchTab('${t.id}')">${t.label}</button>`).join('');}
 function switchTab(name){document.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));event.target.classList.add('active');document.getElementById('tab-'+name).classList.add('active');renderAll();}
 
@@ -235,7 +235,7 @@ function renderSubject(k){const s=subjects[k];const el=document.getElementById('
 
 function renderOverview(){const el=document.getElementById('tab-overview');let tt=0,td=0,tw=0,ts=0;for(const k of Object.keys(subjects))for(const c of subjects[k].chapters)for(const t of c.topics){tt++;if(state.checked[t.id])td++;if(state.confidence[t.id]===1)tw++;if(state.confidence[t.id]===3)ts++;}
 let h=`<div class="stats-row"><div class="stat-item"><div class="stat-num">${tt}</div><div class="stat-label">總主題</div></div><div class="stat-item"><div class="stat-num">${td}</div><div class="stat-label">已完成</div></div><div class="stat-item"><div class="stat-num">${tw}</div><div class="stat-label">不熟</div></div><div class="stat-item"><div class="stat-num">${ts}</div><div class="stat-label">熟練</div></div><div class="stat-item"><div class="stat-num">${tt-td}</div><div class="stat-label">待完成</div></div></div>`;
-h+='<div class="chart-section"><div class="chart-title">各章節完成度</div><div class="bar-chart">';for(const[k,s]of Object.entries(subjects))for(const c of s.chapters){const d=c.topics.filter(t=>state.checked[t.id]).length,t=c.topics.length,p=t?Math.round(d/t*100):0,nm=c.title.replace(/[：:]/g,'\n').split('\n')[0].replace(/（.*?）/,'').trim().slice(0,5);h+=`<div class="bar-col"><div class="bar-area"><div class="bar-val">${p}%</div><div class="bar" style="height:${Math.max(p*1,2)}px"></div></div><div class="bar-lbl">${nm}</div></div>`;}h+='</div></div>';
+h+='<div class="chart-section"><div class="chart-title">各章節完成度</div><div class="bar-chart">';for(const[k,s]of Object.entries(subjects))for(const c of s.chapters){const d=c.topics.filter(t=>state.checked[t.id]).length,t=c.topics.length,p=t?Math.round(d/t*100):0,nm=c.title.replace(/[：:]/g,'\n').split('\n')[0].replace(/（.*?）/,'').trim().slice(0,6);h+=`<div class="bar-col"><div class="bar-area"><div class="bar-val">${p}%</div><div class="bar" style="height:${Math.max(p*1,2)}px"></div></div><div class="bar-lbl">${nm}</div></div>`;}h+='</div></div>';
 const weak=[];for(const[k,s]of Object.entries(subjects))for(const c of s.chapters)for(const t of c.topics)if(state.confidence[t.id]===1)weak.push({...t,subj:s.name});
 if(weak.length){h+='<div class="section-title">需加強</div>';for(const w of weak)h+=`<div class="weak-item"><span class="weak-dot"></span><div><div>${w.name}</div><div class="weak-sub">${w.subj}</div></div></div>`;}el.innerHTML=h;}
 
@@ -249,7 +249,7 @@ function resetAll(){if(confirm('確定重設？')){state.checked={};state.confid
 function updateCountdown(){const el=document.getElementById('countdown'),nav=document.getElementById('navCountdown');if(!state.examDate){el.textContent='';nav.textContent='';return;}document.getElementById('examDate').value=state.examDate;const d=Math.ceil((new Date(state.examDate)-new Date())/864e5);if(d>0){el.textContent=`還剩 ${d} 天`;nav.textContent=`D-${d}`;}else if(d===0){el.textContent='今天考試';nav.textContent='TODAY';}else{el.textContent='已結束';nav.textContent='';}}
 document.getElementById('examDate').addEventListener('change',e=>{state.examDate=e.target.value;saveState();updateCountdown();renderPlanner();});
 
-function renderAll(){renderSummary();renderOverview();renderSubject('math');renderSubject('physics');renderSubject('chem');renderPlanner();updateCountdown();}
+function renderAll(){renderSummary();renderOverview();renderSubject('physics');renderSubject('chem');renderPlanner();updateCountdown();}
 renderTabs();renderAll();
 </script>
 </body>
