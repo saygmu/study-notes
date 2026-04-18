@@ -242,7 +242,7 @@ const subjects={physics:{name:'選修物理',color:'physics',chapters:[{title:'I
 const STORAGE_KEY='studyDashboard-114-2-3';
 let state=JSON.parse(localStorage.getItem(STORAGE_KEY)||'{}');
 if(!state.checked)state.checked={};if(!state.confidence)state.confidence={};if(!state.examDate)state.examDate='2026-04-27';
-function saveState(){localStorage.setItem(STORAGE_KEY,JSON.stringify(state));}
+function saveState(){localStorage.setItem(STORAGE_KEY,JSON.stringify(state));autoSync();}
 function allTopics(k){return subjects[k].chapters.flatMap(c=>c.topics);}
 function checkedN(k){return allTopics(k).filter(t=>state.checked[t.id]).length;}
 function totalN(k){return allTopics(k).length;}
@@ -307,10 +307,48 @@ async function syncDownload(){
   }catch(e){msg.textContent='連線失敗，請稍後再試';}
 }
 
+let _syncTimer=null;
+function autoSync(){
+  const pin=localStorage.getItem('dashSyncPin');
+  if(!pin)return;
+  clearTimeout(_syncTimer);
+  _syncTimer=setTimeout(async()=>{
+    try{
+      await fetch(SYNC_API+'/sync',{method:'POST',headers:{'Content-Type':'application/json','X-Pin':pin},body:JSON.stringify(state)});
+      document.getElementById('syncMsg').textContent='已自動同步 '+new Date().toLocaleTimeString('zh-TW',{hour:'2-digit',minute:'2-digit'});
+    }catch(e){}
+  },800);
+}
+
+async function autoLoad(){
+  const pin=localStorage.getItem('dashSyncPin');
+  if(!pin)return;
+  document.getElementById('syncPin').value=pin;
+  try{
+    const res=await fetch(SYNC_API+'/sync',{headers:{'X-Pin':pin}});
+    const data=await res.json();
+    if(data.found){
+      const remote=data.data;
+      const localCount=Object.keys(state.checked).filter(k=>state.checked[k]).length;
+      const remoteCount=Object.keys(remote.checked||{}).filter(k=>remote.checked[k]).length;
+      if(remoteCount>localCount){
+        if(remote.checked)state.checked=remote.checked;
+        if(remote.confidence)state.confidence=remote.confidence;
+        if(remote.examDate)state.examDate=remote.examDate;
+        localStorage.setItem(STORAGE_KEY,JSON.stringify(state));
+        renderAll();
+        document.getElementById('syncMsg').textContent='已從雲端同步最新進度';
+      }else{
+        document.getElementById('syncMsg').textContent='本地進度是最新的';
+      }
+    }
+  }catch(e){}
+}
+
 (function restorePin(){const p=localStorage.getItem('dashSyncPin');if(p)document.getElementById('syncPin').value=p;})();
 
 function renderAll(){renderSummary();renderOverview();renderSubject('physics');renderSubject('chem');renderPlanner();updateCountdown();}
-renderTabs();renderAll();
+renderTabs();renderAll();autoLoad();
 </script>
 </body>
 </html>
