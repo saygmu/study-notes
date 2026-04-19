@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <script src="../theme.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>有機化合物 1-5～1-10</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🧪%3C/text%3E%3C/svg%3E">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600&family=Noto+Sans+TC:wght@300;400;500&display=swap');
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { overflow-x: hidden; }
+    body { font-family: 'Noto Sans TC', sans-serif; font-weight: 300; background: var(--bg); color: var(--text); line-height: 2; font-size: 16px; transition: all 0.3s ease; }
+    .container { max-width: 720px; margin: 0 auto; padding: 60px 24px; }
+    nav { position: fixed; top: 0; left: 0; right: 0; background: var(--bg); border-bottom: 1px solid var(--border); padding: 16px 24px; display: flex; justify-content: space-between; align-items: center; z-index: 100; font-size: 14px; }
+    nav a { color: var(--muted); text-decoration: none; }
+    nav a:hover { color: var(--text); }
+    .nav-actions { display: flex; gap: 20px; }
+    .nav-actions button { background: none; border: none; color: var(--muted); cursor: pointer; font-size: 14px; font-family: inherit; }
+    .nav-actions button:hover { color: var(--text); }
+    h1 { font-family: 'Noto Serif TC', serif; font-weight: 600; font-size: 2.2rem; margin: 40px 0 16px; letter-spacing: 2px; }
+    .subtitle { color: var(--muted); margin-bottom: 60px; font-size: 14px; }
+    h2 { font-family: 'Noto Serif TC', serif; font-weight: 600; font-size: 1.25rem; margin: 60px 0 24px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+    h3 { font-weight: 500; font-size: 1rem; margin: 32px 0 16px; color: var(--muted); }
+    p { margin-bottom: 16px; }
+    .formula { border: 1px solid var(--border); border-radius: 8px; padding: 24px; text-align: center; background: var(--card); margin: 24px 0; overflow-x: auto; }
+    .formula.left-align { text-align: left; }
+    .formula-note { font-size: 0.85rem; color: var(--muted); margin-top: 12px; }
+    .note { border-left: 2px solid var(--accent); padding: 16px 20px; margin: 24px 0; background: var(--card); }
+    .note-title { font-weight: 500; margin-bottom: 8px; color: var(--accent); }
+    .summary { border: 1px solid var(--border); border-radius: 12px; padding: 32px; margin: 40px 0; background: var(--card); }
+    .summary h3 { margin-top: 0; color: var(--text); }
+    .table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    table { width: 100%; border-collapse: collapse; margin: 24px 0; font-size: 15px; min-width: 400px; }
+    th, td { padding: 12px 16px; text-align: left; border-bottom: 1px solid var(--border); }
+    th { font-weight: 400; color: var(--muted); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; }
+    ul, ol { margin: 16px 0 16px 24px; }
+    li { margin-bottom: 8px; }
+    .comparison { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin: 24px 0; }
+    .comparison-item { padding: 20px; border: 1px solid var(--border); border-radius: 8px; background: var(--card); }
+    .comparison-item h4 { font-weight: 500; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+    .example { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 20px; margin: 20px 0; }
+    .example-title { font-weight: 500; color: var(--accent); margin-bottom: 12px; }
+    footer { margin-top: 80px; padding-top: 24px; border-top: 1px solid var(--border); color: var(--muted); font-size: 13px; }
+    .toc { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 24px 32px; margin: 32px 0; }
+    .toc h3 { margin-top: 0; color: var(--text); font-weight: 500; }
+    .toc ul { list-style: none; padding: 0; margin: 12px 0 0; }
+    .toc li { margin: 6px 0; }
+    .toc a { color: var(--text); text-decoration: none; border-bottom: 1px dashed var(--border); }
+    .toc a:hover { color: var(--accent); border-color: var(--accent); }
+    @media (max-width: 600px) { h1 { font-size: 1.75rem; } .container { padding: 60px 16px; } .comparison { grid-template-columns: 1fr; } .formula { padding: 16px 12px; font-size: 14px; } .katex { font-size: 0.9em; } }
+    @media print { nav { display: none; } .container { padding: 20px; } }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="../index.html">&larr; 返回</a>
+    <div class="nav-actions">
+      <button onclick="window.print()">列印</button>
+    </div>
+  </nav>
+
+  <div class="container">
+    <h1>有機化合物（下）</h1>
+    <p class="subtitle">1-5 芳香烴 ～ 1-10 胺與醯胺 &middot; 段考複習</p>
+
+    <div class="toc">
+      <h3>目錄</h3>
+      <ul>
+        <li><a href="#sec5">1-5 芳香烴</a></li>
+        <li><a href="#sec6">1-6 官能基與有機鹵化烴</a></li>
+        <li><a href="#sec7">1-7 醇、醚與酚</a></li>
+        <li><a href="#sec8">1-8 醛與酮</a></li>
+        <li><a href="#sec9">1-9 羧酸與酯</a></li>
+        <li><a href="#sec10">1-10 胺與醯胺</a></li>
+      </ul>
+    </div>
+
+    <!-- ======================== 1-5 芳香烴 ======================== -->
+    <h2 id="sec5">1-5 芳香烴</h2>
+
+    <h3>苯的結構</h3>
+    <p>分子式 $\text{C}_6\text{H}_6$，六個碳形成<mark>平面正六邊形</mark>，鍵角 120°。碳碳鍵等長（0.139 nm），介於單鍵（0.154）與雙鍵（0.134）之間，屬<mark>共振結構</mark>（離域 π 電子）。</p>
+
+    <div class="note">
+      <div class="note-title">凱庫勒結構 vs 共振</div>
+      苯不是「交替的單鍵和雙鍵」，而是六個 π 電子均勻分布在環上。因此苯的化學性質以<strong>取代反應</strong>為主，而非加成反應（不易破壞穩定的芳香環）。
+    </div>
+
+    <h3>苯的性質</h3>
+    <ul>
+      <li>無色液體，有特殊氣味，<mark>有毒</mark>（致癌物）</li>
+      <li>不溶於水，密度小於水（$\rho = 0.879\text{ g/mL}$）</li>
+      <li>良好的有機溶劑</li>
+      <li>燃燒時火焰明亮且多煙（含碳比高）</li>
+    </ul>
+
+    <h3>苯的反應</h3>
+    <p><strong>取代反應</strong>（主要反應類型）：</p>
+    <div class="formula">
+      $$\text{C}_6\text{H}_6 + \text{Br}_2 \xrightarrow{\text{FeBr}_3} \text{C}_6\text{H}_5\text{Br} + \text{HBr}$$
+      <div class="formula-note">溴化反應，需催化劑 FeBr₃</div>
+    </div>
+    <div class="formula">
+      $$\text{C}_6\text{H}_6 + \text{HNO}_3 \xrightarrow{\text{H}_2\text{SO}_4} \text{C}_6\text{H}_5\text{NO}_2 + \text{H}_2\text{O}$$
+      <div class="formula-note">硝化反應，混酸（濃硫酸+濃硝酸）</div>
+    </div>
+    <div class="formula">
+      $$\text{C}_6\text{H}_6 + \text{CH}_3\text{Cl} \xrightarrow{\text{AlCl}_3} \text{C}_6\text{H}_5\text{CH}_3 + \text{HCl}$$
+      <div class="formula-note">弗瑞乳–乖夫茲烷基化反應（Friedel-Crafts）</div>
+    </div>
+
+    <p><strong>加成反應</strong>（特殊條件下）：</p>
+    <div class="formula">
+      $$\text{C}_6\text{H}_6 + 3\text{H}_2 \xrightarrow{\text{Ni, 高溫高壓}} \text{C}_6\text{H}_{12}$$
+      <div class="formula-note">加氫生成環己烷（需高溫高壓 + 催化劑）</div>
+    </div>
+
+    <h3>常見芳香烴</h3>
+    <div class="table-wrap">
+      <table>
+        <tr><th>名稱</th><th>結構</th><th>用途</th></tr>
+        <tr><td>甲苯</td><td>$\text{C}_6\text{H}_5\text{CH}_3$</td><td>溶劑、TNT 原料</td></tr>
+        <tr><td>二甲苯</td><td>$\text{C}_6\text{H}_4(\text{CH}_3)_2$</td><td>溶劑、合成纖維原料（對二甲苯→PET）</td></tr>
+        <tr><td>萘</td><td>$\text{C}_{10}\text{H}_8$（雙環）</td><td>樟腦丸、染料中間體</td></tr>
+        <tr><td>苯乙烯</td><td>$\text{C}_6\text{H}_5\text{CH}{=}\text{CH}_2$</td><td>聚苯乙烯（PS）原料</td></tr>
+      </table>
+    </div>
+
+    <div class="note">
+      <div class="note-title">鄰、間、對位</div>
+      雙取代苯有三種異構物：<strong>鄰位</strong>（ortho, 1,2）、<strong>間位</strong>（meta, 1,3）、<strong>對位</strong>（para, 1,4）。
+    </div>
+
+    <!-- ======================== 1-6 官能基與有機鹵化烴 ======================== -->
+    <h2 id="sec6">1-6 官能基與有機鹵化烴</h2>
+
+    <h3>官能基總覽</h3>
+    <div class="table-wrap">
+      <table>
+        <tr><th>官能基</th><th>結構</th><th>代表類別</th><th>範例</th></tr>
+        <tr><td>碳碳雙鍵</td><td>$\text{C}{=}\text{C}$</td><td>烯</td><td>乙烯</td></tr>
+        <tr><td>碳碳參鍵</td><td>$\text{C}{\equiv}\text{C}$</td><td>炔</td><td>乙炔</td></tr>
+        <tr><td>鹵素</td><td>$\text{-X}$（F, Cl, Br, I）</td><td>鹵化烴</td><td>氯甲烷</td></tr>
+        <tr><td>羥基</td><td>$\text{-OH}$</td><td>醇、酚</td><td>乙醇、酚</td></tr>
+        <tr><td>醚鍵</td><td>$\text{-O-}$</td><td>醚</td><td>乙醚</td></tr>
+        <tr><td>醛基</td><td>$\text{-CHO}$</td><td>醛</td><td>甲醛</td></tr>
+        <tr><td>酮基</td><td>$\text{>C=O}$</td><td>酮</td><td>丙酮</td></tr>
+        <tr><td>羧基</td><td>$\text{-COOH}$</td><td>羧酸</td><td>醋酸</td></tr>
+        <tr><td>酯基</td><td>$\text{-COO-}$</td><td>酯</td><td>乙酸乙酯</td></tr>
+        <tr><td>胺基</td><td>$\text{-NH}_2$</td><td>胺</td><td>甲胺</td></tr>
+        <tr><td>醯胺鍵</td><td>$\text{-CONH-}$</td><td>醯胺</td><td>尿素</td></tr>
+      </table>
+    </div>
+
+    <h3>有機鹵化烴</h3>
+    <p>烴類中的氫被鹵素取代而成。通式 $\text{R-X}$（X = F, Cl, Br, I）。</p>
+    <ul>
+      <li><strong>製備</strong>：烷類 + 鹵素（光照或高溫）→ 鹵化烴 + HX</li>
+      <li><strong>性質</strong>：沸點隨碳數增加而升高，密度通常 > 水</li>
+    </ul>
+
+    <p><strong>常見鹵化烴：</strong></p>
+    <div class="table-wrap">
+      <table>
+        <tr><th>名稱</th><th>分子式</th><th>用途 / 特性</th></tr>
+        <tr><td>氯仿（三氯甲烷）</td><td>$\text{CHCl}_3$</td><td>早期麻醉劑、有機溶劑</td></tr>
+        <tr><td>四氯化碳</td><td>$\text{CCl}_4$</td><td>滅火劑、溶劑（有毒，已限用）</td></tr>
+        <tr><td>氟氯碳化物（CFCs）</td><td>如 $\text{CCl}_2\text{F}_2$</td><td>曾用冷媒，破壞臭氧層</td></tr>
+        <tr><td>鐵氟龍（PTFE）</td><td>$(\text{CF}_2\text{CF}_2)_n$</td><td>不沾鍋塗層、耐化學性</td></tr>
+        <tr><td>PVC（聚氯乙烯）</td><td>$(\text{CH}_2\text{CHCl})_n$</td><td>塑膠管、雨衣</td></tr>
+      </table>
+    </div>
+
+    <div class="note">
+      <div class="note-title">環保議題</div>
+      CFCs 在平流層經紫外線分解釋出 Cl 自由基，催化分解 $\text{O}_3$，導致臭氧層破洞。《蒙特婁議定書》已全面禁用。
+    </div>
+
+    <!-- ======================== 1-7 醇、醚與酚 ======================== -->
+    <h2 id="sec7">1-7 醇、醚與酚</h2>
+
+    <h3>醇（Alcohol）</h3>
+    <p>通式 $\text{R-OH}$。OH 接在<mark>飽和碳</mark>上。</p>
+
+    <p><strong>分類：</strong></p>
+    <ul>
+      <li><strong>一級醇</strong>（1°）：OH 所接的碳連 1 個碳（$\text{RCH}_2\text{OH}$）</li>
+      <li><strong>二級醇</strong>（2°）：OH 所接的碳連 2 個碳（$\text{R}_2\text{CHOH}$）</li>
+      <li><strong>三級醇</strong>（3°）：OH 所接的碳連 3 個碳（$\text{R}_3\text{COH}$）</li>
+    </ul>
+
+    <p><strong>常見醇類：</strong></p>
+    <div class="table-wrap">
+      <table>
+        <tr><th>名稱</th><th>分子式</th><th>特性</th></tr>
+        <tr><td>甲醇</td><td>$\text{CH}_3\text{OH}$</td><td>有毒（失明甚至致死）、木精</td></tr>
+        <tr><td>乙醇</td><td>$\text{C}_2\text{H}_5\text{OH}$</td><td>酒精、消毒（75%）、燃料</td></tr>
+        <tr><td>乙二醇</td><td>$\text{HOCH}_2\text{CH}_2\text{OH}$</td><td>防凍劑（二元醇）</td></tr>
+        <tr><td>丙三醇（甘油）</td><td>$\text{C}_3\text{H}_5(\text{OH})_3$</td><td>保濕劑、炸藥原料（三元醇）</td></tr>
+      </table>
+    </div>
+
+    <p><strong>醇的反應：</strong></p>
+    <div class="formula">
+      $$\text{C}_2\text{H}_5\text{OH} \xrightarrow[\text{180°C}]{\text{濃 H}_2\text{SO}_4} \text{CH}_2{=}\text{CH}_2 + \text{H}_2\text{O}$$
+      <div class="formula-note">分子內脫水 → 烯類（高溫）</div>
+    </div>
+    <div class="formula">
+      $$2\text{C}_2\text{H}_5\text{OH} \xrightarrow[\text{140°C}]{\text{濃 H}_2\text{SO}_4} \text{C}_2\text{H}_5\text{OC}_2\text{H}_5 + \text{H}_2\text{O}$$
+      <div class="formula-note">分子間脫水 → 醚類（低溫）</div>
+    </div>
+    <div class="formula">
+      $$\text{醇} \xrightarrow{\text{氧化}} \text{1° → 醛 → 羧酸};\quad \text{2° → 酮};\quad \text{3° → 不易氧化}$$
+      <div class="formula-note">氧化程度取決於醇的級數</div>
+    </div>
+
+    <div class="note">
+      <div class="note-title">溫度決定產物</div>
+      濃硫酸 + 乙醇：<strong>140°C → 醚</strong>（分子間脫水）、<strong>180°C → 烯</strong>（分子內脫水）。口訣：「<mark>一四醚、一八烯</mark>」。
+    </div>
+
+    <h3>醚（Ether）</h3>
+    <p>通式 $\text{R-O-R'}$。兩個烴基接在同一個氧上。</p>
+    <ul>
+      <li><mark>不含氫鍵的給體</mark>，沸點比同碳數醇低很多</li>
+      <li>化學性質穩定，常作有機溶劑</li>
+      <li><strong>乙醚</strong>（$\text{C}_2\text{H}_5\text{OC}_2\text{H}_5$）：早期麻醉劑，易燃，蒸氣密度大於空氣</li>
+    </ul>
+
+    <h3>酚（Phenol）</h3>
+    <p>OH 直接接在<mark>苯環</mark>上：$\text{C}_6\text{H}_5\text{OH}$。</p>
+    <ul>
+      <li><strong>弱酸性</strong>：可與 NaOH 反應（醇不行）</li>
+      <li>遇 $\text{FeCl}_3$ 呈<mark>紫色</mark>（鑑別反應）</li>
+      <li>有殺菌力（石碳酸），用於消毒</li>
+    </ul>
+
+    <div class="formula">
+      $$\text{C}_6\text{H}_5\text{OH} + \text{NaOH} \rightarrow \text{C}_6\text{H}_5\text{ONa} + \text{H}_2\text{O}$$
+      <div class="formula-note">酚 + 強鹼 → 酚鈉 + 水（醇無此反應）</div>
+    </div>
+
+    <div class="summary">
+      <h3>醇 vs 酚 比較</h3>
+      <div class="table-wrap">
+        <table>
+          <tr><th></th><th>醇</th><th>酚</th></tr>
+          <tr><td>OH 位置</td><td>接在飽和碳</td><td>接在苯環碳</td></tr>
+          <tr><td>酸性</td><td>中性</td><td>弱酸性</td></tr>
+          <tr><td>與 NaOH</td><td>不反應</td><td>反應</td></tr>
+          <tr><td>FeCl₃ 呈色</td><td>無</td><td>紫色</td></tr>
+          <tr><td>與 Na</td><td>反應放 H₂</td><td>反應放 H₂</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <!-- ======================== 1-8 醛與酮 ======================== -->
+    <h2 id="sec8">1-8 醛與酮</h2>
+
+    <p>兩者都含有<mark>羰基</mark>（$\text{C}{=}\text{O}$），差別在於羰基碳上的取代基。</p>
+
+    <div class="comparison">
+      <div class="comparison-item">
+        <h4>醛（Aldehyde）</h4>
+        <p>通式 $\text{RCHO}$</p>
+        <p>羰基碳至少接一個 H</p>
+        <p>可被<strong>氧化</strong>為羧酸</p>
+      </div>
+      <div class="comparison-item">
+        <h4>酮（Ketone）</h4>
+        <p>通式 $\text{RCOR'}$</p>
+        <p>羰基碳兩側都是烴基</p>
+        <p><strong>不易被氧化</strong></p>
+      </div>
+    </div>
+
+    <h3>常見醛、酮</h3>
+    <div class="table-wrap">
+      <table>
+        <tr><th>名稱</th><th>分子式</th><th>特性 / 用途</th></tr>
+        <tr><td>甲醛</td><td>$\text{HCHO}$</td><td>37% 水溶液 = 福馬林（防腐）、致癌；合成酚醛樹脂</td></tr>
+        <tr><td>乙醛</td><td>$\text{CH}_3\text{CHO}$</td><td>酒精代謝中間物、合成醋酸原料</td></tr>
+        <tr><td>丙酮</td><td>$\text{CH}_3\text{COCH}_3$</td><td>最簡單的酮、去光水、有機溶劑</td></tr>
+      </table>
+    </div>
+
+    <h3>醛的鑑別反應</h3>
+    <p><strong>多倫試驗（銀鏡反應）：</strong></p>
+    <div class="formula">
+      $$\text{RCHO} + 2[\text{Ag(NH}_3)_2]^+ + 2\text{OH}^- \rightarrow \text{RCOO}^- + 2\text{Ag}\downarrow + 3\text{NH}_3 + \text{H}_2\text{O}$$
+      <div class="formula-note">醛被氧化為羧酸根，Ag⁺ 被還原為銀鏡</div>
+    </div>
+
+    <p><strong>斐林試驗：</strong></p>
+    <div class="formula">
+      $$\text{RCHO} + 2\text{Cu}^{2+} + 5\text{OH}^- \rightarrow \text{RCOO}^- + \text{Cu}_2\text{O}\downarrow\text{（磚紅色）} + 3\text{H}_2\text{O}$$
+      <div class="formula-note">醛使 Cu²⁺ 還原為 Cu₂O 磚紅色沉澱</div>
+    </div>
+
+    <div class="note">
+      <div class="note-title">醛 vs 酮 鑑別</div>
+      <strong>醛</strong>可進行銀鏡反應和斐林試驗（因為可被氧化）；<strong>酮</strong>不行。這是最重要的鑑別方式。
+    </div>
+
+    <!-- ======================== 1-9 羧酸與酯 ======================== -->
+    <h2 id="sec9">1-9 羧酸與酯</h2>
+
+    <h3>羧酸（Carboxylic Acid）</h3>
+    <p>通式 $\text{R-COOH}$。含有<mark>羧基</mark>（$\text{-COOH}$），為有機酸。</p>
+
+    <div class="table-wrap">
+      <table>
+        <tr><th>名稱</th><th>分子式</th><th>特性</th></tr>
+        <tr><td>甲酸（蟻酸）</td><td>$\text{HCOOH}$</td><td>蟻蟲分泌、有刺激性、<mark>兼具醛基</mark>可銀鏡反應</td></tr>
+        <tr><td>乙酸（醋酸）</td><td>$\text{CH}_3\text{COOH}$</td><td>食醋成分（3-5%）、冰醋酸（純，mp 16.6°C）</td></tr>
+        <tr><td>草酸</td><td>$\text{(COOH)}_2$</td><td>二元酸、除鏽、有毒</td></tr>
+        <tr><td>苯甲酸</td><td>$\text{C}_6\text{H}_5\text{COOH}$</td><td>食品防腐劑</td></tr>
+      </table>
+    </div>
+
+    <p><strong>酸性比較：</strong></p>
+    <div class="formula">
+      $$\text{強無機酸} > \text{羧酸（弱酸）} > \text{碳酸} > \text{酚} > \text{醇（中性）}$$
+      <div class="formula-note">酸性由強到弱排列</div>
+    </div>
+
+    <div class="note">
+      <div class="note-title">甲酸的特殊性</div>
+      甲酸結構中同時含有<strong>醛基</strong>和<strong>羧基</strong>（$\text{H-COOH}$），因此既有羧酸性質，也能進行銀鏡反應和斐林試驗。
+    </div>
+
+    <h3>酯（Ester）</h3>
+    <p>羧酸 + 醇 → 酯 + 水（酯化反應）：</p>
+    <div class="formula">
+      $$\text{R-COOH} + \text{R'-OH} \xrightleftharpoons[\text{水解}]{\text{H}^+, \Delta} \text{R-COOR'} + \text{H}_2\text{O}$$
+      <div class="formula-note">酯化反應為可逆反應，加酸催化</div>
+    </div>
+
+    <ul>
+      <li>酯類通常有<mark>水果香味</mark></li>
+      <li>不溶於水，密度小於水</li>
+      <li>沸點比同碳數羧酸、醇低（無法形成氫鍵）</li>
+    </ul>
+
+    <p><strong>皂化反應</strong>（酯的鹼性水解）：</p>
+    <div class="formula">
+      $$\text{油脂} + 3\text{NaOH} \xrightarrow{\Delta} 3\text{肥皂（脂肪酸鈉）} + \text{甘油}$$
+      <div class="formula-note">油脂 = 高級脂肪酸 + 甘油的酯</div>
+    </div>
+
+    <div class="example">
+      <div class="example-title">常見酯類香味</div>
+      <table>
+        <tr><th>酯</th><th>香味</th></tr>
+        <tr><td>乙酸異戊酯</td><td>香蕉</td></tr>
+        <tr><td>丁酸乙酯</td><td>鳳梨</td></tr>
+        <tr><td>乙酸辛酯</td><td>橘子</td></tr>
+        <tr><td>水楊酸甲酯</td><td>冬青（撒隆巴斯）</td></tr>
+      </table>
+    </div>
+
+    <div class="note">
+      <div class="note-title">阿斯匹靈</div>
+      乙醯水楊酸（$\text{aspirin}$）= 水楊酸（酚類）+ 醋酸的酯化產物。具解熱鎮痛作用。
+    </div>
+
+    <!-- ======================== 1-10 胺與醯胺 ======================== -->
+    <h2 id="sec10">1-10 胺與醯胺</h2>
+
+    <h3>胺（Amine）</h3>
+    <p>可視為氨（$\text{NH}_3$）的氫被烴基取代：</p>
+
+    <div class="table-wrap">
+      <table>
+        <tr><th>分類</th><th>通式</th><th>範例</th></tr>
+        <tr><td>一級胺（1°）</td><td>$\text{R-NH}_2$</td><td>甲胺 $\text{CH}_3\text{NH}_2$</td></tr>
+        <tr><td>二級胺（2°）</td><td>$\text{R}_2\text{NH}$</td><td>二甲胺 $(\text{CH}_3)_2\text{NH}$</td></tr>
+        <tr><td>三級胺（3°）</td><td>$\text{R}_3\text{N}$</td><td>三甲胺 $(\text{CH}_3)_3\text{N}$</td></tr>
+      </table>
+    </div>
+
+    <ul>
+      <li>胺類為<mark>鹼性</mark>（氮上有孤對電子，可接受 $\text{H}^+$）</li>
+      <li>低碳數胺有魚腥味（三甲胺為魚腥味來源）</li>
+      <li>可與酸反應生成胺鹽：$\text{R-NH}_2 + \text{HCl} \rightarrow \text{R-NH}_3^+\text{Cl}^-$</li>
+    </ul>
+
+    <div class="note">
+      <div class="note-title">生物中的胺</div>
+      胺基酸含有胺基（$\text{-NH}_2$）和羧基（$\text{-COOH}$），是蛋白質的基本單元。生物鹼（如咖啡因、嗎啡、尼古丁）也都含有胺基結構。
+    </div>
+
+    <h3>醯胺（Amide）</h3>
+    <p>羧酸 + 胺 → 醯胺 + 水（脫水縮合）。含有<mark>醯胺鍵</mark> $\text{-CO-NH-}$。</p>
+
+    <div class="formula">
+      $$\text{R-COOH} + \text{H}_2\text{N-R'} \xrightarrow{\Delta} \text{R-CONH-R'} + \text{H}_2\text{O}$$
+      <div class="formula-note">醯胺鍵（肽鍵）的形成</div>
+    </div>
+
+    <p><strong>重要醯胺：</strong></p>
+    <ul>
+      <li><strong>尿素</strong>（$\text{(NH}_2)_2\text{CO}$）：人體蛋白質代謝終產物，化肥原料。歷史意義：1828 年維勒首次從無機物合成有機物（顛覆「生命力」說）</li>
+      <li><strong>蛋白質</strong>中的<mark>肽鍵</mark>（$\text{-CO-NH-}$）即醯胺鍵</li>
+      <li><strong>耐綸（Nylon）</strong>：己二酸 + 己二胺 → 聚醯胺（合成纖維）</li>
+    </ul>
+
+    <div class="note">
+      <div class="note-title">醯胺鍵 = 肽鍵</div>
+      胺基酸之間透過脫水形成的 $\text{-CO-NH-}$ 鍵就是肽鍵。兩個胺基酸 → 二肽 + 水；多個 → 多肽 → 蛋白質。
+    </div>
+
+    <!-- ======================== 總整理 ======================== -->
+    <h2>總整理：氧化程度與轉化關係</h2>
+
+    <div class="formula left-align">
+      $$\text{烴} \xrightarrow{\text{鹵化}} \text{鹵化烴} \xrightarrow{\text{水解}} \text{醇}$$
+      $$\text{1° 醇} \xrightarrow{[\text{O}]} \text{醛} \xrightarrow{[\text{O}]} \text{羧酸}$$
+      $$\text{2° 醇} \xrightarrow{[\text{O}]} \text{酮}$$
+      $$\text{羧酸} + \text{醇} \xrightarrow{} \text{酯}$$
+      $$\text{羧酸} + \text{胺} \xrightarrow{} \text{醯胺}$$
+      <div class="formula-note">有機化合物的氧化層級與互相轉化關係</div>
+    </div>
+
+    <div class="summary">
+      <h3>沸點比較原則</h3>
+      <p>同碳數下：</p>
+      <div class="formula">$$\text{羧酸} > \text{醇} > \text{醛/酮} \approx \text{醚/酯} > \text{烴}$$</div>
+      <ul>
+        <li><strong>羧酸</strong>：雙分子氫鍵（二聚體），沸點最高</li>
+        <li><strong>醇</strong>：分子間氫鍵</li>
+        <li><strong>醛/酮</strong>：極性，但無法自身形成氫鍵</li>
+        <li><strong>醚/酯</strong>：極性較弱</li>
+        <li><strong>烴</strong>：僅凡得瓦力</li>
+      </ul>
+    </div>
+
+    <div class="summary">
+      <h3>鑑別方法速查</h3>
+      <div class="table-wrap">
+        <table>
+          <tr><th>試劑 / 方法</th><th>能鑑別什麼</th><th>現象</th></tr>
+          <tr><td>$\text{FeCl}_3$</td><td>酚</td><td>紫色</td></tr>
+          <tr><td>Na 金屬</td><td>含活性 H（醇、酚、羧酸）</td><td>產生 $\text{H}_2$</td></tr>
+          <tr><td>NaOH</td><td>酚、羧酸（不含醇）</td><td>溶解</td></tr>
+          <tr><td>$\text{NaHCO}_3$</td><td>羧酸（不含酚）</td><td>冒泡（$\text{CO}_2$）</td></tr>
+          <tr><td>銀鏡反應</td><td>醛、甲酸</td><td>銀鏡</td></tr>
+          <tr><td>斐林試驗</td><td>醛、甲酸</td><td>磚紅色沉澱</td></tr>
+          <tr><td>石蕊試紙</td><td>羧酸（酸性）、胺（鹼性）</td><td>變色</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <footer>2026.04.19 · 段考複習用</footer>
+  </div>
+
+  <script src="../theme-effects.js"></script>
+</body>
+</html>
