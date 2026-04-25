@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <script src="../theme.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>有機化合物大表 1-5～1-10</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E📊%3C/text%3E%3C/svg%3E">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600&family=Noto+Sans+TC:wght@300;400;500&display=swap');
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { overflow-x: hidden; }
+    body { font-family: 'Noto Sans TC', sans-serif; font-weight: 300; background: var(--bg); color: var(--text); line-height: 2; font-size: 16px; transition: all 0.3s ease; }
+    .container { max-width: 880px; margin: 0 auto; padding: 60px 24px; }
+    nav { position: fixed; top: 0; left: 0; right: 0; background: var(--bg); border-bottom: 1px solid var(--border); padding: 16px 24px; display: flex; justify-content: space-between; align-items: center; z-index: 100; font-size: 14px; }
+    nav a { color: var(--muted); text-decoration: none; }
+    nav a:hover { color: var(--text); }
+    .nav-actions { display: flex; gap: 20px; }
+    .nav-actions button { background: none; border: none; color: var(--muted); cursor: pointer; font-size: 14px; font-family: inherit; }
+    .nav-actions button:hover { color: var(--text); }
+    h1 { font-family: 'Noto Serif TC', serif; font-weight: 600; font-size: 2.2rem; margin: 40px 0 16px; letter-spacing: 2px; }
+    .subtitle { color: var(--muted); margin-bottom: 60px; font-size: 14px; }
+    h2 { font-family: 'Noto Serif TC', serif; font-weight: 600; font-size: 1.25rem; margin: 60px 0 24px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+    h3 { font-weight: 500; font-size: 1rem; margin: 32px 0 16px; color: var(--muted); }
+    p { margin-bottom: 16px; }
+    .formula { border: 1px solid var(--border); border-radius: 8px; padding: 24px; text-align: center; background: var(--card); margin: 24px 0; overflow-x: auto; }
+    .formula.left-align { text-align: left; }
+    .formula-note { font-size: 0.85rem; color: var(--muted); margin-top: 12px; }
+    .note { border-left: 2px solid var(--accent); padding: 16px 20px; margin: 24px 0; background: var(--card); }
+    .note-title { font-weight: 500; margin-bottom: 8px; color: var(--accent); }
+    .summary { border: 1px solid var(--border); border-radius: 12px; padding: 32px; margin: 40px 0; background: var(--card); }
+    .summary h3 { margin-top: 0; color: var(--text); }
+    .table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    table { width: 100%; border-collapse: collapse; margin: 24px 0; font-size: 14px; min-width: 640px; }
+    th, td { padding: 10px 12px; text-align: left; border-bottom: 1px solid var(--border); vertical-align: top; }
+    th { font-weight: 500; color: var(--muted); font-size: 0.8rem; letter-spacing: 0.5px; background: var(--card); position: sticky; top: 0; }
+    table.compact td, table.compact th { padding: 8px 10px; }
+    table.center td, table.center th { text-align: center; }
+    ul, ol { margin: 16px 0 16px 24px; }
+    li { margin-bottom: 8px; }
+    mark { background: var(--highlight, rgba(255,220,100,0.35)); padding: 0 4px; border-radius: 3px; }
+    .toc { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 24px 32px; margin: 32px 0; }
+    .toc h3 { margin-top: 0; color: var(--text); font-weight: 500; }
+    .toc ul { list-style: none; padding: 0; margin: 12px 0 0; }
+    .toc li { margin: 6px 0; }
+    .toc a { color: var(--text); text-decoration: none; border-bottom: 1px dashed var(--border); }
+    .toc a:hover { color: var(--accent); border-color: var(--accent); }
+    .pill { display: inline-block; padding: 1px 8px; border: 1px solid var(--border); border-radius: 999px; font-size: 0.78rem; color: var(--muted); margin-right: 4px; }
+    footer { margin-top: 80px; padding-top: 24px; border-top: 1px solid var(--border); color: var(--muted); font-size: 13px; }
+    @media (max-width: 600px) { h1 { font-size: 1.75rem; } .container { padding: 60px 16px; } .formula { padding: 16px 12px; font-size: 14px; } .katex { font-size: 0.9em; } table { font-size: 13px; } th, td { padding: 8px 8px; } }
+    @media print { nav { display: none; } .container { padding: 20px; max-width: 100%; } .formula, .note, .summary, table, .toc { break-inside: avoid; } th { position: static; } }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="../index.html">&larr; 返回</a>
+    <div class="nav-actions">
+      <button onclick="window.print()">列印</button>
+    </div>
+  </nav>
+
+  <div class="container">
+    <h1>有機化合物大表</h1>
+    <p class="subtitle">1-5 芳香烴 ～ 1-10 胺與醯胺 &middot; 全章橫向比較</p>
+
+    <div class="toc">
+      <h3>目錄</h3>
+      <ul>
+        <li><a href="#master">A. 官能基總表（結構・特性・反應）</a></li>
+        <li><a href="#bp">B. 沸點 / 溶解度比較</a></li>
+        <li><a href="#acid">C. 酸鹼性比較</a></li>
+        <li><a href="#oxid">D. 氧化還原與互換鏈</a></li>
+        <li><a href="#rxn">E. 反應類型分類</a></li>
+        <li><a href="#id">F. 鑑別反應大表</a></li>
+        <li><a href="#name">G. 命名與分類規則</a></li>
+        <li><a href="#trap">H. 易混淆陷阱</a></li>
+      </ul>
+    </div>
+
+    <!-- ===================================================== -->
+    <h2 id="master">A. 官能基總表</h2>
+    <p>把 1-5～1-10 出現過的所有官能基排成一列，從左到右是：長相、命名、典型物、特性、最常考反應。</p>
+
+    <div class="table-wrap"><table>
+      <tr>
+        <th>類別</th>
+        <th>官能基</th>
+        <th>通式</th>
+        <th>命名（IUPAC）</th>
+        <th>代表物</th>
+        <th>關鍵物性</th>
+        <th>典型反應</th>
+      </tr>
+      <tr>
+        <td>芳香烴<br><span class="pill">1-5</span></td>
+        <td>苯環（共振環）</td>
+        <td>$\text{Ar-H}$</td>
+        <td>苯、甲苯、二甲苯</td>
+        <td>苯 $\text{C}_6\text{H}_6$</td>
+        <td>無色液體、有毒、不溶水、密度 0.879、共振穩定</td>
+        <td><mark>取代</mark>為主（鹵化、硝化、烷基化）</td>
+      </tr>
+      <tr>
+        <td>鹵化烴<br><span class="pill">1-6</span></td>
+        <td>$-\text{X}$</td>
+        <td>$\text{R-X}$</td>
+        <td>鹵某烷 / 某基鹵</td>
+        <td>$\text{CHCl}_3$、$\text{CCl}_4$、CFC</td>
+        <td>密度 &gt; 水（多數）、不溶水、極性弱</td>
+        <td>取代（水解 → 醇）、消去 → 烯</td>
+      </tr>
+      <tr>
+        <td>醇<br><span class="pill">1-7</span></td>
+        <td>$-\text{OH}$（接飽和 C）</td>
+        <td>$\text{R-OH}$</td>
+        <td>某醇 / -ol</td>
+        <td>$\text{CH}_3\text{OH}$、$\text{C}_2\text{H}_5\text{OH}$</td>
+        <td><mark>有氫鍵</mark>、低碳數溶於水、沸點高、中性</td>
+        <td>脫水（→ 烯/醚）、氧化（→ 醛/酮/羧酸）、酯化</td>
+      </tr>
+      <tr>
+        <td>醚<br><span class="pill">1-7</span></td>
+        <td>$-\text{O}-$</td>
+        <td>$\text{R-O-R'}$</td>
+        <td>某基某基醚</td>
+        <td>$\text{C}_2\text{H}_5\text{OC}_2\text{H}_5$ 乙醚</td>
+        <td><mark>不可作氫鍵給體</mark>、沸點低、性質穩定、易燃</td>
+        <td>常溫下幾乎不反應；強酸下可裂開</td>
+      </tr>
+      <tr>
+        <td>酚<br><span class="pill">1-7</span></td>
+        <td>$-\text{OH}$（接<mark>苯環</mark>）</td>
+        <td>$\text{Ar-OH}$</td>
+        <td>苯酚 / 某酚</td>
+        <td>$\text{C}_6\text{H}_5\text{OH}$（石碳酸）</td>
+        <td><mark>弱酸性</mark>、可溶 NaOH、殺菌</td>
+        <td>+ NaOH 成酚鈉、+ FeCl₃ 顯紫色、+ Na 放 H₂</td>
+      </tr>
+      <tr>
+        <td>醛<br><span class="pill">1-8</span></td>
+        <td>$-\text{CHO}$</td>
+        <td>$\text{R-CHO}$</td>
+        <td>某醛 / -al</td>
+        <td>HCHO 甲醛、$\text{CH}_3\text{CHO}$</td>
+        <td>羰基極性、無自身氫鍵、低碳數溶水、刺激味</td>
+        <td><mark>易氧化 → 羧酸</mark>；銀鏡、斐林反應 +</td>
+      </tr>
+      <tr>
+        <td>酮<br><span class="pill">1-8</span></td>
+        <td>$\text{C}{=}\text{O}$（兩側皆 C）</td>
+        <td>$\text{R-CO-R'}$</td>
+        <td>某酮 / -one</td>
+        <td>$\text{CH}_3\text{COCH}_3$ 丙酮</td>
+        <td>羰基極性、丙酮可溶水任意比、好溶劑</td>
+        <td><mark>不被一般氧化劑氧化</mark>；銀鏡、斐林 −</td>
+      </tr>
+      <tr>
+        <td>羧酸<br><span class="pill">1-9</span></td>
+        <td>$-\text{COOH}$</td>
+        <td>$\text{R-COOH}$</td>
+        <td>某酸 / -oic acid</td>
+        <td>HCOOH 蟻酸、$\text{CH}_3\text{COOH}$</td>
+        <td><mark>雙分子氫鍵 → 沸點最高</mark>、弱酸、能解離</td>
+        <td>+ NaOH/NaHCO₃ 中和、+ 醇酯化、脫羧</td>
+      </tr>
+      <tr>
+        <td>酯<br><span class="pill">1-9</span></td>
+        <td>$-\text{COO}-$</td>
+        <td>$\text{R-COO-R'}$</td>
+        <td>某酸某酯</td>
+        <td>乙酸乙酯、油脂</td>
+        <td><mark>果香</mark>、不溶水、無氫鍵、沸點低</td>
+        <td>水解（酸催化逆反應）、<mark>皂化</mark>（NaOH 鹼水解）</td>
+      </tr>
+      <tr>
+        <td>胺<br><span class="pill">1-10</span></td>
+        <td>$-\text{NH}_2$ / $-\text{NHR}$ / $-\text{NR}_2$</td>
+        <td>$\text{R-NH}_2$ 等</td>
+        <td>某胺 / -amine</td>
+        <td>$\text{CH}_3\text{NH}_2$、苯胺</td>
+        <td><mark>弱鹼性</mark>、低碳數魚腥味、有氫鍵（1°、2°）</td>
+        <td>+ HCl 成胺鹽、+ 羧酸 → 醯胺</td>
+      </tr>
+      <tr>
+        <td>醯胺<br><span class="pill">1-10</span></td>
+        <td>$-\text{CO-NH}-$（肽鍵）</td>
+        <td>$\text{R-CONH-R'}$</td>
+        <td>某醯胺 / -amide</td>
+        <td>尿素、Nylon、蛋白質</td>
+        <td><mark>強氫鍵、沸點/熔點高</mark>、近中性（不像胺鹼）</td>
+        <td>水解 → 羧酸 + 胺；尿素受熱分解</td>
+      </tr>
+    </table></div>
+
+    <div class="note">
+      <div class="note-title">看官能基的順序</div>
+      考題給結構式判斷類別時，先掃：(1) 有沒有 C=O？(2) C=O 旁邊是 H（醛）還是 O-H（羧）還是 O-R（酯）還是 N（醯胺）還是 R（酮）？沒有 C=O 再看 O-H（醇/酚，看接苯環否）、O（醚）、N（胺）、X（鹵）。
+    </div>
+
+    <!-- ===================================================== -->
+    <h2 id="bp">B. 沸點 / 溶解度比較</h2>
+
+    <p><strong>同碳數沸點階梯</strong>：</p>
+    <div class="formula">
+      $$\text{醯胺} > \text{羧酸} > \text{醇} > \text{胺(1°)} > \text{醛/酮} \approx \text{酯/醚} > \text{鹵化烴} > \text{烴}$$
+      <div class="formula-note">關鍵：是否能形成氫鍵 + 氫鍵強度 + 雙分子締合（羧酸是二聚體）</div>
+    </div>
+
+    <div class="table-wrap"><table class="compact">
+      <tr><th>類別</th><th>分子間作用力</th><th>溶於水</th><th>原因</th></tr>
+      <tr><td>醯胺</td><td>強氫鍵（N-H 與 C=O）</td><td>低碳數可</td><td>同時有 H 給體與 C=O 接受體</td></tr>
+      <tr><td>羧酸</td><td>雙分子氫鍵（二聚體）</td><td>C₁～C₄ 任意</td><td>O-H 同時做給體與接受體</td></tr>
+      <tr><td>醇</td><td>氫鍵</td><td>C₁～C₃ 任意</td><td>O-H</td></tr>
+      <tr><td>胺（1°、2°）</td><td>較弱氫鍵</td><td>低碳數可</td><td>N-H（N 電負度小於 O）</td></tr>
+      <tr><td>胺（3°）</td><td>無 N-H 氫鍵</td><td>仍可（孤對接受 H）</td><td>N 上孤對電子為氫鍵接受體</td></tr>
+      <tr><td>醛、酮</td><td>偶極-偶極</td><td>低碳數可（如丙酮）</td><td>C=O 為氫鍵接受體</td></tr>
+      <tr><td>酯</td><td>偶極-偶極</td><td>低</td><td>無 H 給體</td></tr>
+      <tr><td>醚</td><td>偶極-偶極（弱）</td><td>低（醇異構物中最低）</td><td>無 H 給體</td></tr>
+      <tr><td>鹵化烴</td><td>偶極 + 凡得瓦</td><td>不溶</td><td>非極性骨架佔多數</td></tr>
+      <tr><td>烴</td><td>凡得瓦</td><td>不溶</td><td>無極性</td></tr>
+    </table></div>
+
+    <div class="note">
+      <div class="note-title">同分異構物常考對比</div>
+      C₂H₆O：<strong>乙醇</strong>（沸點 78°C，氫鍵）vs <strong>甲醚</strong>（−24°C，無氫鍵）。<br>
+      C₃H₆O：<strong>丙醛</strong>、<strong>丙酮</strong>、<strong>烯醇/環氧</strong> 都可能。<br>
+      C₂H₄O₂：<strong>乙酸</strong>（118°C）vs <strong>甲酸甲酯</strong>（32°C）。
+    </div>
+
+    <!-- ===================================================== -->
+    <h2 id="acid">C. 酸鹼性比較</h2>
+
+    <p><strong>酸性由強到弱（同碳數可比較）</strong>：</p>
+    <div class="formula">
+      $$\text{無機強酸} > \text{羧酸} > \text{H}_2\text{CO}_3 > \text{酚} > \text{H}_2\text{O} \approx \text{醇} > \text{醯胺} > \text{胺}$$
+    </div>
+
+    <p><strong>鹼性由強到弱</strong>：</p>
+    <div class="formula">
+      $$\text{NaOH} > \text{脂肪族胺}(\text{R-NH}_2) > \text{NH}_3 > \text{芳香胺}(\text{Ar-NH}_2) > \text{醯胺}$$
+      <div class="formula-note">芳香胺 N 上孤對電子被苯環共振拉走，鹼性減弱；醯胺 N 上孤對被 C=O 拉走，幾乎不顯鹼性</div>
+    </div>
+
+    <div class="table-wrap"><table class="compact">
+      <tr><th>檢驗試劑</th><th>羧酸</th><th>酚</th><th>醇</th><th>醯胺</th><th>胺</th></tr>
+      <tr><td>石蕊試紙</td><td>變紅</td><td>幾乎不變</td><td>不變</td><td>不變</td><td>變藍</td></tr>
+      <tr><td>NaOH(aq)</td><td>溶解 + 中和</td><td>溶解（成酚鈉）</td><td>不反應</td><td>水解需強加熱</td><td>不反應</td></tr>
+      <tr><td>NaHCO₃(aq)</td><td><mark>冒泡（CO₂）</mark></td><td>不反應</td><td>不反應</td><td>不反應</td><td>不反應</td></tr>
+      <tr><td>HCl(aq)</td><td>不反應</td><td>不反應</td><td>不反應</td><td>水解需強加熱</td><td><mark>溶解（成胺鹽）</mark></td></tr>
+      <tr><td>Na 金屬</td><td>放 H₂</td><td>放 H₂</td><td>放 H₂</td><td>不反應</td><td>1°、2° 可放</td></tr>
+    </table></div>
+
+    <div class="note">
+      <div class="note-title">羧酸 vs 酚：用 NaHCO₃ 區分</div>
+      兩者都能溶於 NaOH，但只有<strong>羧酸</strong>強到能與 $\text{NaHCO}_3$ 反應冒 $\text{CO}_2$（因為羧酸酸性 &gt; 碳酸）。酚酸性 &lt; 碳酸，不會冒泡。
+    </div>
+
+    <!-- ===================================================== -->
+    <h2 id="oxid">D. 氧化還原與互換鏈</h2>
+
+    <p>整個 1-5～1-10 的核心地圖：碳氧化態由低到高，每個官能基代表一個層級。</p>
+
+    <div class="formula left-align">
+      $$\text{烷} \xrightarrow[\text{光/熱}]{X_2} \text{鹵化烴} \xrightarrow{\text{OH}^-} \text{醇}$$
+      $$\text{1° 醇} \xrightarrow[\text{部分}]{[\text{O}]} \text{醛} \xrightarrow{[\text{O}]} \text{羧酸}$$
+      $$\text{2° 醇} \xrightarrow{[\text{O}]} \text{酮}$$
+      $$\text{3° 醇} \xrightarrow{[\text{O}]} \text{(不易氧化)}$$
+      $$\text{羧酸} + \text{醇} \xrightleftharpoons[\text{H}_2\text{O}]{\text{H}^+} \text{酯}$$
+      $$\text{羧酸} + \text{胺} \xrightarrow{-\text{H}_2\text{O}} \text{醯胺（肽鍵）}$$
+      $$\text{烯} \xleftarrow[\text{180°C}]{\text{濃 H}_2\text{SO}_4} \text{醇} \xrightarrow[\text{140°C}]{\text{濃 H}_2\text{SO}_4} \text{醚}$$
+    </div>
+
+    <div class="table-wrap"><table class="compact center">
+      <tr><th>碳氧化態</th><th>0</th><th>−1</th><th>+1</th><th>+2</th><th>+3</th></tr>
+      <tr><td>代表</td><td>烴 / 烯 / 炔</td><td>醇、鹵化烴</td><td>醛</td><td>酮、羧酸</td><td>羧酸（加 OH 算）</td></tr>
+      <tr><td>方向</td><td colspan="5">←——— 還原（加 H、減 O） ｜ 氧化（加 O、減 H）———→</td></tr>
+    </table></div>
+
+    <div class="note">
+      <div class="note-title">「一四醚、一八烯」</div>
+      乙醇 + 濃硫酸：<strong>140°C</strong> 分子間脫水生<strong>醚</strong>；<strong>180°C</strong> 分子內脫水生<strong>烯</strong>。同樣是脫水，溫度決定哪一個 OH 被搶。
+    </div>
+
+    <!-- ===================================================== -->
+    <h2 id="rxn">E. 反應類型分類</h2>
+
+    <h3>1. 取代反應（Substitution）</h3>
+    <div class="table-wrap"><table class="compact">
+      <tr><th>受質</th><th>條件 / 試劑</th><th>產物</th></tr>
+      <tr><td>烷</td><td>$\text{X}_2$、光照</td><td>鹵化烴 + HX</td></tr>
+      <tr><td>苯</td><td>$\text{Br}_2 / \text{FeBr}_3$</td><td>溴苯 + HBr</td></tr>
+      <tr><td>苯</td><td>濃 $\text{HNO}_3$ + 濃 $\text{H}_2\text{SO}_4$</td><td>硝基苯（硝化）</td></tr>
+      <tr><td>苯</td><td>$\text{R-Cl} / \text{AlCl}_3$</td><td>烷基苯（Friedel-Crafts）</td></tr>
+      <tr><td>鹵化烴</td><td>$\text{OH}^-$（水解）</td><td>醇</td></tr>
+      <tr><td>鹵化烴</td><td>$\text{NH}_3$</td><td>胺</td></tr>
+    </table></div>
+
+    <h3>2. 加成反應（Addition）</h3>
+    <div class="table-wrap"><table class="compact">
+      <tr><th>受質</th><th>試劑</th><th>產物</th></tr>
+      <tr><td>烯 / 炔</td><td>$\text{H}_2$ / Ni 催化</td><td>烷</td></tr>
+      <tr><td>烯</td><td>$\text{X}_2$、HX、$\text{H}_2\text{O}$</td><td>鹵化烴 / 醇</td></tr>
+      <tr><td>苯</td><td>$3\text{H}_2$ / Ni（高溫高壓）</td><td>環己烷</td></tr>
+    </table></div>
+
+    <h3>3. 消去反應（Elimination）</h3>
+    <ul>
+      <li>醇脫水（180°C 濃 H₂SO₄）→ 烯</li>
+      <li>鹵化烴脫 HX（KOH/醇溶液）→ 烯</li>
+    </ul>
+
+    <h3>4. 氧化反應</h3>
+    <ul>
+      <li>1° 醇 → 醛 → 羧酸（$\text{KMnO}_4$ / $\text{K}_2\text{Cr}_2\text{O}_7$）</li>
+      <li>2° 醇 → 酮</li>
+      <li>3° 醇、酮、醚：不易被一般氧化劑氧化</li>
+      <li>醛 → 羧酸（極易，連空氣都行）</li>
+    </ul>
+
+    <h3>5. 還原反應</h3>
+    <ul>
+      <li>醛 → 1° 醇；酮 → 2° 醇（H₂/Ni 或 NaBH₄）</li>
+      <li>羧酸、酯 → 1° 醇（LiAlH₄）</li>
+      <li>硝基苯 → 苯胺（Sn / HCl）</li>
+    </ul>
+
+    <h3>6. 縮合 / 水解</h3>
+    <div class="table-wrap"><table class="compact">
+      <tr><th>正向（縮合）</th><th>逆向（水解）</th></tr>
+      <tr><td>羧酸 + 醇 → 酯 + H₂O（H⁺ 催化）</td><td>酯 + H₂O / H⁺ → 羧酸 + 醇</td></tr>
+      <tr><td>羧酸 + 胺 → 醯胺 + H₂O（加熱）</td><td>醯胺 + H₂O / H⁺ 或 OH⁻ → 羧酸 + 胺</td></tr>
+      <tr><td>胺基酸 ⇌ 二肽 ⇌ 多肽（蛋白質）</td><td>蛋白質 + 酶 → 胺基酸（消化）</td></tr>
+      <tr><td>—</td><td>油脂 + NaOH → 肥皂 + 甘油（<mark>皂化</mark>）</td></tr>
+    </table></div>
+
+    <!-- ===================================================== -->
+    <h2 id="id">F. 鑑別反應大表</h2>
+
+    <div class="table-wrap"><table>
+      <tr><th>試劑 / 方法</th><th>+ 反應的</th><th>− 不反應的</th><th>現象</th></tr>
+      <tr><td>$\text{Br}_2 / \text{CCl}_4$</td><td>烯、炔</td><td>烷、苯</td><td>溴水退色</td></tr>
+      <tr><td>$\text{KMnO}_4$（鹼性）</td><td>烯、炔、1° 醇、醛</td><td>烷、苯、3° 醇、酮、醚</td><td>紫色褪 → 棕</td></tr>
+      <tr><td>$\text{FeCl}_3$</td><td><mark>酚</mark></td><td>醇、羧酸（一般）</td><td>紫（紅／藍／綠）色</td></tr>
+      <tr><td>Na 金屬</td><td>醇、酚、羧酸（活性 H）</td><td>醚、酯、酮</td><td>放 $\text{H}_2$</td></tr>
+      <tr><td>NaOH(aq)</td><td>羧酸、酚</td><td>醇</td><td>溶解</td></tr>
+      <tr><td>$\text{NaHCO}_3$(aq)</td><td><mark>羧酸</mark></td><td>酚、醇</td><td>冒 $\text{CO}_2$ 泡</td></tr>
+      <tr><td>HCl(aq)</td><td><mark>胺</mark></td><td>醯胺、醇、酚</td><td>溶解（成銨鹽）</td></tr>
+      <tr><td>銀鏡反應 [$\text{Ag(NH}_3)_2$]⁺</td><td>醛、<mark>甲酸</mark>、葡萄糖</td><td>酮、羧酸（除甲酸外）</td><td>試管壁鍍銀</td></tr>
+      <tr><td>斐林試劑（Cu²⁺/OH⁻）</td><td>醛、<mark>甲酸</mark>、葡萄糖</td><td>酮、芳香醛（弱）</td><td>$\text{Cu}_2\text{O}$ 磚紅沉澱</td></tr>
+      <tr><td>碘仿反應 $\text{I}_2 / \text{NaOH}$</td><td>$\text{CH}_3\text{CO}-$ 或 $\text{CH}_3\text{CH(OH)}-$</td><td>—</td><td>$\text{CHI}_3$ 黃色沉澱</td></tr>
+      <tr><td>石蕊</td><td>羧酸（紅）、胺（藍）</td><td>醇、醚、酯、醯胺</td><td>變色</td></tr>
+    </table></div>
+
+    <div class="note">
+      <div class="note-title">兩個經典分離流程</div>
+      <strong>分離羧酸 / 酚 / 中性物</strong>：先加 $\text{NaHCO}_3$ → 羧酸進水層；再加 NaOH → 酚進水層；剩下中性物在有機層。<br>
+      <strong>分離胺 / 中性物</strong>：加 HCl → 胺成胺鹽進水層；中性物留在有機層；再用 NaOH 把胺從水層釋出。
+    </div>
+
+    <!-- ===================================================== -->
+    <h2 id="name">G. 命名與分類規則</h2>
+
+    <div class="table-wrap"><table class="compact">
+      <tr><th>類別</th><th>級數判斷</th><th>命名重點</th></tr>
+      <tr><td>醇</td><td>OH 接的碳連幾個 C：1°/2°/3°</td><td>主鏈含 OH 最長碳鏈，OH 號碼最小</td></tr>
+      <tr><td>胺</td><td>N 上接幾個烴基：1°/2°/3°</td><td>低碳數用「某基胺」，高用 -amine</td></tr>
+      <tr><td>鹵化烴</td><td>X 接的碳連幾個 C：1°/2°/3°</td><td>鹵當取代基</td></tr>
+      <tr><td>醛</td><td>—</td><td>CHO 必為 C1，主鏈含此 C</td></tr>
+      <tr><td>酮</td><td>—</td><td>主鏈含 C=O，編號最小</td></tr>
+      <tr><td>羧酸</td><td>—</td><td>COOH 必為 C1</td></tr>
+      <tr><td>酯</td><td>—</td><td>「酸基-酯基」：羧酸名 + 醇基 + 酯</td></tr>
+      <tr><td>醯胺</td><td>—</td><td>羧酸名去 -ic acid 換 -amide</td></tr>
+    </table></div>
+
+    <div class="note">
+      <div class="note-title">同分異構物常見組合（同分子式）</div>
+      <strong>C$_n$H$_{2n+2}$O</strong>：醇 vs 醚<br>
+      <strong>C$_n$H$_{2n}$O</strong>：醛 vs 酮 vs 烯醇<br>
+      <strong>C$_n$H$_{2n}$O$_2$</strong>：羧酸 vs 酯 vs 羥基醛/酮
+    </div>
+
+    <!-- ===================================================== -->
+    <h2 id="trap">H. 易混淆陷阱</h2>
+
+    <div class="summary">
+      <h3>必背陷阱清單</h3>
+      <ol>
+        <li><strong>甲酸是雙面人</strong>：$\text{H-COOH}$ 同時有醛基（H-C=O）和羧基（-COOH），<mark>能銀鏡、能斐林</mark>，且為羧酸中酸性最強。</li>
+        <li><strong>醯胺幾乎中性，不像胺</strong>：N 上孤對電子被 C=O 共振拉走，鹼性消失。</li>
+        <li><strong>苯胺鹼性弱於氨</strong>：苯環共振拉走孤對；脂肪胺則因 R 推電子，鹼性比氨強。</li>
+        <li><strong>酚 ≠ 醇</strong>：酚是 OH 直接接苯環碳；苯甲醇（$\text{C}_6\text{H}_5\text{CH}_2\text{OH}$）OH 接 sp³ 碳，仍是<mark>醇</mark>。</li>
+        <li><strong>FeCl₃ 紫色僅鑑別酚</strong>，不能用來抓羧酸或醇。</li>
+        <li><strong>斐林對芳香醛弱反應</strong>：苯甲醛在斐林中幾乎不變色，銀鏡仍可正向。</li>
+        <li><strong>3° 醇不易氧化</strong>，但<mark>可被脫水</mark>成烯。氧化、脫水兩件事不要搞混。</li>
+        <li><strong>酯的水解兩種環境</strong>：酸催化可逆；NaOH 鹼水解（皂化）為不可逆，因為產物羧酸根進一步離開平衡。</li>
+        <li><strong>「酸 + 醇 → 酯」要加 H⁺ 催化、加熱</strong>，且須<mark>除水才能推動平衡</mark>。</li>
+        <li><strong>耐綸 vs 蛋白質</strong>：兩者主鏈都靠醯胺鍵連結；蛋白質單體是胺基酸，耐綸是己二酸 + 己二胺。</li>
+        <li><strong>苯的反應以取代為主，不是加成</strong>。題目給「+ Br₂ 取代」要記得需 FeBr₃；無催化劑就不反應。</li>
+        <li><strong>乙醚 ≠ 乙酸</strong>，乙醚 ≠ 醇：$\text{C}_2\text{H}_5\text{OC}_2\text{H}_5$ 是醚（C-O-C），名字裡的「醚」不要看成「醇」。</li>
+      </ol>
+    </div>
+
+    <div class="summary">
+      <h3>三句話總結</h3>
+      <ul>
+        <li><strong>看結構辨類別</strong>：先找 C=O 的左右鄰居，再找 O-H、N、X。</li>
+        <li><strong>看反應辨類別</strong>：銀鏡 / 斐林 → 醛、甲酸；NaHCO₃ 冒泡 → 羧酸；FeCl₃ 紫 → 酚；HCl 溶解 → 胺。</li>
+        <li><strong>看物性辨類別</strong>：氫鍵強度＝沸點高低；能否做 H 給體決定能否自身氫鍵。</li>
+      </ul>
+    </div>
+
+    <footer>2026.04.25 · 個申筆試 / 段考通用</footer>
+  </div>
+
+  <script src="../theme-effects.js"></script>
+</body>
+</html>
