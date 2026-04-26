@@ -13,9 +13,11 @@
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600&family=Noto+Sans+TC:wght@300;400;500&display=swap');
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    html, body { overflow-x: hidden; }
+    html, body { overflow-x: hidden; max-width: 100%; width: 100%; position: relative; }
     body { font-family: 'Noto Sans TC', sans-serif; font-weight: 300; background: var(--bg); color: var(--text); line-height: 2; font-size: 16px; transition: all 0.3s ease; }
-    .container { max-width: 880px; margin: 0 auto; padding: 60px 24px; }
+    .container { max-width: 880px; margin: 0 auto; padding: 60px 24px; width: 100%; }
+    .container > * { max-width: 100%; }
+    .katex-display { overflow-x: auto; overflow-y: hidden; max-width: 100%; }
     nav { position: fixed; top: 0; left: 0; right: 0; background: var(--bg); border-bottom: 1px solid var(--border); padding: 16px 24px; display: flex; justify-content: space-between; align-items: center; z-index: 100; font-size: 14px; }
     nav a { color: var(--muted); text-decoration: none; }
     nav a:hover { color: var(--text); }
@@ -275,8 +277,8 @@
     </div>
 
     <div class="table-wrap"><table class="compact center">
-      <tr><th>碳氧化態</th><th>0</th><th>−1</th><th>+1</th><th>+2</th><th>+3</th></tr>
-      <tr><td>代表</td><td>烴 / 烯 / 炔</td><td>醇、鹵化烴</td><td>醛</td><td>酮、羧酸</td><td>羧酸（加 OH 算）</td></tr>
+      <tr><th>碳氧化態</th><th>−3 ~ −2</th><th>−1</th><th>+1</th><th>+2</th><th>+3</th></tr>
+      <tr><td>代表</td><td>烷 / 烯 / 炔</td><td>醇、鹵化烴</td><td>醛</td><td>酮</td><td>羧酸 / 酯 / 醯胺</td></tr>
       <tr><td>方向</td><td colspan="5">←——— 還原（加 H、減 O） ｜ 氧化（加 O、減 H）———→</td></tr>
     </table></div>
 
