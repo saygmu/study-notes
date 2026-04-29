@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+<meta name="theme-color" content="#fefefe">
+<title>學習歷程自述 · 重複論點分析</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E📝%3C/text%3E%3C/svg%3E">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600&family=Noto+Serif+TC:wght@600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color: transparent; }
+:root {
+  --bg: #fefefe;
+  --text: #2d2d2d;
+  --muted: #888;
+  --accent: #2d2d2d;
+  --accent-dim: rgba(45,45,45,0.08);
+  --border: #e8e8e8;
+  --card: #f9f9f9;
+  --high: #c0392b;
+  --high-bg: #fde2e0;
+  --mid: #b5841a;
+  --mid-bg: #fcecd0;
+  --low: #4f7d54;
+  --low-bg: #e0f0e2;
+  --keep: #2e7d52;
+  --keep-bg: #eef7f0;
+  --del: #c0392b;
+  --del-bg: #fdf0ee;
+}
+html, body { overflow-x: hidden; max-width: 100%; width: 100%; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Noto Sans TC', sans-serif;
+  font-weight: 300;
+  line-height: 1.7;
+  font-size: 15px;
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+
+nav {
+  position: sticky;
+  top: 0;
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+  padding: 14px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 100;
+  font-size: 14px;
+}
+nav a { color: var(--muted); text-decoration: none; }
+nav a:active { color: var(--text); }
+
+.container { max-width: 720px; margin: 0 auto; padding: 24px 20px 80px; }
+
+header { padding: 16px 0 28px; border-bottom: 1px solid var(--border); margin-bottom: 24px; }
+h1 { font-family: 'Noto Serif TC', serif; font-size: 1.6rem; font-weight: 600; letter-spacing: 1px; margin-bottom: 8px; }
+.subtitle { color: var(--muted); font-size: 13px; }
+
+.stats-bar {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-bottom: 24px;
+  padding: 16px;
+  background: var(--card);
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  position: sticky;
+  top: 51px;
+  z-index: 50;
+}
+.stat { text-align: center; }
+.stat-num { font-family: 'JetBrains Mono', monospace; font-size: 1.4rem; font-weight: 700; line-height: 1.2; }
+.stat-label { font-size: 10px; color: var(--muted); margin-top: 2px; letter-spacing: 0.5px; }
+.stat.keep .stat-num { color: var(--keep); }
+.stat.delete .stat-num { color: var(--del); }
+.stat.undecided .stat-num { color: var(--mid); }
+
+.priority {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-left: 2px solid var(--high);
+  border-radius: 12px;
+  padding: 18px 20px;
+  margin-bottom: 24px;
+}
+.priority-title {
+  font-family: 'Noto Serif TC', serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--high);
+  margin-bottom: 12px;
+  letter-spacing: 0.5px;
+}
+.priority ol { list-style: none; counter-reset: p; }
+.priority li {
+  counter-increment: p;
+  padding: 8px 0 8px 28px;
+  position: relative;
+  font-size: 14px;
+  line-height: 1.6;
+}
+.priority li::before {
+  content: counter(p);
+  position: absolute;
+  left: 0;
+  top: 9px;
+  width: 20px;
+  height: 20px;
+  background: var(--high);
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  font-weight: 700;
+}
+.priority li strong { font-weight: 600; color: var(--text); }
+
+.legend {
+  display: flex;
+  gap: 14px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+  font-size: 11px;
+  color: var(--muted);
+}
+.legend-item { display: flex; align-items: center; gap: 6px; }
+.legend-dot { width: 8px; height: 8px; border-radius: 50%; }
+
+.filter-bar {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+.filter-btn {
+  padding: 6px 12px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--muted);
+  border-radius: 16px;
+  font-size: 12px;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.2s;
+}
+.filter-btn:active { transform: scale(0.96); }
+.filter-btn.active {
+  background: var(--text);
+  color: var(--bg);
+  border-color: var(--text);
+}
+
+.group {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-left: 2px solid var(--accent);
+  border-radius: 12px;
+  margin-bottom: 12px;
+  overflow: hidden;
+  transition: border-color 0.2s;
+}
+.group.severity-high { border-left-color: var(--high); }
+.group.severity-mid { border-left-color: var(--mid); }
+.group.severity-low { border-left-color: var(--low); }
+
+.group-header {
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  user-select: none;
+}
+.group-header:active { background: var(--card); }
+.group-num {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: var(--bg);
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 700;
+  font-size: 12px;
+  flex-shrink: 0;
+}
+.severity-high .group-num { background: var(--high); }
+.severity-mid .group-num { background: var(--mid); }
+.severity-low .group-num { background: var(--low); }
+
+.group-title {
+  flex: 1;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.4;
+}
+.severity-tag {
+  font-size: 10px;
+  padding: 2px 8px;
+  border-radius: 10px;
+  background: var(--accent-dim);
+  color: var(--muted);
+  white-space: nowrap;
+  font-weight: 500;
+}
+.severity-high .severity-tag { background: var(--high-bg); color: var(--high); }
+.severity-mid .severity-tag { background: var(--mid-bg); color: var(--mid); }
+.severity-low .severity-tag { background: var(--low-bg); color: var(--low); }
+
+.toggle-icon {
+  color: var(--muted);
+  font-size: 11px;
+  transition: transform 0.3s;
+  flex-shrink: 0;
+}
+.group.expanded .toggle-icon { transform: rotate(90deg); }
+
+.group-body {
+  display: none;
+  padding: 8px 16px 16px;
+  border-top: 1px solid var(--border);
+}
+.group.expanded .group-body { display: block; }
+
+.item {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px 14px;
+  margin-bottom: 10px;
+  transition: all 0.2s;
+}
+.item.keep {
+  background: var(--keep-bg);
+  border-color: rgba(46,125,82,0.3);
+}
+.item.delete {
+  background: var(--del-bg);
+  border-color: rgba(192,57,43,0.25);
+  opacity: 0.65;
+}
+.item.delete .item-quote { text-decoration: line-through; color: #aaa; }
+
+.item-location {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  color: var(--muted);
+  margin-bottom: 6px;
+}
+.page-badge {
+  background: var(--accent);
+  color: var(--bg);
+  padding: 1px 8px;
+  border-radius: 8px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  font-weight: 700;
+}
+.item-section { font-weight: 500; }
+
+.item-quote {
+  font-size: 13px;
+  color: var(--text);
+  padding: 6px 10px;
+  margin-bottom: 10px;
+  background: var(--bg);
+  border-left: 2px solid var(--border);
+  border-radius: 4px;
+  line-height: 1.6;
+}
+
+.actions {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.action-btn {
+  flex: 1;
+  min-width: 0;
+  padding: 7px 10px;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 12px;
+  font-family: inherit;
+  color: var(--muted);
+  transition: all 0.15s;
+}
+.action-btn:active { transform: scale(0.96); }
+.action-btn.keep-btn.active {
+  background: var(--keep);
+  color: white;
+  border-color: var(--keep);
+}
+.action-btn.delete-btn.active {
+  background: var(--del);
+  color: white;
+  border-color: var(--del);
+}
+.action-btn.reset-btn { flex: 0 0 auto; padding: 7px 10px; }
+
+.recommended-tag {
+  width: 100%;
+  text-align: right;
+  font-size: 10px;
+  color: var(--muted);
+  margin-top: 6px;
+  padding-top: 6px;
+  border-top: 1px dashed var(--border);
+}
+
+.recommendation {
+  background: #fff8e7;
+  border: 1px solid #f0d878;
+  border-radius: 10px;
+  padding: 12px 14px;
+  margin-top: 10px;
+  font-size: 12px;
+  color: #6d5616;
+  line-height: 1.7;
+}
+.recommendation strong { color: #8a6914; font-weight: 600; }
+
+.controls-bottom {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  margin-top: 24px;
+  flex-wrap: wrap;
+}
+.btn {
+  padding: 9px 18px;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 12px;
+  font-family: inherit;
+  background: var(--bg);
+  color: var(--muted);
+  transition: all 0.2s;
+}
+.btn:active { transform: scale(0.96); }
+.btn-primary {
+  background: var(--text);
+  color: var(--bg);
+  border-color: var(--text);
+}
+
+footer {
+  text-align: center;
+  padding: 32px 0 16px;
+  color: var(--muted);
+  font-size: 11px;
+}
+
+@media (max-width: 480px) {
+  h1 { font-size: 1.35rem; }
+  .stats-bar { grid-template-columns: repeat(2, 1fr); padding: 12px; }
+  .stat-num { font-size: 1.2rem; }
+  .group-header { padding: 12px 14px; gap: 10px; }
+  .group-title { font-size: 13px; }
+  .severity-tag { display: none; }
+  .group-body { padding: 8px 12px 14px; }
+  .item { padding: 10px 12px; }
+  .priority { padding: 14px 16px; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="../">← 返回</a>
+  <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);">REVIEW</div>
+</nav>
+
+<div class="container">
+
+<header>
+  <h1>學習歷程自述 · 重複論點分析</h1>
+  <p class="subtitle">交大資工 · 共識別出 10 組重複/重疊論點</p>
+</header>
+
+<div class="stats-bar">
+  <div class="stat"><div class="stat-num" id="total-count">0</div><div class="stat-label">引用</div></div>
+  <div class="stat keep"><div class="stat-num" id="keep-count">0</div><div class="stat-label">保留</div></div>
+  <div class="stat delete"><div class="stat-num" id="delete-count">0</div><div class="stat-label">刪除</div></div>
+  <div class="stat undecided"><div class="stat-num" id="undecided-count">0</div><div class="stat-label">未決</div></div>
+</div>
+
+<div class="priority">
+  <div class="priority-title">優先處理（時間有限請先看這三組）</div>
+  <ol>
+    <li><strong>Discord Bot 被當成萬用例子</strong>——全文 5 次引用，後面 4 處至少砍掉 2 處</li>
+    <li><strong>P.22「為什麼適合」與「總結」幾乎同義</strong>——強烈建議合併或大幅刪減</li>
+    <li><strong>「迭代修正/實驗精神」散落四處</strong>——集中到 P.3 那段最具體的反思即可</li>
+  </ol>
+</div>
+
+<div class="legend">
+  <div class="legend-item"><span class="legend-dot" style="background:var(--high)"></span>嚴重重複</div>
+  <div class="legend-item"><span class="legend-dot" style="background:var(--mid)"></span>中度重疊</div>
+  <div class="legend-item"><span class="legend-dot" style="background:var(--low)"></span>輕度重疊</div>
+</div>
+
+<div class="filter-bar">
+  <button class="filter-btn active" data-filter="all">全部</button>
+  <button class="filter-btn" data-filter="high">嚴重</button>
+  <button class="filter-btn" data-filter="mid">中度</button>
+  <button class="filter-btn" data-filter="low">輕度</button>
+  <button class="filter-btn" data-filter="undecided">未決</button>
+</div>
+
+<div id="groups"></div>
+
+<div class="controls-bottom">
+  <button class="btn btn-primary" onclick="expandAll()">全部展開</button>
+  <button class="btn" onclick="collapseAll()">全部收合</button>
+  <button class="btn" onclick="resetAll()">重置決策</button>
+</div>
+
+<footer>v1.0 · localStorage 同步</footer>
+
+</div>
+
+<script>
+const data = [
+  {
+    id: 1, severity: "high", title: "Discord Bot 自主學習被當作萬用例子",
+    items: [
+      { page: "P.6–7", section: "主章節「自主學習專題」", quote: "完整介紹開發過程：跨域整合、工程思維、Cog 架構、Discord Developers 提問", recommended: "keep" },
+      { page: "P.14–15", section: "個人特質「運用創意與邏輯思維」", quote: "點餐系統因邏輯繁瑣...習慣以平板手寫進行發想", recommended: "delete" },
+      { page: "P.15", section: "個人特質「忠實團隊活動」", quote: "在共同開發 Discord Bot 時，我主動將所有變數的意義紀錄完整", recommended: "delete" },
+      { page: "P.21", section: "為什麼適合「以使用者需求出發」", quote: "在參加網頁程式設計營與開發 Discord 機器人時，我發現自己對使用者體驗（UX）有很高的敏銳度", recommended: "keep" },
+      { page: "P.22", section: "為什麼適合「化難題為自學驅動力」", quote: "我在開發期間查詢了許多官方文件...主動加入開發者社群 Discord Developers 使用英語向前輩提問", recommended: "delete" }
+    ],
+    recommendation: "主章節（P.6–7）保留完整版，後面 4 處應該大幅刪減或只保留一句帶過。P.21 的「使用者需求出發」和 P.14 的「創意實作」內容幾乎是同一件事，建議二擇一。"
+  },
+  {
+    id: 2, severity: "high", title: "軟硬體除錯思維相通 / 先理解架構再逐步定位",
+    items: [
+      { page: "P.4", section: "數位邏輯與晶片設計", quote: "先理解系統架構，再逐步定位...先確認整體架構，再檢查關鍵節點", recommended: "keep" },
+      { page: "P.3–4", section: "強化學習", quote: "需透過觀察訓練曲線與實際影片，猜想問題的來源，再嘗試透過調整訓練方法與參數逐步修正", recommended: "keep" },
+      { page: "P.22", section: "總結", quote: "以勇敢但謹慎的假設與推論進行創新，進而尋得兼具邏輯與可行性的最佳解", recommended: "delete" }
+    ],
+    recommendation: "P.4 的論述最完整、最有畫面感（軟硬體對照），建議保留。P.22 總結改成更概括的收尾，不要再重複具體方法。"
+  },
+  {
+    id: 3, severity: "high", title: "迭代修正 / 實驗精神 / 資料品質優於模型",
+    items: [
+      { page: "P.3", section: "AI 創世紀", quote: "AI 的核心不只是追求更強的模型，而是先建立高品質、可通用的資料基礎", recommended: "keep" },
+      { page: "P.3–4", section: "強化學習", quote: "用數據與行為進行觀察反覆修正原先的設定", recommended: "keep" },
+      { page: "P.12", section: "學科培養", quote: "物理...透過不斷迭代的過程逐漸逼近最終的正確答案", recommended: "delete" },
+      { page: "P.22", section: "總結", quote: "這樣的迭代與創新，成為了可以一起循環的迴圈", recommended: "delete" }
+    ],
+    recommendation: "建議保留 P.3 的「資料品質 > 模型複雜度」（最具體、最有反思深度），其餘簡化或刪除「迭代」一詞，避免讓人覺得在湊字數。"
+  },
+  {
+    id: 4, severity: "high", title: "自主學習 / 問題導向迴圈",
+    items: [
+      { page: "P.6", section: "Discord Bot", quote: "完全體驗了「問題導向主動學習」的強大力量", recommended: "keep" },
+      { page: "P.19", section: "就讀動機 - 系統化學習", quote: "解決問題的根本，在於紮實的基礎與創意", recommended: "keep" },
+      { page: "P.22", section: "為什麼適合 - 自學迴圈", quote: "「發崛問題」，到「找尋解法」，最後「實際應用」的自學迴圈", recommended: "keep" },
+      { page: "P.22", section: "總結", quote: "再次重述相同自學迴圈概念", recommended: "delete" }
+    ],
+    recommendation: "P.22「為什麼適合」與「總結」這兩段內容高度重疊，強烈建議合併，否則最後兩頁讀起來像同一段話講兩次。"
+  },
+  {
+    id: 5, severity: "mid", title: "英文能力 / 多益 870 / 對外論壇提問",
+    items: [
+      { page: "P.7", section: "Discord Bot", quote: "多次到國外論壇請教", recommended: "keep" },
+      { page: "P.15", section: "個人特質「滴水穿石」", quote: "多益 870 + 觀看英語影音 + collocation 與 thesaurus 辭典", recommended: "keep" },
+      { page: "P.22", section: "為什麼適合「化難題為自學驅動力」", quote: "擁有多益金色證書的英文紮實基礎...加入 Discord Developers 使用英語向前輩提問", recommended: "delete" }
+    ],
+    recommendation: "P.15 是英文能力的主論述，P.22 那段刪除「多益金色證書」與「Discord Developers 英語提問」，因為前面都講過了。可以改成「具備英文閱讀第一手技術文件的能力」一句帶過。"
+  },
+  {
+    id: 6, severity: "mid", title: "團隊合作 / 與夥伴完成的成就感（幾乎一字不差）",
+    items: [
+      { page: "P.15", section: "個人特質「忠實團隊活動」", quote: "與夥伴一同努力完成一項成品，是我成就感的最大來源", recommended: "keep" },
+      { page: "P.21", section: "為什麼適合「團隊溝通能力佳」", quote: "我也非常享受與夥伴一起努力，完成成品所帶來的成就感與滿足感", recommended: "delete" }
+    ],
+    recommendation: "兩句幾乎一字不差。建議 P.21 重寫成更聚焦「為什麼這特質符合交大資工」的角度，例如連結到交大「團隊合作、實作導向」的特色。"
+  },
+  {
+    id: 7, severity: "mid", title: "跨域 / 多元能力（用詞不一致）",
+    items: [
+      { page: "P.6–7", section: "Discord Bot", quote: "跨域整合...將分散的技術一步一步整合", recommended: "keep" },
+      { page: "P.13", section: "學科總結", quote: "將所學抽象的知識轉化為實作的基礎能力，廣泛應用於...", recommended: "keep" },
+      { page: "P.19", section: "就讀動機「跨域學程培養多方面能力」", quote: "整段論述交大跨域學程", recommended: "keep" }
+    ],
+    recommendation: "P.19 是專門講交大跨域學程的，邏輯成立可保留。但 P.6–7 和 P.13 講的「整合所學」屬於另一種跨域，建議統一用詞——前段只談「軟硬整合」，避免和後面的「跨領域學程」概念混淆。"
+  },
+  {
+    id: 8, severity: "mid", title: "電資班先修經驗",
+    items: [
+      { page: "P.2–5", section: "電資班與程式設計", quote: "整章詳述（AI 創世紀、強化學習、數位邏輯）", recommended: "keep" },
+      { page: "P.13", section: "學科總結", quote: "感謝雄女電資班提供了我良好的學習環境", recommended: "keep" },
+      { page: "P.21", section: "為什麼適合", quote: "身為電資班的學生，我曾用兩年時間以課程初步認識了人工智慧與半導體製程", recommended: "delete" }
+    ],
+    recommendation: "P.21 開頭那句是對前面 3 頁的濃縮重述。可以改成「已在電資班建立的基礎讓我有信心...」直接連結到「為什麼適合」，而不是再列一次學了什麼。"
+  },
+  {
+    id: 9, severity: "low", title: "解題競賽 / 程式能力像外語",
+    items: [
+      { page: "P.8", section: "資訊月", quote: "程式能力就像外語能力，沒有天份，只有持續熟悉", recommended: "keep" },
+      { page: "P.19", section: "就讀動機", quote: "過去在參與解題競賽的經驗，明顯反映了解決問題的根本，在於紮實的基礎與創意", recommended: "keep" }
+    ],
+    recommendation: "兩段都引用同一個競賽經驗，但角度不同（前者談學習方法、後者談課程設計），重複度較低，可以保留，但 P.19 那句可以更具體一點。"
+  },
+  {
+    id: 10, severity: "mid", title: "創造實用產品 / 影響世界（收尾型大話）",
+    items: [
+      { page: "P.13", section: "學科總結", quote: "憑藉自身的能力實際做出實用的物品，真正在這個世界發揮影響力", recommended: "delete" },
+      { page: "P.14", section: "個人特質", quote: "創造出實用的優秀科技產品", recommended: "delete" },
+      { page: "P.22", section: "總結", quote: "一起建造一個更好的世界", recommended: "keep" }
+    ],
+    recommendation: "三處都是收尾型大話。建議只在 P.22 總結保留一次，前兩處改成更具體的目標。"
+  }
+];
+
+const STORAGE_KEY = "self-statement-review-v1";
+
+function loadDecisions() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    return raw ? JSON.parse(raw) : {};
+  } catch (e) { return {}; }
+}
+
+function saveDecisions() {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(decisions));
+  } catch (e) {}
+}
+
+let decisions = loadDecisions();
+
+function render() {
+  const container = document.getElementById("groups");
+  container.innerHTML = "";
+  const sevLabel = { high: "嚴重重複", mid: "中度重疊", low: "輕度重疊" };
+
+  data.forEach((group) => {
+    const div = document.createElement("div");
+    div.className = `group severity-${group.severity}`;
+    div.dataset.severity = group.severity;
+    div.dataset.gid = group.id;
+
+    const itemsHtml = group.items.map((item, ii) => {
+      const key = `${group.id}-${ii}`;
+      const decision = decisions[key] || "";
+      return `
+        <div class="item ${decision}" data-key="${key}">
+          <div class="item-location">
+            <span class="page-badge">${item.page}</span>
+            <span class="item-section">${item.section}</span>
+          </div>
+          <div class="item-quote">"${item.quote}"</div>
+          <div class="actions">
+            <button class="action-btn keep-btn ${decision === 'keep' ? 'active' : ''}" onclick="setDecision('${key}', 'keep')">✓ 保留</button>
+            <button class="action-btn delete-btn ${decision === 'delete' ? 'active' : ''}" onclick="setDecision('${key}', 'delete')">✗ 刪除</button>
+            <button class="action-btn reset-btn" onclick="setDecision('${key}', '')">—</button>
+          </div>
+          ${item.recommended ? `<div class="recommended-tag">建議：${item.recommended === 'keep' ? '✓ 保留' : '✗ 刪除'}</div>` : ''}
+        </div>
+      `;
+    }).join("");
+
+    div.innerHTML = `
+      <div class="group-header" onclick="toggleGroup(this)">
+        <div class="group-num">${group.id}</div>
+        <div class="group-title">${group.title}</div>
+        <span class="severity-tag">${sevLabel[group.severity]} · ${group.items.length}</span>
+        <span class="toggle-icon">▶</span>
+      </div>
+      <div class="group-body">
+        ${itemsHtml}
+        <div class="recommendation"><strong>💡 取捨建議：</strong>${group.recommendation}</div>
+      </div>
+    `;
+    container.appendChild(div);
+  });
+  updateStats();
+  applyFilter();
+}
+
+function toggleGroup(header) {
+  header.parentElement.classList.toggle("expanded");
+}
+
+function expandAll() {
+  document.querySelectorAll(".group").forEach(g => g.classList.add("expanded"));
+}
+function collapseAll() {
+  document.querySelectorAll(".group").forEach(g => g.classList.remove("expanded"));
+}
+
+function setDecision(key, value) {
+  if (value === "") delete decisions[key];
+  else decisions[key] = value;
+
+  const item = document.querySelector(`.item[data-key="${key}"]`);
+  if (item) {
+    item.classList.remove("keep", "delete");
+    if (value) item.classList.add(value);
+    item.querySelectorAll(".action-btn").forEach(b => b.classList.remove("active"));
+    if (value === "keep") item.querySelector(".keep-btn").classList.add("active");
+    if (value === "delete") item.querySelector(".delete-btn").classList.add("active");
+  }
+  saveDecisions();
+  updateStats();
+  applyFilter();
+}
+
+function resetAll() {
+  if (!confirm("確定要重置所有決策嗎？")) return;
+  decisions = {};
+  saveDecisions();
+  render();
+}
+
+function updateStats() {
+  let total = 0, keep = 0, del = 0;
+  data.forEach(g => g.items.forEach((_, ii) => {
+    total++;
+    const d = decisions[`${g.id}-${ii}`];
+    if (d === "keep") keep++;
+    else if (d === "delete") del++;
+  }));
+  document.getElementById("total-count").textContent = total;
+  document.getElementById("keep-count").textContent = keep;
+  document.getElementById("delete-count").textContent = del;
+  document.getElementById("undecided-count").textContent = total - keep - del;
+}
+
+let currentFilter = "all";
+function applyFilter() {
+  document.querySelectorAll(".group").forEach(g => {
+    const gid = g.dataset.gid;
+    const groupData = data.find(d => d.id == gid);
+    if (currentFilter === "all") g.style.display = "";
+    else if (currentFilter === "undecided") {
+      const has = groupData.items.some((_, ii) => !decisions[`${gid}-${ii}`]);
+      g.style.display = has ? "" : "none";
+    } else {
+      g.style.display = g.dataset.severity === currentFilter ? "" : "none";
+    }
+  });
+}
+
+document.querySelectorAll(".filter-btn").forEach(btn => {
+  btn.addEventListener("click", () => {
+    document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    currentFilter = btn.dataset.filter;
+    applyFilter();
+  });
+});
+
+render();
+document.querySelector(".group").classList.add("expanded");
+</script>
+</body>
+</html>
